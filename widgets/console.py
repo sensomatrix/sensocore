@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QPlainTextEdit, QVBoxLayout, QWidget
 import logging
 
+
 class ConsoleHandler(logging.Handler):
     def __init__(self, parent):
         super().__init__()
@@ -10,6 +11,7 @@ class ConsoleHandler(logging.Handler):
     def emit(self, msg):
         format_msg = self.format(msg)
         self.plain_text_widget.appendPlainText(format_msg)
+
 
 class Console(QWidget):
     def __init__(self, parent):

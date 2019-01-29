@@ -1,10 +1,15 @@
 from .channels import Channels
-from .scope import Scope
 from .info import Info
 from .center import Center
 from .console import Console
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget
+
+
+# connect pyqt signals to pyqt slots here
+def init_connect_slots(MAIN):
+        MAIN.datasets.signal_loaded_signal.connect(MAIN.center.scope.on_signal_loaded)
+        MAIN.center.scope.cursor_moved_signal.connect(MAIN.center.chrono.on_cursor_moved)
 
 
 def init_ui_widgets(MAIN):

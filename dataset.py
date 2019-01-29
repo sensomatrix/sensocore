@@ -3,11 +3,15 @@ from itertools import islice
 from signal import Signal
 import numpy as np
 from PyQt5.QtWidgets import QAction, QFileDialog
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
-class Dataset():
+class Dataset(QObject):
+
+    signal_loaded_signal = pyqtSignal(object)
 
     def __init__(self, parent):
+        super().__init__()
         self.parent = parent
         self.signals_dictionary = {}
         self.actions = None
@@ -19,14 +23,15 @@ class Dataset():
         act.triggered.connect(self.open_dataset_dialog)
         output['open_dataset'] = act
         self.actions = output
-        
+
+    # dialog used to load a complete dataset. to do: deal with the case user clicks on "cancel"
     def open_dataset_dialog(self):
         openfilepath = QFileDialog.getOpenFileName(self.parent)
-        self.parent.datasets.load_from_file(openfilepath[0])
-        for id, signal in self.parent.datasets.signals_dictionary.items():
-            self.parent.center.scope.addTrace(signal)
-        self.parent.info.set_opened_filename(os.path.basename(openfilepath[0]))
-        self.parent.center.scope.pw.resizeEvent(None)
+        if openfilepath[0]:
+            self.load_from_file(openfilepath[0])
+            for sig in self.signals_dictionary.values():
+                self.signal_loaded_signal.emit(sig)
+            self.parent.info.set_opened_filename(os.path.basename(openfilepath[0]))
 
     def load_from_file(self, path_to_file):
         with open(path_to_file, 'r') as fileObject:

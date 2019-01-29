@@ -1,11 +1,13 @@
 from numpy import random
+
+
 class Signal:
     # function to generate time array out of fs is not implemented yet
 
-    id_list = [] #class-wide list that contains list of already-assigned unique IDs
+    id_list = [] # class-wide list that contains list of already-assigned unique IDs
 
     def __init__(self, samples_array, time_array=None, fs=None, name=None, type=None):
-
+        super().__init__()
         self.id = random.randint(1,100)
         while self.id in Signal.id_list:
             self.id = random.randint(1,100)
