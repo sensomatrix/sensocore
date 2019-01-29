@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QDockWidget
 def init_connect_slots(MAIN):
         MAIN.datasets.signal_loaded_signal.connect(MAIN.center.scope.on_signal_loaded)
         MAIN.center.scope.cursor_moved_signal.connect(MAIN.center.chrono.on_cursor_moved)
-
+        MAIN.datasets.signal_loaded_signal.connect(MAIN.channels.on_signal_loaded)
 
 def init_ui_widgets(MAIN):
     
