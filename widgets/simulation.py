@@ -45,10 +45,10 @@ class Simulation(QMainWindow):
 		self.plotECG()
 		
 	def getSenderIndex(self, sender, param_type_index):
-		spin_boxs = self.ecg_sim.all_spin_boxes[param_type_index]
+		spin_boxes = self.ecg_sim.all_spin_boxes[param_type_index]
 
-		for i in range(len(spin_boxs)):
-			if sender == spin_boxs[i]:
+		for i in range(len(spin_boxes)):
+			if sender == spin_boxes[i]:
 				return i
 
 		return -1
