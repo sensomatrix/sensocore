@@ -92,6 +92,7 @@ class Scope(QObject):
         pos.setY(0)
         mousePoint = (next(iter(self.plotitems_dictionary.values()))).vb.mapSceneToView(pos)
         self.cursor_moved_signal.emit(mousePoint.x())
+        print("gay")
 
     def hideTimeAxis(self, lastAddedPlotItem):
         for id, isPlotted in self.plotitems_isPlotted_dictionary.items():

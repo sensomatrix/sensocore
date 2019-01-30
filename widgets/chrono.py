@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QFrame, QSlider, QGridLayout, QLabel
+from PyQt5.QtWidgets import QFrame, QSlider, QGridLayout, QLabel, QScrollArea, QSizePolicy
 from PyQt5.QtCore import Qt
 import decimal
 class Chrono(QFrame):
@@ -13,7 +13,10 @@ class Chrono(QFrame):
         grid_layout = QGridLayout()
         self.setLayout(grid_layout)
 
+
+        #cursor in a scroll area to prevent GUI flickering
         self.cursorValueLabel = QLabel("Cursor: ")
+        self.cursorValueLabel.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Minimum)
         grid_layout.addWidget(self.cursorValueLabel, 1, 1)
         
         self.slider = QSlider(Qt.Horizontal)
