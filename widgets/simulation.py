@@ -44,7 +44,6 @@ class Simulation(QMainWindow):
 		self.plotECG()
 
 	def resetEvent(self):
-		self.ecg_sim.setToDefaultValues()
 		self.initECGFunction()
 		
 	def getSenderIndex(self, sender, param_type_index):
