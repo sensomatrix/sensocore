@@ -46,6 +46,7 @@ class ECGSimulationParameters(QDockWidget):
 			self.initR()
 			self.initS()
 			self.initT()
+			self.initSignalProperties()
 			self.initLayout()
 
 		def initP(self):
@@ -66,13 +67,22 @@ class ECGSimulationParameters(QDockWidget):
 		def initT(self):
 			self.t_group, self.t_spin_box = self.createWaveParameters('T')
 
-		def initDoubleSpinBox(self, signal_type, spin_boxes, single_step=0.0001, precision=4):
-			for i in range(len(spin_boxes)):
-				spin_boxes[i].setDecimals(precision)
-				spin_boxes[i].setMinimum(self.sig_values[signal_type]['min_values'][i])
-				spin_boxes[i].setMaximum(self.sig_values[signal_type]['max_values'][i])
-				spin_boxes[i].setValue(self.sig_values[signal_type]['init_values'][i])
-				spin_boxes[i].setSingleStep(single_step)
+		def initSignalProperties(self):
+			self.signal_prop_group = QGroupBox('Signal Properties')
+
+			self.noise_label = QLabel('Noise (dB)')
+			self.noise_spin_box = QDoubleSpinBox(self)
+
+			self.noise_spin_box.setMinimum(0.0001)
+			self.noise_spin_box.setMaximum(0.01)
+
+
+			layout = QGridLayout()
+
+			layout.addWidget(self.noise_label)
+			layout.addWidget(self.noise_spin_box)
+
+			self.signal_prop_group.setLayout(layout)
 
 		def createWaveParameters(self, signal_type, wave_label=None, num_params=3):
 			if wave_label == None:
@@ -94,12 +104,21 @@ class ECGSimulationParameters(QDockWidget):
 
 			return wave_group, wave_spin_box
 
+		def initDoubleSpinBox(self, signal_type, spin_boxes, single_step=0.0001, precision=4):
+			for i in range(len(spin_boxes)):
+				spin_boxes[i].setDecimals(precision)
+				spin_boxes[i].setMinimum(self.sig_values[signal_type]['min_values'][i])
+				spin_boxes[i].setMaximum(self.sig_values[signal_type]['max_values'][i])
+				spin_boxes[i].setValue(self.sig_values[signal_type]['init_values'][i])
+				spin_boxes[i].setSingleStep(single_step)
+
 		def initLayout(self):
 			self.main_layout.addWidget(self.p_group,1,0)
 			self.main_layout.addWidget(self.q_group,2,0)
 			self.main_layout.addWidget(self.r_group,3,0)
 			self.main_layout.addWidget(self.s_group,4,0)
 			self.main_layout.addWidget(self.t_group,5,0)
+			self.main_layout.addWidget(self.signal_prop_group,6,0)
 
 			self.group_box.setLayout(self.main_layout)
 
