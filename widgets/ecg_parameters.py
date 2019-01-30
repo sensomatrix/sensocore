@@ -127,8 +127,3 @@ class ECGSimulationParameters(QDockWidget):
 						self.sig_values['S']['init_values'],
 						self.sig_values['T']['init_values']
 					]
-
-if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	ex = Simulation()
-	sys.exit(app.exec_())
