@@ -89,12 +89,12 @@ class ECGSimulationParameters(QDockWidget):
 			return wave_group, wave_spin_box
 
 		def initDoubleSpinBox(self, signal_type, spin_boxes, single_step=0.0001, precision=4):
-			for i in range(len(spin_boxes)):
-				spin_boxes[i].setDecimals(precision)
-				spin_boxes[i].setMinimum(self.sig_values[signal_type]['min_values'][i])
-				spin_boxes[i].setMaximum(self.sig_values[signal_type]['max_values'][i])
-				spin_boxes[i].setValue(self.sig_values[signal_type]['init_values'][i])
-				spin_boxes[i].setSingleStep(single_step)
+			for i, spin_box in enumerate(spin_boxes):
+				spin_box.setDecimals(precision)
+				spin_box.setMinimum(self.sig_values[signal_type]['min_values'][i])
+				spin_box.setMaximum(self.sig_values[signal_type]['max_values'][i])
+				spin_box.setValue(self.sig_values[signal_type]['init_values'][i])
+				spin_box.setSingleStep(single_step)
 
 		def initLayout(self):
 			self.main_layout.addWidget(self.p_group,1,0)
