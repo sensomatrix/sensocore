@@ -1,5 +1,5 @@
 from numpy import random
-from scipy.signal import welch
+from scipy.signal import welch, spectrogram
 
 class Signal:
     # function to generate time array out of fs is not implemented yet
@@ -20,7 +20,12 @@ class Signal:
             self.time_array = time_array
             self.fs = 1/(time_array[1] - time_array[0])
         self.PSDfbins, self.PSDxx = self.compute_psd(self.samples_array, self.fs)
+        self.TFf, self.TFt, self.TFSxx = self.compute_time_freq(self.samples_array, self.fs)
 
     def compute_psd(self, samplesarray, fs):
         fbins, pxx = welch(samplesarray, fs=fs, nperseg=int(min((fs, len(samplesarray)))))
         return fbins, pxx
+
+    def compute_time_freq(self, samplesarray, fs):
+        f, t, Sxx = spectrogram(samplesarray, fs)
+        return f, t, Sxx
