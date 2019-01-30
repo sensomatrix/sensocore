@@ -1,6 +1,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import pyqtgraph as pg
+
+## Switch to using white background and black foreground
+pg.setConfigOption('background', 'w')
+pg.setConfigOption('foreground', 'k')
  
 class Simulation(QMainWindow):
 	def __init__(self, title='ECG Simulation'):
