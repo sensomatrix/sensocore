@@ -73,9 +73,10 @@ class ECGSimulationParameters(QDockWidget):
 			self.noise_label = QLabel('Noise (dB)')
 			self.noise_spin_box = QDoubleSpinBox(self)
 
-			self.noise_spin_box.setMinimum(0.0001)
+			self.noise_spin_box.setDecimals(4)
+			self.noise_spin_box.setMinimum(0)
 			self.noise_spin_box.setMaximum(0.01)
-
+			self.noise_spin_box.setSingleStep(0.0001)
 
 			layout = QGridLayout()
 
