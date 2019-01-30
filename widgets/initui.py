@@ -4,7 +4,7 @@ from .center import Center
 from .console import Console
 from .secondaryarea import SecondaryArea
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDockWidget
+from PyQt5.QtWidgets import QDockWidget, QSizePolicy
 
 
 # connect pyqt signals to pyqt slots here
@@ -35,7 +35,7 @@ def init_ui_widgets(MAIN):
              {'name': 'Secondary plotting',
               'widget': MAIN.secondary_area,
               'main_area': Qt.RightDockWidgetArea,
-              'min_width': 300
+              'min_width': 250,
               },
              {'name': 'Console',
               'widget': MAIN.console,
@@ -51,12 +51,11 @@ def init_ui_widgets(MAIN):
         dockwidget.setObjectName(dock['name'])
         if 'max_height' in dock:
             dockwidget.setMaximumHeight(dock['max_height'])
-        MAIN.addDockWidget(dock['main_area'], dockwidget)
         if 'min_height' in dock:
             dockwidget.setMinimumHeight(dock['min_height'])
-        MAIN.addDockWidget(dock['main_area'], dockwidget)
         if 'min_width' in dock:
             dockwidget.setMinimumWidth(dock['min_width'])
+
         MAIN.addDockWidget(dock['main_area'], dockwidget)
 
 def init_ui_toolbar(MAIN):
