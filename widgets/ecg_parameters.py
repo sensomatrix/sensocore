@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGroupBox, QDockWidget, QHBoxLayout, QDoubleSpinBox, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
+from signal_property import SignalProperties
 
 class ECGSimulationParameters(QDockWidget):
 		def __init__(self, parent):
@@ -13,7 +14,7 @@ class ECGSimulationParameters(QDockWidget):
 					{
 						"init_values": [0.185, 0.0178, 0.2369],
 						"min_values": [0.1, 0.01, 0.2],
-						"max_values": [0.2, 0.03, 0.3],
+						"max_values": [0.3, 0.03, 0.3],
 					},
 				"Q":
 					{
@@ -46,7 +47,7 @@ class ECGSimulationParameters(QDockWidget):
 			self.initR()
 			self.initS()
 			self.initT()
-			self.initSignalProperties()
+			self.sig_props = SignalProperties()
 			self.initLayout()
 
 		def initP(self):
@@ -66,24 +67,6 @@ class ECGSimulationParameters(QDockWidget):
 
 		def initT(self):
 			self.t_group, self.t_spin_box = self.createWaveParameters('T')
-
-		def initSignalProperties(self):
-			self.signal_prop_group = QGroupBox('Signal Properties')
-
-			self.noise_label = QLabel('Noise (dB)')
-			self.noise_spin_box = QDoubleSpinBox(self)
-
-			self.noise_spin_box.setDecimals(4)
-			self.noise_spin_box.setMinimum(0)
-			self.noise_spin_box.setMaximum(0.01)
-			self.noise_spin_box.setSingleStep(0.0001)
-
-			layout = QGridLayout()
-
-			layout.addWidget(self.noise_label)
-			layout.addWidget(self.noise_spin_box)
-
-			self.signal_prop_group.setLayout(layout)
 
 		def createWaveParameters(self, signal_type, wave_label=None, num_params=3):
 			if wave_label == None:
@@ -119,7 +102,7 @@ class ECGSimulationParameters(QDockWidget):
 			self.main_layout.addWidget(self.r_group,3,0)
 			self.main_layout.addWidget(self.s_group,4,0)
 			self.main_layout.addWidget(self.t_group,5,0)
-			self.main_layout.addWidget(self.signal_prop_group,6,0)
+			self.main_layout.addWidget(self.sig_props,6,0)
 
 			self.group_box.setLayout(self.main_layout)
 
@@ -132,6 +115,9 @@ class ECGSimulationParameters(QDockWidget):
 			for param_slider in self.all_spin_boxes:
 				for slider in param_slider:
 					slider.valueChanged.connect(handler)
+
+		def connectProperties(self, handler):
+			self.sig_props.connectSignalProperties(handler)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

@@ -27,7 +27,7 @@ class Simulation(QMainWindow):
 
 		self.ecg_sim = ECGSimulationParameters(self)
 		self.ecg_sim.connectParameters(self.changeInParameter)
-		self.ecg_sim.noise_spin_box.valueChanged.connect(self.changeInNoise)
+		self.ecg_sim.connectProperties(self.changeInNoise)
 
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_sim)
 		self.show()
