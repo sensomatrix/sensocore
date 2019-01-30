@@ -1,12 +1,17 @@
-from PyQt5.QtWidgets import QWidget, QGroupBox, QDoubleSpinBox, QLabel, QGridLayout
+from PyQt5.QtWidgets import QGroupBox, QDoubleSpinBox, QLabel, QGridLayout
 
-class SignalProperties(QWidget):
+class SignalProperties(QGroupBox):
 	def __init__(self):
-		super().__init__()
+		super().__init__('Signal Properties')
 
-		self.signal_prop_group = QGroupBox('Signal Properties')
+		self.initUI()
+		self.initLayout()
+		
+	def initUI(self):
+		self.initNoise()
 
-		self.noise_label = QLabel('Noise (Mean Value)')
+	def initNoise(self):
+		self._noise_label = QLabel('Noise (Mean Value)')
 		self._noise_spin_box = QDoubleSpinBox(self)
 
 		self._noise_spin_box.setDecimals(4)
@@ -14,9 +19,10 @@ class SignalProperties(QWidget):
 		self._noise_spin_box.setMaximum(0.05)
 		self._noise_spin_box.setSingleStep(0.0001)
 
+	def initLayout(self):
 		layout = QGridLayout()
 
-		layout.addWidget(self.noise_label)
+		layout.addWidget(self._noise_label)
 		layout.addWidget(self._noise_spin_box)
 
 		self.setLayout(layout)
