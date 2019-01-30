@@ -35,6 +35,7 @@ def init_ui_widgets(MAIN):
              {'name': 'Secondary plotting',
               'widget': MAIN.secondary_area,
               'main_area': Qt.RightDockWidgetArea,
+              'min_width': 300
               },
              {'name': 'Console',
               'widget': MAIN.console,
@@ -54,8 +55,8 @@ def init_ui_widgets(MAIN):
         if 'min_height' in dock:
             dockwidget.setMinimumHeight(dock['min_height'])
         MAIN.addDockWidget(dock['main_area'], dockwidget)
-        if 'max_width' in dock:
-            dockwidget.setMaximumWidth(dock['max_width'])
+        if 'min_width' in dock:
+            dockwidget.setMinimumWidth(dock['min_width'])
         MAIN.addDockWidget(dock['main_area'], dockwidget)
 
 def init_ui_toolbar(MAIN):
