@@ -10,6 +10,7 @@ class SignalProperties(QGroupBox):
 	def initUI(self):
 		self.initNoise()
 		self.initResetButton()
+		self.setDefaultValues()
 
 	def initNoise(self):
 		self._noise_label = QLabel('Noise (Mean Value)')
@@ -22,6 +23,9 @@ class SignalProperties(QGroupBox):
 
 	def initResetButton(self):
 		self._resetButton = QPushButton("Reset to default")
+
+	def setDefaultValues(self):
+		self._noise_spin_box.setValue(0)
 
 	def initLayout(self):
 		layout = QGridLayout()

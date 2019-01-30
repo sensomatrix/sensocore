@@ -22,17 +22,17 @@ class Simulation(QMainWindow):
 		self.sim_graph = SimulationGraph()
 		self.setCentralWidget(self.sim_graph)
 
-		self.ecg_sim = ECGSimulationParameters(self)
-		self.ecg_sim.connectParameters(self.changeInParameter)
-		self.ecg_sim.connectProperties(self.changeInNoise, self.resetEvent)
+		self.ecg_params = ECGSimulationParameters(self)
+		self.ecg_params.connectParameters(self.changeInParameter)
+		self.ecg_params.connectProperties(self.changeInNoise, self.resetEvent)
 
 		self.initECGFunction()
 
-		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_sim)
+		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_params)
 		self.show()
 
 	def changeInParameter(self, value):
-		for param_type_index in range(len(self.ecg_sim.all_spin_boxes)):
+		for param_type_index in range(len(self.ecg_params.all_spin_boxes)):
 			param_spin_box_index = self.getSenderIndex(self.sender(), param_type_index)
 			
 			if param_spin_box_index != -1:
@@ -44,11 +44,10 @@ class Simulation(QMainWindow):
 		self.plotECG()
 
 	def resetEvent(self):
-		self.ecg_sim.setToDefaultValues()
-		self.initECGFunction()
+		self.ecg_params.setToDefaultValues()
 		
 	def getSenderIndex(self, sender, param_type_index):
-		spin_boxes = self.ecg_sim.all_spin_boxes[param_type_index]
+		spin_boxes = self.ecg_params.all_spin_boxes[param_type_index]
 
 		for i in range(len(spin_boxes)):
 			if sender == spin_boxes[i]:
@@ -66,7 +65,7 @@ class Simulation(QMainWindow):
 				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4]))
 
 	def initECGFunction(self):
-		self.waves = self.ecg_sim.getDefaultValues()
+		self.waves = self.ecg_params.getDefaultValues()
 		self.sampling_freq = 256
 		self.noise = 0
 		self.end_time = 0.9
