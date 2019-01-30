@@ -39,7 +39,7 @@ class ECGSimulationParameters(QDockWidget):
 
 			wave_group = QGroupBox(signal_type + ' Wave Parameters',self)
 
-			wave_slider = [QSlider(Qt.Horizontal) for _ in range(num_params)]
+			wave_slider = [QSlider(Qt.Horizontal, self) for _ in range(num_params)]
 
 			layout = QGridLayout()
 
@@ -61,6 +61,22 @@ class ECGSimulationParameters(QDockWidget):
 			self.group_box.setLayout(self.main_layout)
 			
 			self.setWidget(self.group_box)
+
+		def connect(self, handler):
+			for slider in self.p_slider:
+				slider.valueChanged.connect(handler)
+
+			for slider in self.q_slider:
+				slider.valueChanged.connect(handler)
+
+			for slider in self.r_slider:
+				slider.valueChanged.connect(handler)
+
+			for slider in self.s_slider:
+				slider.valueChanged.connect(handler)
+
+			for slider in self.t_slider:
+				slider.valueChanged.connect(handler)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
