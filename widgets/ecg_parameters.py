@@ -17,11 +17,12 @@ class ECGSimulationParameters(QDockWidget):
 
 		def initP(self):
 			self.p_group, self.p_slider = self.createWaveParameters('P')
-			
+
+			initValues = [185, 178, 2369]
 			minValues = [100, 100, 2000]
 			maxValues = [200, 300, 3000]
 
-			self.setMinMaxForSliders(minValues, maxValues, self.p_slider)
+			self.initSliders(initValues, minValues, maxValues, self.p_slider)
 
 		def initQ(self):
 			q_label = [QLabel('Q1 Magnitude'), QLabel('Q1 Widthness'), QLabel('Q1 Time'),
@@ -29,39 +30,44 @@ class ECGSimulationParameters(QDockWidget):
 
 			self.q_group, self.q_slider = self.createWaveParameters('Q', wave_label=q_label, num_params=6)
 
+			initValues = [1103, 3064, 3218, 1075, 5705, 37123]
 			minValues = [1000, 2500, 2500, 500, 5000, 36000]
 			maxValues = [2000, 3500, 3500, 1500, 6000, 38000]
 
-			self.setMinMaxForSliders(minValues, maxValues, self.q_slider)
+			self.initSliders(initValues, minValues, maxValues, self.q_slider)
 
 		def initR(self):
 			self.r_group, self.r_slider = self.createWaveParameters('R')
 
+			initValues = [50, 2987, 46571]
 			minValues = [25, 2900, 46000]
 			maxValues = [125, 3100, 47000]
 
-			self.setMinMaxForSliders(minValues, maxValues, self.r_slider)
+			self.initSliders(initValues, minValues, maxValues, self.r_slider)
 
 		def initS(self):
 			self.s_group, self.s_slider = self.createWaveParameters('S')
 
+			initValues = [509, 909, 4769]
 			minValues = [400, 800, 4600]
 			maxValues = [600, 1000, 4800]
 
-			self.setMinMaxForSliders(minValues, maxValues, self.s_slider)
+			self.initSliders(initValues, minValues, maxValues, self.s_slider)
 
 		def initT(self):
 			self.t_group, self.t_slider = self.createWaveParameters('T')
 
+			initValues = [3255, 2978, 7543]
 			minValues = [3100, 2800, 7400]
 			maxValues = [3300, 3100, 7600]
 
-			self.setMinMaxForSliders(minValues, maxValues, self.t_slider)			
+			self.initSliders(initValues, minValues, maxValues, self.t_slider)			
 
-		def setMinMaxForSliders(self, minValues, maxValues, slider):
+		def initSliders(self, initValues, minValues, maxValues, slider):
 			for i in range(len(slider)):
 				slider[i].setMinimum(minValues[i])
 				slider[i].setMaximum(maxValues[i])
+				slider[i].setValue(initValues[i])
 
 		def createWaveParameters(self, signal_type, wave_label=None,num_params=3):
 			if wave_label == None:
