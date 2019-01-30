@@ -119,6 +119,15 @@ class ECGSimulationParameters(QDockWidget):
 		def connectProperties(self, handler):
 			self.sig_props.connectSignalProperties(handler)
 
+		def getDefaultValues(self):
+			return  [
+						self.sig_values['P']['init_values'],
+						self.sig_values['Q']['init_values'],
+						self.sig_values['R']['init_values'],
+						self.sig_values['S']['init_values'],
+						self.sig_values['T']['init_values']
+					]
+
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	ex = Simulation()

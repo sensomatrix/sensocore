@@ -6,8 +6,7 @@ from PyQt5.QtGui import QGridLayout
 from ecg_parameters import ECGSimulationParameters
 
 sys.path.append('simulations')
-from ecg.ecg import generateECG, returnDefault
-
+from ecg.ecg import generateECG
 ## Switch to using white background and black foreground
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -23,11 +22,11 @@ class Simulation(QMainWindow):
 		self.sim_graph = SimulationGraph()
 		self.setCentralWidget(self.sim_graph)
 
-		self.initECGFunction()
-
 		self.ecg_sim = ECGSimulationParameters(self)
 		self.ecg_sim.connectParameters(self.changeInParameter)
 		self.ecg_sim.connectProperties(self.changeInNoise)
+
+		self.initECGFunction()
 
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_sim)
 		self.show()
@@ -63,7 +62,7 @@ class Simulation(QMainWindow):
 				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4]))
 
 	def initECGFunction(self):
-		self.waves = returnDefault()
+		self.waves = self.ecg_sim.getDefaultValues()
 		self.sampling_freq = 256
 		self.noise = 0
 		self.end_time = 0.9

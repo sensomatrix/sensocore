@@ -6,20 +6,6 @@ from .t_wave import t_wave
 import numpy as np
 import math
 
-def returnDefault():
-	P = [0.185, 0.0178, 0.2369]
-
-	Q = [
-			-0.1103, 0.03064, 0.3218,
-			-0.1075, 0.005705, 0.37123,
-		]
-
-	R = [0.050, 0.02987, 0.46571]
-	S = [0.509, 0.00909, 0.4769]
-	T = [0.3255, 0.02978, 0.7543]
-
-	return [P, Q, R, S, T]
-
 def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 				P, Q, R, S, T, callback=None):
 
