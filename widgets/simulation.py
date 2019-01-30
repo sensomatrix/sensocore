@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGroupBox, QDockWidget, QHBoxLayout, QSlider
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGroupBox, QDockWidget, QHBoxLayout
 import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
@@ -25,16 +25,6 @@ class Simulation(QMainWindow):
 
 		self.initECGFunction()
 
-		self.parameter_map = [
-								[10 ** 3, 10 ** 4, 10 ** 4],
-								[ -1 * 10 ** 4, 10 ** 5, 10 ** 4, 
-								  -1 * 10 ** 4, 10 ** 6, 10 ** 5
-								],
-								[10 ** 3, 10 ** 5, 10 ** 5],
-								[10 ** 3, 10 ** 5, 10 ** 4],
-								[10 ** 4, 10 ** 5, 10 ** 4]
-							 ]
-
 		self.ecg_sim = ECGSimulationParameters(self)
 		self.ecg_sim.connect(self.changeInParameter)
 
@@ -42,26 +32,24 @@ class Simulation(QMainWindow):
 		self.show()
 
 	def changeInParameter(self, value):
-		for param_type_index in range(len(self.ecg_sim.all_sliders)):
-			param_slider_index = self.getSenderIndex(self.sender(), param_type_index)
+		for param_type_index in range(len(self.ecg_sim.all_spin_boxes)):
+			param_spin_box_index = self.getSenderIndex(self.sender(), param_type_index)
 			
-			if param_slider_index != -1:
-				self.updateParameterValue(value, param_type_index, param_slider_index)
+			if param_spin_box_index != -1:
+				self.updateParameterValue(value, param_type_index, param_spin_box_index)
 				return
 		
 	def getSenderIndex(self, sender, param_type_index):
-		sliders = self.ecg_sim.all_sliders[param_type_index]
+		spin_boxs = self.ecg_sim.all_spin_boxes[param_type_index]
 
-		for i in range(len(sliders)):
-			if sender == sliders[i]:
+		for i in range(len(spin_boxs)):
+			if sender == spin_boxs[i]:
 				return i
 
 		return -1
 
-	def updateParameterValue(self, value, param_type_index, param_slider_index):
-		divisor = self.parameter_map[param_type_index][param_slider_index ]
-		self.waves[param_type_index][param_slider_index] = value / divisor
-
+	def updateParameterValue(self, value, param_type_index, param_spin_box_index):
+		self.waves[param_type_index][param_spin_box_index] = value
 		self.plotECG()
 
 	def plotECG(self):
