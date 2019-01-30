@@ -59,24 +59,16 @@ class ECGSimulationParameters(QDockWidget):
 			self.main_layout.addWidget(self.t_group,5,0)
 
 			self.group_box.setLayout(self.main_layout)
+
+			self.all_sliders = [self.p_slider, self.q_slider, self.r_slider,
+								self.s_slider, self.t_slider]
 			
 			self.setWidget(self.group_box)
 
 		def connect(self, handler):
-			for slider in self.p_slider:
-				slider.valueChanged.connect(handler)
-
-			for slider in self.q_slider:
-				slider.valueChanged.connect(handler)
-
-			for slider in self.r_slider:
-				slider.valueChanged.connect(handler)
-
-			for slider in self.s_slider:
-				slider.valueChanged.connect(handler)
-
-			for slider in self.t_slider:
-				slider.valueChanged.connect(handler)
+			for param_slider in self.all_sliders:
+				for slider in param_slider:
+					slider.valueChanged.connect(handler)
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
