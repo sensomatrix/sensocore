@@ -49,6 +49,8 @@ class ECGSimulationParameters(QDockWidget):
 			self.initT()
 			self.sig_props = SignalProperties()
 			self.initLayout()
+			self.setToDefaultValues()
+
 
 		def initP(self):
 			self.p_group, self.p_spin_box = self.createWaveParameters('P')
@@ -93,7 +95,6 @@ class ECGSimulationParameters(QDockWidget):
 				spin_box.setDecimals(precision)
 				spin_box.setMinimum(self.sig_values[signal_type]['min_values'][i])
 				spin_box.setMaximum(self.sig_values[signal_type]['max_values'][i])
-				spin_box.setValue(self.sig_values[signal_type]['init_values'][i])
 				spin_box.setSingleStep(single_step)
 
 		def initLayout(self):
@@ -116,8 +117,9 @@ class ECGSimulationParameters(QDockWidget):
 				for slider in param_slider:
 					slider.valueChanged.connect(handler)
 
-		def connectProperties(self, handler):
-			self.sig_props.connectSignalProperties(handler)
+		def connectProperties(self, noise_handler, reset_handler):
+			self.sig_props.connectSignalProperties(noise_handler)
+			self.sig_props.connectResetButton(reset_handler)
 
 		def getDefaultValues(self):
 			return  [
@@ -127,3 +129,10 @@ class ECGSimulationParameters(QDockWidget):
 						self.sig_values['S']['init_values'],
 						self.sig_values['T']['init_values']
 					]
+
+		def setToDefaultValues(self):
+			signal_types = ['P', 'Q', 'R', 'S', 'T']
+
+			for j, spin_box_type in enumerate(self.all_spin_boxes):
+				for i, spin_box in enumerate(spin_box_type):
+					spin_box.setValue(self.sig_values[signal_types[j]]['init_values'][i])

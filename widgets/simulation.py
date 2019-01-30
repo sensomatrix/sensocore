@@ -24,7 +24,7 @@ class Simulation(QMainWindow):
 
 		self.ecg_sim = ECGSimulationParameters(self)
 		self.ecg_sim.connectParameters(self.changeInParameter)
-		self.ecg_sim.connectProperties(self.changeInNoise)
+		self.ecg_sim.connectProperties(self.changeInNoise, self.resetEvent)
 
 		self.initECGFunction()
 
@@ -42,6 +42,10 @@ class Simulation(QMainWindow):
 	def changeInNoise(self, value):
 		self.noise = value
 		self.plotECG()
+
+	def resetEvent(self):
+		self.ecg_sim.setToDefaultValues()
+		self.initECGFunction()
 		
 	def getSenderIndex(self, sender, param_type_index):
 		spin_boxes = self.ecg_sim.all_spin_boxes[param_type_index]

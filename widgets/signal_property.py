@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QGroupBox, QDoubleSpinBox, QLabel, QGridLayout
+from PyQt5.QtWidgets import QGroupBox, QDoubleSpinBox, QLabel, QGridLayout, QPushButton
 
 class SignalProperties(QGroupBox):
 	def __init__(self):
@@ -9,6 +9,7 @@ class SignalProperties(QGroupBox):
 		
 	def initUI(self):
 		self.initNoise()
+		self.initResetButton()
 
 	def initNoise(self):
 		self._noise_label = QLabel('Noise (Mean Value)')
@@ -19,11 +20,15 @@ class SignalProperties(QGroupBox):
 		self._noise_spin_box.setMaximum(0.05)
 		self._noise_spin_box.setSingleStep(0.0001)
 
+	def initResetButton(self):
+		self._resetButton = QPushButton("Reset to default")
+
 	def initLayout(self):
 		layout = QGridLayout()
 
 		layout.addWidget(self._noise_label)
 		layout.addWidget(self._noise_spin_box)
+		layout.addWidget(self._resetButton)
 
 		self.setLayout(layout)
 
@@ -33,4 +38,7 @@ class SignalProperties(QGroupBox):
 
 	def connectSignalProperties(self, handler):
 		self._noise_spin_box.valueChanged.connect(handler)
+
+	def connectResetButton(self, handler):
+		self._resetButton.clicked.connect(handler)
 	
