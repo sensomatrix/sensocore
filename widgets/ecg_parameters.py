@@ -19,8 +19,8 @@ class ECGSimulationParameters(QDockWidget):
 			self.p_group, self.p_slider = self.createWaveParameters('P')
 
 		def initQ(self):
-			q_label = [QLabel('Q1 Widthness'), QLabel('Q1 Magnitude'), QLabel('Q1 Time'),
-					   QLabel('Q2 Widthness'), QLabel('Q2 Magnitude'), QLabel('Q2 Time')]
+			q_label = [QLabel('Q1 Magnitude'), QLabel('Q1 Widthness'), QLabel('Q1 Time'),
+					   QLabel('Q2 Magnitude'), QLabel('Q2 Widthness'), QLabel('Q2 Time')]
 
 			self.q_group, self.q_slider = self.createWaveParameters('Q', wave_label=q_label, num_params=6)
 
@@ -35,7 +35,7 @@ class ECGSimulationParameters(QDockWidget):
 
 		def createWaveParameters(self, signal_type, wave_label=None,num_params=3):
 			if wave_label == None:
-				wave_label = [QLabel('Widthness'), QLabel('Magnitude'), QLabel('Time')]
+				wave_label = [QLabel('Magnitude'), QLabel('Widthness'), QLabel('Time')]
 
 			wave_group = QGroupBox(signal_type + ' Wave Parameters',self)
 
