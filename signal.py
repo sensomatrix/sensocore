@@ -1,5 +1,5 @@
 from numpy import random
-
+from scipy.signal import welch
 
 class Signal:
     # function to generate time array out of fs is not implemented yet
@@ -19,3 +19,8 @@ class Signal:
         if time_array is not None:
             self.time_array = time_array
             self.fs = 1/(time_array[1] - time_array[0])
+        self.PSDfbins, self.PSDxx = self.compute_psd(self.samples_array, self.fs)
+
+    def compute_psd(self, samplesarray, fs):
+        fbins, pxx = welch(samplesarray, fs=fs, nperseg=int(min((fs, len(samplesarray)))))
+        return fbins, pxx
