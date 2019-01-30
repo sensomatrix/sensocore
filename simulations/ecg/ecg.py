@@ -46,9 +46,8 @@ def returnDefault():
 	P = [args.m_p, args.w_p, args.t_p]
 
 	Q = [
-		 [args.m_q1, args.m_q2], 
-		 [args.w_q1,  args.w_q2], 
-		 [args.t_q1, args.t_q2]
+			args.m_q1, args.w_q1, args.t_q1,
+			args.m_q2, args.w_q2, args.t_q2,
 		]
 
 	R = [args.m_r, args.w_r, args.t_r]
