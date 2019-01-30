@@ -60,27 +60,17 @@ class Simulation(QMainWindow):
 
 	def updateParameterValue(self, value, param_type_index, param_slider_index):
 		divisor = self.parameter_map[param_type_index][param_slider_index ]
-
-		if param_type_index == 0:
-			self.P[param_slider_index] = value / divisor
-		elif param_type_index == 1:
-			self.Q[param_slider_index] = value / divisor
-		elif param_type_index == 2:
-			self.R[param_slider_index] = value / divisor
-		elif param_type_index == 3:
-			self.S[param_slider_index] = value / divisor
-		elif param_type_index == 4:
-			self.T[param_slider_index] = value / divisor
+		self.waves[param_type_index][param_slider_index] = value / divisor
 
 		self.plotECG()
 
 	def plotECG(self):
 		self.sim_graph.clear()
 		self.sim_graph.plot(generateECG(self.sampling_freq, self.noise, self.end_time, self.period,
-				self.P, self.Q, self.R, self.S, self.T))
+				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4]))
 
 	def initECGFunction(self):
-		self.P, self.Q, self.R, self.S, self. T = returnDefault()
+		self.waves = returnDefault()
 		self.sampling_freq = 256
 		self.noise = 0
 		self.end_time = 0.9

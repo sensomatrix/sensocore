@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 def q_wave(x, shift, Q):
 	y = x.copy()
 
-	print(Q)
-
 	Q = [
 			[Q[0], Q[3]],
 			[Q[1], Q[4]],

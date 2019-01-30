@@ -54,7 +54,7 @@ def returnDefault():
 	S = [args.m_s, args.w_s, args.t_s]
 	T = [args.m_t, args.w_t, args.t_t]
 
-	return P, Q, R, S, T
+	return [P, Q, R, S, T]
 
 def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 				P, Q, R, S, T, callback=None):
