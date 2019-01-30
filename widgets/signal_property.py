@@ -6,7 +6,7 @@ class SignalProperties(QWidget):
 
 		self.signal_prop_group = QGroupBox('Signal Properties')
 
-		self.noise_label = QLabel('Noise (dB)')
+		self.noise_label = QLabel('Noise (Mean Value)')
 		self._noise_spin_box = QDoubleSpinBox(self)
 
 		self._noise_spin_box.setDecimals(4)
