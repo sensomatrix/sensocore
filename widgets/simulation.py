@@ -26,7 +26,8 @@ class Simulation(QMainWindow):
 		self.initECGFunction()
 
 		self.ecg_sim = ECGSimulationParameters(self)
-		self.ecg_sim.connect(self.changeInParameter)
+		self.ecg_sim.connectParameters(self.changeInParameter)
+		self.ecg_sim.noise_spin_box.valueChanged.connect(self.changeInNoise)
 
 		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_sim)
 		self.show()
@@ -38,6 +39,10 @@ class Simulation(QMainWindow):
 			if param_spin_box_index != -1:
 				self.updateParameterValue(value, param_type_index, param_spin_box_index)
 				return
+
+	def changeInNoise(self, value):
+		self.noise = value
+		self.plotECG()
 		
 	def getSenderIndex(self, sender, param_type_index):
 		spin_boxs = self.ecg_sim.all_spin_boxes[param_type_index]

@@ -128,7 +128,7 @@ class ECGSimulationParameters(QDockWidget):
 			
 			self.setWidget(self.group_box)
 
-		def connect(self, handler):
+		def connectParameters(self, handler):
 			for param_slider in self.all_spin_boxes:
 				for slider in param_slider:
 					slider.valueChanged.connect(handler)
