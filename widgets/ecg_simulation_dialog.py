@@ -4,7 +4,7 @@ import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
 from .ecg_parameters import ECGSimulationParameters
-from .signal_property import SignalProperties
+from .signal_properties import SignalProperties
 
 sys.path.append('simulations')
 from ecg.ecg import generateECG
