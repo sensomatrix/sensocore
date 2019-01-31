@@ -12,7 +12,6 @@ def init_connect_slots(MAIN):
         MAIN.datasets.signal_loaded_signal.connect(MAIN.center.scope.on_signal_loaded)
         MAIN.center.scope.cursor_moved_signal.connect(MAIN.center.chrono.on_cursor_moved)
         MAIN.datasets.signal_loaded_signal.connect(MAIN.channels.on_signal_loaded)
-        MAIN.channels.channel_selected_signal.connect(MAIN.secondary_area.on_channel_selection_change)
 
 def init_ui_widgets(MAIN):
     
