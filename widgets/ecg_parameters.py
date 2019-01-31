@@ -1,15 +1,15 @@
 from PyQt5.QtWidgets import QGroupBox, QDockWidget, QHBoxLayout, QDoubleSpinBox, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
-from .signal_property import SignalProperties
 import copy
 
 class ECGSimulationParameters(QDockWidget):
-		def __init__(self, parent):
-			super().__init__(parent=parent)
+		def __init__(self, sig_props):
+			super().__init__()
 			self.group_box = QGroupBox('ECG Simulation Parameters')
 			self.main_layout = QGridLayout()
-
+			self.sig_props = sig_props
+			
 			self.sig_values = {
 				"P":
 					{
@@ -48,7 +48,6 @@ class ECGSimulationParameters(QDockWidget):
 			self.initR()
 			self.initS()
 			self.initT()
-			self.sig_props = SignalProperties()
 			self.initLayout()
 			self.setToDefaultValues()
 
@@ -117,14 +116,6 @@ class ECGSimulationParameters(QDockWidget):
 				for spin_box in spin_boxes:
 					spin_box.valueChanged.connect(handler)
 
-		def connectProperties(self, noise_handler, reset_handler,
-							  sampling_freq_handler, duration_handler, period_handler,
-							  create_handler):
-			self.sig_props.connectSignalProperties(noise_handler, sampling_freq_handler,
-												   duration_handler, period_handler)
-			self.sig_props.connectResetButton(reset_handler)
-			self.sig_props.connectCreateButton(create_handler)
-
 		def getDefaultValues(self):
 			return  [
 						copy.deepcopy(self.sig_values['P']['init_values']),
@@ -140,5 +131,3 @@ class ECGSimulationParameters(QDockWidget):
 			for j, spin_box_type in enumerate(self.all_spin_boxes):
 				for i, spin_box in enumerate(spin_box_type):
 					spin_box.setValue(self.sig_values[signal_types[j]]['init_values'][i])
-
-			self.sig_props.setDefaultValues()

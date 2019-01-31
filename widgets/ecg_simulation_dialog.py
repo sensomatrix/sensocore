@@ -4,6 +4,7 @@ import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
 from .ecg_parameters import ECGSimulationParameters
+from .signal_property import SignalProperties
 
 sys.path.append('simulations')
 from ecg.ecg import generateECG
@@ -20,13 +21,18 @@ class Simulation(QDialog):
 	
 	def initUI(self):
 		self.setWindowTitle(self.title)
-		self.sim_graph = SimulationGraph()
 
-		self.ecg_params = ECGSimulationParameters(self)
+		self.sig_props = SignalProperties()
+		self.sig_props.connectSignalProperties(self.changeInNoise, self.changeInFrequency,
+											   self.changeInDuration, self.changeInPeriod,
+											   self.resetEvent, self.createSignal)
+
+		self.sim_graph = SimulationGraph()
+		
+		self.ecg_params = ECGSimulationParameters(self.sig_props)
 		self.ecg_params.connectParameters(self.changeInParameter)
-		self.ecg_params.connectProperties(self.changeInNoise, self.resetEvent, 
-										  self.changeInFrequency, self.changeInDuration,
-										  self.changeInPeriod, self.createSignal)
+		
+
 
 		self.initECGFunction()
 
@@ -52,6 +58,7 @@ class Simulation(QDialog):
 
 	def resetEvent(self):
 		self.ecg_params.setToDefaultValues()
+		self.sig_props.setToDefaultValues()
 
 	def changeInFrequency(self, value):
 		self.sampling_freq = value
@@ -81,6 +88,13 @@ class Simulation(QDialog):
 				return i
 
 		return -1
+
+	def connectProperties(self, noise_handler, reset_handler, sampling_freq_handler, 
+						  duration_handler, period_handler, create_handler):
+		self.sig_props.connectSignalProperties(noise_handler, sampling_freq_handler,
+											   duration_handler, period_handler)
+		self.sig_props.connectResetButton(reset_handler)
+		self.sig_props.connectCreateButton(create_handler)
 
 	def updateParameterValue(self, value, param_type_index, param_spin_box_index):
 		self.waves[param_type_index][param_spin_box_index] = value
