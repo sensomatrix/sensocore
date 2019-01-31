@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QGroupBox, QDockWidget, QHBoxLayout
+from PyQt5.QtWidgets import QDialog, QGroupBox, QDockWidget, QHBoxLayout, QScrollArea
 import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
@@ -21,6 +21,9 @@ class Simulation(QDialog):
 	
 	def initUI(self):
 		self.setWindowTitle(self.title)
+		self.showMaximized()
+
+		self.scroll = QScrollArea()
 
 		self.sig_props = SignalProperties()
 		self.sig_props.connectSignalProperties(self.changeInNoise, self.changeInFrequency,
@@ -34,8 +37,16 @@ class Simulation(QDialog):
 		
 		self.initECGFunction()
 
+		scroll = QScrollArea(self)
+		scroll.setWidget(self.ecg_params)
+		scroll.setWidgetResizable(True)
+		scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff);
+
+		test = QHBoxLayout()
+		self.ecg_params.setLayout(test)
+
 		h_box = QHBoxLayout()
-		h_box.addWidget(self.ecg_params)
+		h_box.addWidget(scroll)
 		h_box.addWidget(self.sim_graph)
 
 		self.setLayout(h_box)
