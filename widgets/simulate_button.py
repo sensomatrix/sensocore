@@ -35,6 +35,7 @@ class SimulateButton(QToolButton):
 
     def simulation_window(self, title):
         sim = Simulation(title, self.parent)
-        print(sim.time_series)
-        print(sim.output)
+
+        if sim.output != None:
+            self.parent.datasets.loadFromSimulation(sim.output, sim.time_series, sim.sampling_freq, 'Sim test', type=title)
         

@@ -48,9 +48,10 @@ class Dataset(QObject):
                 lines = self.readnextlines(fileObject, 5)
             print("file loaded")
 
-    def loadFromSimulation(self, samples_array, time_array, fs, namee, type):
+    def loadFromSimulation(self, samples_array, time_array, fs, name, type):
         sig = Signal(samples_array, time_array=time_array, fs=fs, name=name, type=type)
         self.signals_dictionary[sig.id] = sig
+        self.signal_loaded_signal.emit(sig)
 
     def readnextlines(self, fileObject, n):
         return [x.strip() for x in islice(fileObject, n)]
