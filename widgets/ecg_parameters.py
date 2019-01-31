@@ -117,10 +117,12 @@ class ECGSimulationParameters(QDockWidget):
 					spin_box.valueChanged.connect(handler)
 
 		def connectProperties(self, noise_handler, reset_handler,
-							  sampling_freq_handler, duration_handler, period_handler):
+							  sampling_freq_handler, duration_handler, period_handler,
+							  create_handler):
 			self.sig_props.connectSignalProperties(noise_handler, sampling_freq_handler,
 												   duration_handler, period_handler)
 			self.sig_props.connectResetButton(reset_handler)
+			self.sig_props.connectCreateButton(create_handler)
 
 		def getDefaultValues(self):
 			return  [

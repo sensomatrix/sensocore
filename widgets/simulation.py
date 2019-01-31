@@ -12,6 +12,8 @@ class Simulation(QDialog):
 	def __init__(self, title='ECG Simulation', parent=None):
 		super().__init__(parent=parent)
 		self.title = title
+		self.time_series = None
+		self.output = None
 		self.initUI()
 	
 	def initUI(self):
@@ -22,7 +24,7 @@ class Simulation(QDialog):
 		self.ecg_params.connectParameters(self.changeInParameter)
 		self.ecg_params.connectProperties(self.changeInNoise, self.resetEvent, 
 										  self.changeInFrequency, self.changeInDuration,
-										  self.changeInPeriod)
+										  self.changeInPeriod, self.createSignal)
 
 		self.initECGFunction()
 
