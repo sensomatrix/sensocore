@@ -16,7 +16,7 @@ class SignalProperties(QGroupBox):
 		self.initPeriod()
 		self.initCreateButton()
 		self.initNameField()
-		self.setDefaultValues()
+		self.setToDefaultValues()
 
 	def initNoise(self):
 		self._noise_label = QLabel('Noise (Mean Value)')
@@ -62,7 +62,7 @@ class SignalProperties(QGroupBox):
 		self._name_label = QLabel('Signal Name')
 		self._name_text_field = QLineEdit(self)
 
-	def setDefaultValues(self):
+	def setToDefaultValues(self):
 		self._name_text_field.setText('Sim Example')
 		self._noise_spin_box.setValue(0)
 		self._sampling_freq_spin_box.setValue(256)
@@ -97,11 +97,13 @@ class SignalProperties(QGroupBox):
 	
 
 	def connectSignalProperties(self, noise_handler, sampling_freq_handler, 
-								duration_handler, period_handler):
+								duration_handler, period_handler, reset_handler, create_handler):
 		self._noise_spin_box.valueChanged.connect(noise_handler)
 		self._sampling_freq_spin_box.valueChanged.connect(sampling_freq_handler)
 		self._duration_spin_box.valueChanged.connect(duration_handler)
 		self._period_spin_box.valueChanged.connect(period_handler)
+		self.connectResetButton(reset_handler)
+		self.connectCreateButton(create_handler)
 
 	def connectResetButton(self, handler):
 		self._resetButton.clicked.connect(handler)
