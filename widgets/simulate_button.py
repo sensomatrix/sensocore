@@ -34,6 +34,5 @@ class SimulateButton(QToolButton):
         self.ecg_action.triggered.connect(lambda: self.simulation_window('ECG Simulation'))
 
     def simulation_window(self, title):
-        print('sim')
         sim = Simulation(title, self.parent)
         sim.show()

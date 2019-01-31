@@ -7,9 +7,6 @@ from .ecg_parameters import ECGSimulationParameters
 
 sys.path.append('simulations')
 from ecg.ecg import generateECG
-## Switch to using white background and black foreground
-pg.setConfigOption('background', 'w')
-pg.setConfigOption('foreground', 'k')
 
 class Simulation(QMainWindow):
 	def __init__(self, title='ECG Simulation', parent=None):
@@ -79,7 +76,7 @@ class Simulation(QMainWindow):
 		time, signal = generateECG(self.sampling_freq, self.noise, self.duration, self.period,
 				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4])
 
-		self.sim_graph.plot(time, signal)
+		self.sim_graph.plot(time, signal, pen='k')
 
 	def initECGFunction(self):
 		self.waves = self.ecg_params.getDefaultValues()
@@ -92,3 +89,4 @@ class Simulation(QMainWindow):
 class SimulationGraph(pg.PlotWidget):
 	def __init__(self):
 		super().__init__()
+		self.setBackground('w')
