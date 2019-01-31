@@ -32,8 +32,6 @@ class Simulation(QDialog):
 		self.ecg_params = ECGSimulationParameters(self.sig_props)
 		self.ecg_params.connectParameters(self.changeInParameter)
 		
-
-
 		self.initECGFunction()
 
 		h_box = QHBoxLayout()
