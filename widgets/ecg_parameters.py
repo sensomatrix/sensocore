@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QGroupBox, QDockWidget, QHBoxLayout, QDoubleSpinBox,
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
 from signal_property import SignalProperties
+import copy
 
 class ECGSimulationParameters(QDockWidget):
 		def __init__(self, parent):
@@ -111,19 +112,28 @@ class ECGSimulationParameters(QDockWidget):
 			self.setWidget(self.group_box)
 
 		def connectParameters(self, handler):
-			for param_slider in self.all_spin_boxes:
-				for slider in param_slider:
-					slider.valueChanged.connect(handler)
+			for spin_boxes in self.all_spin_boxes:
+				for spin_box in spin_boxes:
+					spin_box.valueChanged.connect(handler)
 
-		def connectProperties(self, noise_handler, reset_handler):
-			self.sig_props.connectSignalProperties(noise_handler)
+		def connectProperties(self, noise_handler, reset_handler, sampling_freq_handler):
+			self.sig_props.connectSignalProperties(noise_handler, sampling_freq_handler)
 			self.sig_props.connectResetButton(reset_handler)
 
 		def getDefaultValues(self):
 			return  [
-						self.sig_values['P']['init_values'],
-						self.sig_values['Q']['init_values'],
-						self.sig_values['R']['init_values'],
-						self.sig_values['S']['init_values'],
-						self.sig_values['T']['init_values']
+						copy.deepcopy(self.sig_values['P']['init_values']),
+						copy.deepcopy(self.sig_values['Q']['init_values']),
+						copy.deepcopy(self.sig_values['R']['init_values']),
+						copy.deepcopy(self.sig_values['S']['init_values']),
+						copy.deepcopy(self.sig_values['T']['init_values'])
 					]
+
+		def setToDefaultValues(self):
+			signal_types = ['P', 'Q', 'R', 'S', 'T']
+
+			for j, spin_box_type in enumerate(self.all_spin_boxes):
+				for i, spin_box in enumerate(spin_box_type):
+					spin_box.setValue(self.sig_values[signal_types[j]]['init_values'][i])
+
+			self.sig_props.setDefaultValues()
