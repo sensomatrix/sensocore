@@ -35,4 +35,3 @@ class SimulateButton(QToolButton):
 
     def simulation_window(self, title):
         sim = Simulation(title, self.parent)
-        sim.show()
