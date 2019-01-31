@@ -7,7 +7,10 @@ import numpy as np
 import math
 
 def generateECG(sampling_frequency, noise_magnitude, end_time, period,
-				P, Q, R, S, T, callback=None):
+				P, Q, R, S, T, callback=None, is_for_graphing=True):
+
+	if is_for_graphing:
+		end_time = period
 
 	begin_time = 0
 	period = period
@@ -40,4 +43,4 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 
 	output = y + noise
 
-	return output
+	return x, output
