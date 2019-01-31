@@ -50,6 +50,7 @@ class ECGSimulationParameters(QDockWidget):
 			self.initT()
 			self.sig_props = SignalProperties()
 			self.initLayout()
+			self.setToDefaultValues()
 
 		def initP(self):
 			self.p_group, self.p_spin_box = self.createWaveParameters('P')
