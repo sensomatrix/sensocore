@@ -15,6 +15,7 @@ class Simulation(QDialog):
 		self.title = title
 		self.time_series = None
 		self.output = None
+		self.name = 'Sim Example'
 		self.initUI()
 	
 	def initUI(self):
@@ -69,7 +70,7 @@ class Simulation(QDialog):
 		self.time_series, self.output = generateECG(self.sampling_freq, self.noise, self.duration, self.period,
 				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4], is_for_graphing=False)
 
-		self.parent.datasets.loadFromSimulation(self.output, self.time_series, self.sampling_freq, 'Sim test', type=self.title)
+		self.parent.datasets.loadFromSimulation(self.output, self.time_series, self.sampling_freq, self.ecg_params.sig_props.name_text_field.text(), type=self.title)
 		self.close()
 
 	def getSenderIndex(self, sender, param_type_index):

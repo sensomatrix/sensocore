@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QGroupBox, QDoubleSpinBox, QLabel, QGridLayout, QPushButton, QSpinBox
+from PyQt5.QtWidgets import (QGroupBox, QDoubleSpinBox, QLabel, 
+							QGridLayout, QPushButton, QSpinBox, QLineEdit)
 
 class SignalProperties(QGroupBox):
 	def __init__(self):
@@ -14,6 +15,7 @@ class SignalProperties(QGroupBox):
 		self.initResetButton()
 		self.initPeriod()
 		self.initCreateButton()
+		self.initNameField()
 		self.setDefaultValues()
 
 	def initNoise(self):
@@ -56,7 +58,12 @@ class SignalProperties(QGroupBox):
 		self._period_spin_box.setMaximum(1.5)
 		self._period_spin_box.setSingleStep(0.001)
 
+	def initNameField(self):
+		self._name_label = QLabel('Signal Name')
+		self._name_text_field = QLineEdit(self)
+
 	def setDefaultValues(self):
+		self._name_text_field.setText('Sim Example')
 		self._noise_spin_box.setValue(0)
 		self._sampling_freq_spin_box.setValue(256)
 		self._duration_spin_box.setValue(0.9)
@@ -65,6 +72,8 @@ class SignalProperties(QGroupBox):
 	def initLayout(self):
 		layout = QGridLayout()
 
+		layout.addWidget(self._name_label)
+		layout.addWidget(self._name_text_field)
 		layout.addWidget(self._noise_label)
 		layout.addWidget(self._noise_spin_box)
 		layout.addWidget(self._sampling_freq_label)
@@ -81,6 +90,11 @@ class SignalProperties(QGroupBox):
 	@property
 	def all_spin_boxes(self):
 		return self._noise_spin_box
+
+	@property
+	def name_text_field(self):
+		return self._name_text_field
+	
 
 	def connectSignalProperties(self, noise_handler, sampling_freq_handler, 
 								duration_handler, period_handler):
