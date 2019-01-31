@@ -24,7 +24,8 @@ class Simulation(QMainWindow):
 
 		self.ecg_params = ECGSimulationParameters(self)
 		self.ecg_params.connectParameters(self.changeInParameter)
-		self.ecg_params.connectProperties(self.changeInNoise, self.resetEvent, self.changeInFrequency)
+		self.ecg_params.connectProperties(self.changeInNoise, self.resetEvent, 
+										  self.changeInFrequency, self.changeInDuration)
 
 		self.initECGFunction()
 
@@ -49,6 +50,9 @@ class Simulation(QMainWindow):
 	def changeInFrequency(self, value):
 		self.sampling_freq = value
 		self.plotECG()
+
+	def changeInDuration(self, value):
+		self.duration = value
 		
 	def getSenderIndex(self, sender, param_type_index):
 		spin_boxes = self.ecg_params.all_spin_boxes[param_type_index]
@@ -65,14 +69,14 @@ class Simulation(QMainWindow):
 
 	def plotECG(self):
 		self.sim_graph.clear()
-		self.sim_graph.plot(generateECG(self.sampling_freq, self.noise, self.end_time, self.period,
+		self.sim_graph.plot(generateECG(self.sampling_freq, self.noise, 0.9, self.period,
 				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4]))
 
 	def initECGFunction(self):
 		self.waves = self.ecg_params.getDefaultValues()
 		self.sampling_freq = 256
 		self.noise = 0
-		self.end_time = 0.9
+		self.duration = 0.9
 		self.period = 0.9
 		self.plotECG()
 
