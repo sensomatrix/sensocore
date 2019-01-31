@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGroupBox, QDockWidget, QHBoxLayout
+from PyQt5.QtWidgets import QDialog, QGroupBox, QDockWidget, QHBoxLayout
 import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
@@ -8,16 +8,15 @@ from .ecg_parameters import ECGSimulationParameters
 sys.path.append('simulations')
 from ecg.ecg import generateECG
 
-class Simulation(QMainWindow):
+class Simulation(QDialog):
 	def __init__(self, title='ECG Simulation', parent=None):
-		super(QMainWindow, self).__init__(parent)
+		super().__init__(parent=parent)
 		self.title = title
 		self.initUI()
-	 
+	
 	def initUI(self):
 		self.setWindowTitle(self.title)
 		self.sim_graph = SimulationGraph()
-		self.setCentralWidget(self.sim_graph)
 
 		self.ecg_params = ECGSimulationParameters(self)
 		self.ecg_params.connectParameters(self.changeInParameter)
@@ -27,8 +26,13 @@ class Simulation(QMainWindow):
 
 		self.initECGFunction()
 
-		self.addDockWidget(Qt.LeftDockWidgetArea, self.ecg_params)
-		self.show()
+		h_box = QHBoxLayout()
+		h_box.addWidget(self.ecg_params)
+		h_box.addWidget(self.sim_graph)
+
+		self.setLayout(h_box)
+
+		self.exec_()
 
 	def changeInParameter(self, value):
 		for param_type_index in range(len(self.ecg_params.all_spin_boxes)):
@@ -57,6 +61,10 @@ class Simulation(QMainWindow):
 			self.duration = value
 		self.period = value
 		self.plotECG()
+
+	def createSignal(self):
+		self.time_series, self.output = generateECG(self.sampling_freq, self.noise, self.duration, self.period,
+				self.waves[0], self.waves[1], self.waves[2], self.waves[3], self.waves[4], is_for_graphing=False)
 		
 	def getSenderIndex(self, sender, param_type_index):
 		spin_boxes = self.ecg_params.all_spin_boxes[param_type_index]

@@ -65,4 +65,6 @@ def init_ui_toolbar(MAIN):
     toolbar = MAIN.addToolBar("file")
     toolbar.addAction(MAIN.datasets.actions['open_dataset'])
 
-    toolbar.addWidget(SimulateButton(MAIN))
+    simulate_button = SimulateButton(MAIN)
+
+    toolbar.addWidget(simulate_button)
