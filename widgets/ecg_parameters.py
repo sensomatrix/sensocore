@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGroupBox, QDockWidget, QHBoxLayout, QDoubleSpinBox, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
-from signal_property import SignalProperties
+from .signal_property import SignalProperties
 import copy
 
 class ECGSimulationParameters(QDockWidget):

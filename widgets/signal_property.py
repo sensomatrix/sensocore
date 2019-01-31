@@ -13,6 +13,7 @@ class SignalProperties(QGroupBox):
 		self.initDuration()
 		self.initResetButton()
 		self.initPeriod()
+		self.initCreateButton()
 		self.setDefaultValues()
 
 	def initNoise(self):
@@ -26,6 +27,9 @@ class SignalProperties(QGroupBox):
 
 	def initResetButton(self):
 		self._resetButton = QPushButton("Reset to default")
+
+	def initCreateButton(self):
+		self._createButton = QPushButton("Create Signal")
 
 	def initSamplingFrequency(self):
 		self._sampling_freq_label = QLabel('Sampling Frequency (Hz)')
@@ -70,6 +74,7 @@ class SignalProperties(QGroupBox):
 		layout.addWidget(self._period_label)
 		layout.addWidget(self._period_spin_box)
 		layout.addWidget(self._resetButton)
+		layout.addWidget(self._createButton)
 
 		self.setLayout(layout)
 
@@ -86,3 +91,6 @@ class SignalProperties(QGroupBox):
 
 	def connectResetButton(self, handler):
 		self._resetButton.clicked.connect(handler)
+
+	def connectCreateButton(self, handler):
+		self._createButton.clicked.connect(handler)

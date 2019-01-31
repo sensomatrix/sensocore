@@ -3,17 +3,17 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QGroupBox, QDockWidget, Q
 import pyqtgraph as pg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
-from ecg_parameters import ECGSimulationParameters
+from .ecg_parameters import ECGSimulationParameters
 
 sys.path.append('simulations')
 from ecg.ecg import generateECG
 ## Switch to using white background and black foreground
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
- 
+
 class Simulation(QMainWindow):
-	def __init__(self, title='ECG Simulation'):
-		super().__init__()
+	def __init__(self, title='ECG Simulation', parent=None):
+		super(QMainWindow, self).__init__(parent)
 		self.title = title
 		self.initUI()
 	 
@@ -92,8 +92,3 @@ class Simulation(QMainWindow):
 class SimulationGraph(pg.PlotWidget):
 	def __init__(self):
 		super().__init__()
-
-if __name__ == '__main__':
-       app = QApplication(sys.argv)
-       ex = Simulation()
-       sys.exit(app.exec_())
