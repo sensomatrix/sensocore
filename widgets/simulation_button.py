@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QAction, QToolButton, QMenu
 from PyQt5.QtGui import QIcon
 from pathlib import Path
-from .simulation import Simulation
+from .ecg_simulation_dialog import Simulation
 
 class SimulateButton(QToolButton):
     def __init__(self, parent):

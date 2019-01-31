@@ -3,7 +3,7 @@ from .info import Info
 from .center import Center
 from .console import Console
 from .secondaryarea import SecondaryArea
-from .simulate_button import SimulateButton
+from .simulation_button import SimulateButton
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QSizePolicy
 
