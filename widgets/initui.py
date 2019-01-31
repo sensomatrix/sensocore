@@ -3,6 +3,7 @@ from .info import Info
 from .center import Center
 from .console import Console
 from .secondaryarea import SecondaryArea
+from .simulation_button import SimulateButton
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QSizePolicy
 
@@ -63,3 +64,6 @@ def init_ui_toolbar(MAIN):
     toolbar = MAIN.addToolBar("file")
     toolbar.addAction(MAIN.datasets.actions['open_dataset'])
 
+    simulate_button = SimulateButton(MAIN)
+
+    toolbar.addWidget(simulate_button)
