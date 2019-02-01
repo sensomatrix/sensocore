@@ -22,8 +22,14 @@ class ECGSimulation(Simulation):
 		for spin_box_type in self.all_spin_boxes:
 			for spin_box in spin_box_type:
 				spin_box.valueChanged.connect(self.onValueChanged)
-				
-	def onValueChanged(self, value):
+
+		self.sig_params.noise_spin_box.valueChanged.connect(self.onValueChanged)
+		self.sig_params.sampling_freq_spin_box.valueChanged.connect(self.onValueChanged)
+		self.sig_params.duration_spin_box.valueChanged.connect(self.onValueChanged)
+		self.sig_params.period_spin_box.valueChanged.connect(self.onValueChanged)
+		self.sig_params.reset_button.clicked.connect(self.onReset)
+
+	def onValueChanged(self):
 		self.plotECGSignal()
 
 	def plotECGSignal(self):

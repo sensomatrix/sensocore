@@ -28,10 +28,10 @@ class SignalProperties(QGroupBox):
 		self._noise_spin_box.setSingleStep(0.0001)
 
 	def initResetButton(self):
-		self._resetButton = QPushButton("Reset to default")
+		self._reset_button = QPushButton("Reset to default")
 
 	def initCreateButton(self):
-		self._createButton = QPushButton("Create Signal")
+		self._create_button = QPushButton("Create Signal")
 
 	def initSamplingFrequency(self):
 		self._sampling_freq_label = QLabel('Sampling Frequency (Hz)')
@@ -82,14 +82,10 @@ class SignalProperties(QGroupBox):
 		layout.addWidget(self._duration_spin_box)
 		layout.addWidget(self._period_label)
 		layout.addWidget(self._period_spin_box)
-		layout.addWidget(self._resetButton)
-		layout.addWidget(self._createButton)
+		layout.addWidget(self._reset_button)
+		layout.addWidget(self._create_button)
 
 		self.setLayout(layout)
-
-	@property
-	def all_spin_boxes(self):
-		return self._noise_spin_box
 
 	@property
 	def name_text_field(self):
@@ -111,17 +107,26 @@ class SignalProperties(QGroupBox):
 	def period(self):
 		return self._period_spin_box.value()
 
-	def connectSignalProperties(self, noise_handler, sampling_freq_handler, 
-								duration_handler, period_handler, reset_handler, create_handler):
-		self._noise_spin_box.valueChanged.connect(noise_handler)
-		self._sampling_freq_spin_box.valueChanged.connect(sampling_freq_handler)
-		self._duration_spin_box.valueChanged.connect(duration_handler)
-		self._period_spin_box.valueChanged.connect(period_handler)
-		self.connectResetButton(reset_handler)
-		self.connectCreateButton(create_handler)
+	@property
+	def noise_spin_box(self):
+		return self._noise_spin_box
+	
+	@property
+	def sampling_freq_spin_box(self):
+		return self._sampling_freq_spin_box
+	
+	@property
+	def duration_spin_box(self):
+		return self._duration_spin_box
 
-	def connectResetButton(self, handler):
-		self._resetButton.clicked.connect(handler)
+	@property
+	def period_spin_box(self):
+		return self._period_spin_box
 
-	def connectCreateButton(self, handler):
-		self._createButton.clicked.connect(handler)
+	@property
+	def reset_button(self):
+		return self._reset_button
+
+	@property
+	def create_button(self):
+		return self._create_button

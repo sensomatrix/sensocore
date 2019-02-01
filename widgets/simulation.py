@@ -37,6 +37,10 @@ class Simulation(QDialog):
 
 		self.setLayout(grid_layout)
 
+	def onReset(self):
+		self._sig_params.setToDefaultValues()
+		self._sim_params.setToDefaultValues()
+
 	@property
 	def sim_params(self):
 		return self._sim_params
