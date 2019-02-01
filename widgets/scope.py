@@ -18,7 +18,7 @@ class Scope(QObject):
         # pyqtgraph settings
         self.pw = pg.MultiPlotWidget()
         self.pw.setBackground('w')
-        self.pw.setMinimumPlotHeight(120)
+        self.pw.setMinimumPlotHeight(100)
         self.xcursor = None
         self.colorlist=['r','g','b','c','m','k']
         self.colorpool = cycle(self.colorlist)
