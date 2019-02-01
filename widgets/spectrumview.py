@@ -6,10 +6,10 @@ class SpectrumView(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.createpyqtgraph()
+        self.createspecviewgraph()
 
         # Selection Spectrum
-    def createpyqtgraph(self):
+    def createspecviewgraph(self):
         self.pgview = pg.GraphicsView()
         self.graphLayout = pg.GraphicsLayout()
         self.graphLayout.layout.setContentsMargins(0, 0, 0, 0)

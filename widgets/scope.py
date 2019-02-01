@@ -15,12 +15,12 @@ class Scope(QObject):
         self.parent = parent
         self.plotitems_dictionary = {}
         self.plotitems_isPlotted_dictionary = {}
-
         # pyqtgraph settings
         self.pw = pg.MultiPlotWidget()
         self.pw.setBackground('w')
         self.pw.setMinimumPlotHeight(100)
         self.xcursor = None
+        self.linRegiononSig = None
         self.colorlist=['r','g','b','c','m','k']
         self.colorpool = cycle(self.colorlist)
 
@@ -101,13 +101,20 @@ class Scope(QObject):
         lastAddedPlotItem.showAxis('bottom')
 
     def showLinearRegion(self, signal):
+
+        self.remove_all_linear_regions()
+        self.linRegiononSig = signal
+
+        # add new linear region
         values = self.plotitems_dictionary.get(signal.id).getAxis('bottom').range
         deltat = values[1] - values[0]
         minValue = values[0] + 0.45*deltat
         maxValue = values[0] + 0.55*deltat
-        lr = pg.LinearRegionItem(values=[minValue, maxValue])
-        self.linRegiononSig = signal
+        plotdataitemlist = [dataitem for dataitem in self.plotitems_dictionary.get(signal.id).vb.allChildren()
+                 if isinstance(dataitem, pg.graphicsItems.PlotDataItem.PlotDataItem)]
+        lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
         self.plotitems_dictionary.get(signal.id).vb.addItem(lr)
+        self.plotitems_dictionary.get(signal.id).vb.sigXRangeChanged.connect(self.lr_vb_x_range_changed)
         lr.sigRegionChangeFinished.connect(self.regionFinishChanged)
 
     def regionFinishChanged(self, regionItem):
@@ -118,11 +125,22 @@ class Scope(QObject):
         data = np.column_stack((fbins, pxx))
         self.plot_specview.emit(data)
 
+    def remove_all_linear_regions(self):
+        for plotitem in self.plotitems_dictionary.values():
+            childitems = [child for child in plotitem.vb.allChildren() if
+                          isinstance(child, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
+            for child_lr in childitems:
+                plotitem.vb.removeItem(child_lr)
+                plotitem.vb.sigXRangeChanged.disconnect(self.lr_vb_x_range_changed)
 
 
-
-
-
-
-
-
+    def lr_vb_x_range_changed(self, ev):
+        for plotitem in self.plotitems_dictionary.values():
+            values = plotitem.getAxis('bottom').range
+            lritemlist = [lr for lr in plotitem.vb.allChildren()
+                          if isinstance(lr, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
+            for lr in lritemlist:
+                deltat = values[1] - values[0]
+                minValue = values[0] + 0.45 * deltat
+                maxValue = values[0] + 0.55 * deltat
+                lr.setRegion([minValue, maxValue])
