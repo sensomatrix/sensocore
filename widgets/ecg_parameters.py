@@ -4,11 +4,10 @@ from PyQt5.QtGui import QGridLayout
 import copy
 
 class ECGSimulationParameters(QDockWidget):
-		def __init__(self, sig_props):
+		def __init__(self):
 			super().__init__()
 			self.group_box = QGroupBox('ECG Simulation Parameters')
 			self.main_layout = QGridLayout()
-			self.sig_props = sig_props
 			
 			self.sig_values = {
 				"P":
@@ -102,7 +101,6 @@ class ECGSimulationParameters(QDockWidget):
 			self.main_layout.addWidget(self.r_group,3,0)
 			self.main_layout.addWidget(self.s_group,4,0)
 			self.main_layout.addWidget(self.t_group,5,0)
-			self.main_layout.addWidget(self.sig_props,6,0)
 
 			self.group_box.setLayout(self.main_layout)
 

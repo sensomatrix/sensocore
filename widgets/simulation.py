@@ -10,15 +10,13 @@ class Simulation(QDialog):
 
 	def initUI(self):
 		self.setWindowTitle(self._title)
+
 		self._sim_graph = pg.PlotWidget()
 		self._sim_graph.setBackground('w')
-		_h_box = QHBoxLayout()
-		_h_box.addWidget(self._sim_graph)
-		self.setLayout(_h_box)
 
-if __name__ == "__main__":
-	global app
-	app = QApplication([])
-	q = Simulation('ECG Simulation')
-	q.showMaximized()
-	sys.exit(app.exec_())
+	def addSimParameters(self, sim_params):
+		_h_box = QHBoxLayout()
+		_h_box.addWidget(sim_params)
+		_h_box.addWidget(self._sim_graph)
+
+		self.setLayout(_h_box)
