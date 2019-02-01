@@ -64,9 +64,3 @@ class ChannelsRightClickMenu(QMenu):
         action = self.addAction("Plot Time-Frequency")
         action.triggered.connect(lambda: self.parent.parent.secondary_area.plot_tf_slot(self.sig))
         self.addAction(action)
-
-        #Add linear region for specturm view
-        action = self.addAction("Spectrum view")
-        action.triggered.connect(lambda: self.parent.parent.center.scope.showLinearRegion(self.sig))
-        action.triggered.connect(lambda: self.parent.parent.dock_names['Spectrum View'].raise_())
-        self.addAction(action)
