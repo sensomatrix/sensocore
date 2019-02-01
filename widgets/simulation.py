@@ -37,7 +37,6 @@ class Simulation(QDialog):
 
 		self.setLayout(grid_layout)
 
-
 	@property
 	def sim_params(self):
 		return self._sim_params
