@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout
+from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QGridLayout
 import pyqtgraph as pg
+from signal_properties import SignalProperties
 
 class Simulation(QDialog):
 	def __init__(self, title):
@@ -15,8 +16,14 @@ class Simulation(QDialog):
 		self._sim_graph.setBackground('w')
 
 	def addSimParameters(self, sim_params):
-		_h_box = QHBoxLayout()
-		_h_box.addWidget(sim_params)
-		_h_box.addWidget(self._sim_graph)
+		self._sig_param = SignalProperties()
 
-		self.setLayout(_h_box)
+		grid_layout = QGridLayout()
+
+		grid_layout.addWidget(sim_params, 0, 0)
+		grid_layout.addWidget(self._sig_param, 1, 0)
+		grid_layout.addWidget(self._sim_graph, 0, 1, 2, 1)
+
+		grid_layout.setColumnStretch(1, 5)
+
+		self.setLayout(grid_layout)
