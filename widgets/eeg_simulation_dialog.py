@@ -16,11 +16,7 @@ class EEGSimulation(Simulation):
 		self.exec_()
 
 	def setupConnections(self):
-		self.sim_params.c_1_spin_box.valueChanged.connect(self.onValueChanged)
-
-		self.sig_params.noise_spin_box.valueChanged.connect(self.onValueChanged)
-		self.sig_params.sampling_freq_spin_box.valueChanged.connect(self.onValueChanged)
-		self.sig_params.period_spin_box.valueChanged.connect(self.onValueChanged)
+		self.sim_params.preview_button.clicked.connect(self.onValueChanged)
 		self.sig_params.reset_button.clicked.connect(self.onReset)
 		self.sig_params.create_button.clicked.connect(self.onCreate)
 
