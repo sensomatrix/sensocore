@@ -24,7 +24,7 @@ class EEGSimulation(Simulation):
 		self.plotEEGSignal()
 
 	def onCreate(self):
-		self.time_series, self.output = simulate_eeg_jansen()
+		self.time_series, self.output = simulate_eeg_jansen(duration=self.sig_params.end_time, fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1)
 
 		self.parent.datasets.loadFromSimulation(self.output, self.time_series, self.sig_params.sampling_frequency, self.sig_params.name_text_field.text(), type=self.title)
 		self.close()
