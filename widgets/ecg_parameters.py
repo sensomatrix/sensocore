@@ -6,7 +6,7 @@ import copy
 class ECGSimulationParameters(QDockWidget):
 		def __init__(self):
 			super().__init__()
-			self.group_box = QGroupBox('ECG Simulation Parameters')
+			self.group_box = QGroupBox()
 			self.main_layout = QGridLayout()
 			
 			self.sig_values = {
