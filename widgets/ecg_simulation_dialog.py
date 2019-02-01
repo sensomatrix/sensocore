@@ -15,6 +15,10 @@ class ECGSimulation(Simulation):
 	def __init__(self, title):
 		super().__init__(title)
 		self.addSimParameters(ECGSimulationParameters())
+		self.sim_params.connectParameters(self.onParameterChanged)
+
+	def onParameterChanged(self, value):
+		print(value)
 
 if __name__ == "__main__":
 	global app

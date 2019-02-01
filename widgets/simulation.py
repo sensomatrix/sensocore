@@ -16,15 +16,16 @@ class Simulation(QDialog):
 		self._sim_graph.setBackground('w')
 
 	def addSimParameters(self, sim_params):
-		self._sig_param = SignalProperties()
+		self._sig_params = SignalProperties()
+		self._sim_params = sim_params
 
 		grid_layout = QGridLayout()
 
 		parameters_group_box = QGroupBox()
 
 		v_box = QVBoxLayout()
-		v_box.addWidget(sim_params)
-		v_box.addWidget(self._sig_param)
+		v_box.addWidget(self._sim_params)
+		v_box.addWidget(self._sig_params)
 
 		parameters_group_box.setLayout(v_box)
 
@@ -35,3 +36,14 @@ class Simulation(QDialog):
 		grid_layout.addWidget(self._sim_graph, 0, 1, 2, 1)
 
 		self.setLayout(grid_layout)
+
+
+	@property
+	def sim_params(self):
+		return self._sim_params
+
+	@property
+	def sig_params(self):
+		return self._sig_params
+	
+	
