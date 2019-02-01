@@ -22,6 +22,8 @@ class SpectrumView(QWidget):
     def plot_selection(self, data):
         self.graphLayout.clear()
         self.graphLayout.nextRow()
-        p = pg.PlotItem(name="test")
+        p = pg.PlotItem(name="selectedregionpsd")
+        p.setLabel('left', text = "PSD", units="V^2/Hz")
+        p.setLabel('bottom', text="frequency", units="Hz")
         p.plot(data)
         self.graphLayout.addItem(p)
