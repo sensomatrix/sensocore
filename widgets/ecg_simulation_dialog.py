@@ -14,8 +14,9 @@ from ecg.ecg import generateECG
 class ECGSimulation(Simulation):
 	def __init__(self, title):
 		super().__init__(title)
-		self.addSimParameters(ECGSimulationParameters())
+		self.addSimAndSigParameters(ECGSimulationParameters())
 		self.setupConnections()
+		self.plotECGSignal()
 
 	def setupConnections(self):
 		self.all_spin_boxes[0][0].valueChanged.connect(self.onPMagnitudeChanged)
@@ -95,7 +96,11 @@ class ECGSimulation(Simulation):
 
 	def onTDelayChanged(self, value):
 		print('onTDelayChanged')
-	
+
+	def plotECGSignal(self):
+		time, output = generateECG(self.sig_params.sampling_frequency, self.sig_params.noise_magnitude, self.sig_params.end_time, self.sig_params.period,
+			self.sim_params.P, self.sim_params.Q, self.sim_params.R, self.sim_params.S, self.sim_params.T)
+		self.sim_graph.plot(time, output, pen='k')
 
 if __name__ == "__main__":
 	global app

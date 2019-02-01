@@ -15,7 +15,7 @@ class Simulation(QDialog):
 		self._sim_graph = pg.PlotWidget()
 		self._sim_graph.setBackground('w')
 
-	def addSimParameters(self, sim_params):
+	def addSimAndSigParameters(self, sim_params):
 		self._sig_params = SignalProperties()
 		self._sim_params = sim_params
 
@@ -50,4 +50,7 @@ class Simulation(QDialog):
 	def all_spin_boxes(self):
 		return self._sim_params.all_spin_boxes
 	
+	@property
+	def sim_graph(self):
+		return self._sim_graph
 	

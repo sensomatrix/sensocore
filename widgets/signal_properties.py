@@ -95,6 +95,21 @@ class SignalProperties(QGroupBox):
 	def name_text_field(self):
 		return self._name_text_field
 	
+	@property
+	def sampling_frequency(self):
+		return self._sampling_freq_spin_box.value()
+
+	@property
+	def noise_magnitude(self):
+		return self._noise_spin_box.value()
+
+	@property
+	def end_time(self):
+		return self._duration_spin_box.value()
+	
+	@property
+	def period(self):
+		return self._period_spin_box.value()
 
 	def connectSignalProperties(self, noise_handler, sampling_freq_handler, 
 								duration_handler, period_handler, reset_handler, create_handler):

@@ -109,23 +109,30 @@ class ECGSimulationParameters(QDockWidget):
 			
 			self.setWidget(self.group_box)
 
-		def connectParameters(self, handler):
-			for spin_boxes in self.all_spin_boxes:
-				for spin_box in spin_boxes:
-					spin_box.valueChanged.connect(handler)
-
-		def getDefaultValues(self):
-			return  [
-						copy.deepcopy(self.sig_values['P']['init_values']),
-						copy.deepcopy(self.sig_values['Q']['init_values']),
-						copy.deepcopy(self.sig_values['R']['init_values']),
-						copy.deepcopy(self.sig_values['S']['init_values']),
-						copy.deepcopy(self.sig_values['T']['init_values'])
-					]
-
 		def setToDefaultValues(self):
 			signal_types = ['P', 'Q', 'R', 'S', 'T']
 
 			for j, spin_box_type in enumerate(self.all_spin_boxes):
 				for i, spin_box in enumerate(spin_box_type):
 					spin_box.setValue(self.sig_values[signal_types[j]]['init_values'][i])
+
+		@property
+		def P(self):
+			return [self.p_spin_box[0].value(), self.p_spin_box[1].value(), self.p_spin_box[2].value()]
+		
+		@property
+		def Q(self):
+			return [self.q_spin_box[0].value(), self.q_spin_box[1].value(), self.q_spin_box[2].value(),
+					self.q_spin_box[3].value(), self.q_spin_box[4].value(), self.q_spin_box[5].value()]
+
+		@property
+		def R(self):
+			return [self.r_spin_box[0].value(), self.r_spin_box[1].value(), self.r_spin_box[2].value()]
+
+		@property
+		def S(self):
+			return [self.s_spin_box[0].value(), self.s_spin_box[1].value(), self.s_spin_box[2].value()]
+
+		@property
+		def T(self):
+			return [self.t_spin_box[0].value(), self.t_spin_box[1].value(), self.t_spin_box[2].value()]
