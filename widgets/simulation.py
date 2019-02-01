@@ -1,11 +1,12 @@
 import sys
 from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QGridLayout, QScrollArea, QVBoxLayout, QGroupBox
 import pyqtgraph as pg
-from signal_properties import SignalProperties
+from .signal_properties import SignalProperties
 
 class Simulation(QDialog):
-	def __init__(self, title):
+	def __init__(self, title, parent=None):
 		self._title = title
+		self.parent = parent
 		super().__init__()
 		self.initUI()
 
@@ -56,4 +57,9 @@ class Simulation(QDialog):
 	@property
 	def sim_graph(self):
 		return self._sim_graph
+
+	@property
+	def title(self):
+		return self._title
+	
 	
