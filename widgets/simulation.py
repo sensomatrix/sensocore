@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QGridLayout
+from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QGridLayout, QScrollArea, QVBoxLayout, QGroupBox
 import pyqtgraph as pg
 from signal_properties import SignalProperties
 
@@ -20,8 +20,22 @@ class Simulation(QDialog):
 
 		grid_layout = QGridLayout()
 
-		grid_layout.addWidget(sim_params, 0, 0)
-		grid_layout.addWidget(self._sig_param, 1, 0)
+		# scroll_area = QScrollArea()
+
+		# v_box = QVBoxLayout()
+
+		mygroupbox = QGroupBox('Test')
+
+		v_box = QVBoxLayout()
+		v_box.addWidget(sim_params)
+		v_box.addWidget(self._sig_param)
+
+		mygroupbox.setLayout(v_box)
+
+		scroll = QScrollArea()
+		scroll.setWidget(mygroupbox)
+
+		grid_layout.addWidget(scroll, 0, 0, 2, 1)
 		grid_layout.addWidget(self._sim_graph, 0, 1, 2, 1)
 
 		grid_layout.setColumnStretch(1, 5)
