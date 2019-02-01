@@ -27,7 +27,6 @@ class ECGSimulation(Simulation):
 
 		self.sig_params.noise_spin_box.valueChanged.connect(self.onValueChanged)
 		self.sig_params.sampling_freq_spin_box.valueChanged.connect(self.onValueChanged)
-		self.sig_params.duration_spin_box.valueChanged.connect(self.onValueChanged)
 		self.sig_params.period_spin_box.valueChanged.connect(self.onValueChanged)
 		self.sig_params.reset_button.clicked.connect(self.onReset)
 		self.sig_params.create_button.clicked.connect(self.onCreate)
