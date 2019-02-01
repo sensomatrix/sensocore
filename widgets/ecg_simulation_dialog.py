@@ -12,7 +12,6 @@ class ECGSimulation(Simulation):
 		self.addSimAndSigParameters(ECGSimulationParameters())
 		self.setupConnections()
 		self.plotECGSignal()
-		self.showMaximized()
 		self.exec_()
 
 	def setupConnections(self):

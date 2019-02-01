@@ -16,8 +16,8 @@ class Simulation(QDialog):
 		self._sim_graph = pg.PlotWidget()
 		self._sim_graph.setBackground('w')
 
-	def addSimAndSigParameters(self, sim_params):
-		self._sig_params = SignalProperties()
+	def addSimAndSigParameters(self, sim_params, props_to_remove=[]):
+		self._sig_params = SignalProperties(props_to_remove)
 		self._sim_params = sim_params
 
 		splitter = QSplitter()
