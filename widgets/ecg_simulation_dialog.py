@@ -1,9 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QGroupBox, QDockWidget, QHBoxLayout, QScrollArea, QApplication
-import pyqtgraph as pg
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGridLayout
 from .ecg_parameters import ECGSimulationParameters
-from widgets.signal_properties import SignalProperties
 from .simulation import Simulation
 
 import sys

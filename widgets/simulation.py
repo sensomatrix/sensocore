@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QApplication, QHBoxLayout, QGridLayout, QScrollArea, QVBoxLayout, QGroupBox, QSplitter
+from PyQt5.QtWidgets import QDialog, QHBoxLayout, QScrollArea, QVBoxLayout, QGroupBox, QSplitter
 import pyqtgraph as pg
 from .signal_properties import SignalProperties
 

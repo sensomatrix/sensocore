@@ -1,12 +1,11 @@
-from PyQt5.QtWidgets import QGroupBox, QDockWidget, QHBoxLayout, QDoubleSpinBox, QLabel
+from PyQt5.QtWidgets import QGroupBox, QGroupBox, QDoubleSpinBox, QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGridLayout
 import copy
 
-class ECGSimulationParameters(QDockWidget):
+class ECGSimulationParameters(QGroupBox):
 		def __init__(self):
 			super().__init__()
-			self.group_box = QGroupBox()
 			self.main_layout = QGridLayout()
 			
 			self.sig_values = {
@@ -102,13 +101,11 @@ class ECGSimulationParameters(QDockWidget):
 			self.main_layout.addWidget(self.s_group,4,0)
 			self.main_layout.addWidget(self.t_group,5,0)
 
-			self.group_box.setLayout(self.main_layout)
+			self.setLayout(self.main_layout)
 
 			self.all_spin_boxes = [self.p_spin_box, self.q_spin_box, self.r_spin_box,
 								self.s_spin_box, self.t_spin_box]
 			
-			self.setWidget(self.group_box)
-
 		def setToDefaultValues(self):
 			signal_types = ['P', 'Q', 'R', 'S', 'T']
 
