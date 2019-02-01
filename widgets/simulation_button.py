@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QAction, QToolButton, QMenu
 from PyQt5.QtGui import QIcon
 from pathlib import Path
-from .ecg_simulation_dialog import Simulation
+from .ecg_simulation_dialog import ECGSimulation
 
 class SimulateButton(QToolButton):
     def __init__(self, parent):
@@ -34,5 +34,7 @@ class SimulateButton(QToolButton):
         self.ecg_action.triggered.connect(lambda: self.simulation_window('ECG Simulation'))
 
     def simulation_window(self, title):
-        sim = Simulation(title, self.parent)
-        
+        if 'ECG' in title:
+            sim = ECGSimulation(title, self.parent)
+        elif 'EEG' in title:
+            sim = EEGSimulation(title, self.parent)
