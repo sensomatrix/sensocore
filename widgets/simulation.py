@@ -45,5 +45,9 @@ class Simulation(QDialog):
 	@property
 	def sig_params(self):
 		return self._sig_params
+
+	@property
+	def all_spin_boxes(self):
+		return self._sim_params.all_spin_boxes
 	
 	
