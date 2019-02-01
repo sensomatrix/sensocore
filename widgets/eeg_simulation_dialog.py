@@ -31,5 +31,5 @@ class EEGSimulation(Simulation):
 
 	def plotEEGSignal(self):
 		self.sim_graph.clear()
-		time, output = simulate_eeg_jansen()
-		self.sim_graph.plot(time, output, pen='k')
+		time_series, output = simulate_eeg_jansen(duration=self.sig_params.end_time, fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1)
+		self.sim_graph.plot(time_series, output, pen='k')
