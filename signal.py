@@ -29,3 +29,4 @@ class Signal:
     def compute_time_freq(self, samplesarray, fs):
         f, t, Sxx = spectrogram(samplesarray, fs)
         return f, t, Sxx
+

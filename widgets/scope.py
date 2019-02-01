@@ -8,6 +8,7 @@ from itertools import cycle
 class Scope(QObject):
 
     cursor_moved_signal = pyqtSignal(float)
+    plot_specview = pyqtSignal(np.ndarray)
 
     def __init__(self, parent):
         super().__init__()
@@ -98,5 +99,30 @@ class Scope(QObject):
         for id, isPlotted in self.plotitems_isPlotted_dictionary.items():
             (self.plotitems_dictionary.get(id)).hideAxis('bottom')
         lastAddedPlotItem.showAxis('bottom')
+
+    def showLinearRegion(self, signal):
+        values = self.plotitems_dictionary.get(signal.id).getAxis('bottom').range
+        deltat = values[1] - values[0]
+        minValue = values[0] + 0.45*deltat
+        maxValue = values[0] + 0.55*deltat
+        lr = pg.LinearRegionItem(values=[minValue, maxValue])
+        self.linRegiononSig = signal
+        self.plotitems_dictionary.get(signal.id).vb.addItem(lr)
+        lr.sigRegionChangeFinished.connect(self.regionFinishChanged)
+
+    def regionFinishChanged(self, regionItem):
+        lo, hi = regionItem.getRegion()
+        idx_lo = int(self.linRegiononSig.fs * lo)
+        idx_hi = int(self.linRegiononSig.fs * hi)
+        fbins, pxx = self.linRegiononSig.compute_psd(self.linRegiononSig.samples_array[idx_lo:idx_hi], self.linRegiononSig.fs)
+        data = np.column_stack((fbins, pxx))
+        self.plot_specview.emit(data)
+
+
+
+
+
+
+
 
 

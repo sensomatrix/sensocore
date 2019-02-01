@@ -1,19 +1,27 @@
-from pyqtgraph.dockarea import *
-from .graphdock import GraphDock
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
-from PyQt5.QtCore import QSize
+import pyqtgraph as pg
 
 class SpectrumView(QWidget):
 
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.area = DockArea()
-        layout = QVBoxLayout()
-        layout.addWidget(self.area)
-        self.setLayout(layout)
-        self.setMaximumHeight(130)
+        self.createpyqtgraph()
 
         # Selection Spectrum
-        self.selection_spectrum = GraphDock(self, "Selection spectrum")
-        self.area.addDock(self.selection_spectrum)
+    def createpyqtgraph(self):
+        self.pgview = pg.GraphicsView()
+        self.graphLayout = pg.GraphicsLayout()
+        self.graphLayout.layout.setContentsMargins(0, 0, 0, 0)
+        self.pgview.setCentralItem(self.graphLayout)
+        layout = QVBoxLayout()
+        layout.addWidget(self.pgview)
+        layout.setContentsMargins(0,0,0,0)
+        self.setLayout(layout)
+
+    def plot_selection(self, data):
+        self.graphLayout.clear()
+        self.graphLayout.nextRow()
+        p = pg.PlotItem(name="test")
+        p.plot(data)
+        self.graphLayout.addItem(p)
