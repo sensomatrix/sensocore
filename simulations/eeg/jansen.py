@@ -56,23 +56,14 @@ def simulate_eeg_jansen(duration=10, fs=100, C1=135, callback=None):
         if callback is not None:
             callback(r.t/(duration+1)) #percentage of completion
 
+    duration = int(duration)
+
     ode_time = ode_time[-(duration * fs + 1):] #remove the first second (we don't want the transient part)
     ode_y = ode_y[-(duration * fs + 1):]
     ode_time = asarray(ode_time, dtype=dtype(float))
     ode_time = ode_time - ode_time[0]
     ode_time = around(ode_time, 3)
     ode_y = asarray(ode_y, dtype=dtype(float))
-
-    # print(r.successful())
-    # with open('your_file.txt', 'w') as f:
-    #     f.write("time=[")
-    #     for item in ode_time:
-    #         f.write("%s, " % item)
-    #     f.write("]\n")
-    #     f.write("y=[")
-    #     for item in ode_y:
-    #         f.write("%s, " % item)
-    #     f.write("]\n")
 
     return ode_time, ode_y  # return a tuple with time and y.
 

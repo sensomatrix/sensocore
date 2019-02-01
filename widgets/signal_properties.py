@@ -2,11 +2,11 @@ from PyQt5.QtWidgets import (QGroupBox, QDoubleSpinBox, QLabel,
 							QGridLayout, QPushButton, QSpinBox, QLineEdit)
 
 class SignalProperties(QGroupBox):
-	def __init__(self):
+	def __init__(self, props_to_remove=[]):
 		super().__init__('Signal Properties')
 
 		self.initUI()
-		self.initLayout()
+		self.initLayout(props_to_remove)
 		
 	def initUI(self):
 		self.initNoise()
@@ -16,7 +16,7 @@ class SignalProperties(QGroupBox):
 		self.initPeriod()
 		self.initCreateButton()
 		self.initNameField()
-		self.setToDefaultValues()
+		self.setDefaultValues()
 
 	def initNoise(self):
 		self._noise_label = QLabel('Noise (Mean Value)')
@@ -64,12 +64,20 @@ class SignalProperties(QGroupBox):
 
 	def setToDefaultValues(self):
 		self._name_text_field.setText('Sim Example')
-		self._noise_spin_box.setValue(0)
-		self._sampling_freq_spin_box.setValue(256)
-		self._duration_spin_box.setValue(0.9)
-		self._period_spin_box.setValue(0.9)
+		self._noise_spin_box.setValue(self._noise_magnitude)
+		self._sampling_freq_spin_box.setValue(self._sampling_frequency)
+		self._duration_spin_box.setValue(self._duration)
+		self._period_spin_box.setValue(self._period)
 
-	def initLayout(self):
+	def setDefaultValues(self, noise_magnitude=0, sampling_frequency=256,
+						 duration=0.9, period=0.9):
+		self._noise_magnitude = noise_magnitude
+		self._sampling_frequency = sampling_frequency
+		self._duration = duration
+		self._period = period
+		self.setToDefaultValues()
+
+	def initLayout(self, props_to_remove):
 		layout = QGridLayout()
 
 		layout.addWidget(self._name_label)
@@ -84,6 +92,20 @@ class SignalProperties(QGroupBox):
 		layout.addWidget(self._period_spin_box)
 		layout.addWidget(self._reset_button)
 		layout.addWidget(self._create_button)
+
+		properties = {
+					'N': [self._noise_label, self._noise_spin_box],
+					'F': [self._sampling_freq_label, self.sampling_freq_spin_box],
+					'D': [self._duration_label, self.duration_spin_box],
+					'P': [self._period_label, self._period_spin_box],
+		}
+
+		for prop in props_to_remove:
+			properties[prop][0].close()
+			properties[prop][1].close()
+
+			layout.removeWidget(properties[prop][0])
+			layout.removeWidget(properties[prop][1])
 
 		self.setLayout(layout)
 
