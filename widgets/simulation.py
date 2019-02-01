@@ -20,24 +20,18 @@ class Simulation(QDialog):
 
 		grid_layout = QGridLayout()
 
-		# scroll_area = QScrollArea()
-
-		# v_box = QVBoxLayout()
-
-		mygroupbox = QGroupBox('Test')
+		parameters_group_box = QGroupBox()
 
 		v_box = QVBoxLayout()
 		v_box.addWidget(sim_params)
 		v_box.addWidget(self._sig_param)
 
-		mygroupbox.setLayout(v_box)
+		parameters_group_box.setLayout(v_box)
 
 		scroll = QScrollArea()
-		scroll.setWidget(mygroupbox)
+		scroll.setWidget(parameters_group_box)
 
 		grid_layout.addWidget(scroll, 0, 0, 2, 1)
 		grid_layout.addWidget(self._sim_graph, 0, 1, 2, 1)
-
-		grid_layout.setColumnStretch(1, 5)
 
 		self.setLayout(grid_layout)
