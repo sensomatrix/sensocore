@@ -1,6 +1,7 @@
 import pyqtgraph as pg
 import numpy as np
 from pyqtgraph.dockarea import *
+from frequtils import compute_psd, compute_time_freq
 
 
 class GraphDock(Dock):
@@ -25,8 +26,9 @@ class GraphDock(Dock):
             'left': YAxis
         }
         p = pg.PlotItem(title=title, name=str(signal.id), axisItems=axisdict)
-        p.plot(signal.PSDfbins, signal.PSDxx)
-        p.vb.setLimits(xMin=0, xMax=(signal.PSDfbins[-1])/2, yMin=0, yMax=1.1*np.max(signal.PSDxx))
+        PSDfbins, PSDxx = compute_psd(signal.samples_array, signal.fs)
+        p.plot(PSDfbins, PSDxx)
+        p.vb.setLimits(xMin=0, xMax=(PSDfbins[-1])/2, yMin=0, yMax=1.1*np.max(PSDxx))
         self.graphLayout.addItem(p)
 
     # Following code is from: https://stackoverflow.com/questions/51312923/plotting-the-spectrum
@@ -37,16 +39,17 @@ class GraphDock(Dock):
         p1.addItem(img)
         hist = pg.HistogramLUTItem()
         hist.setImageItem(img)
-        hist.setLevels(np.min(signal.TFSxx), np.max(signal.TFSxx))
+        TFf, TFt, TFSxx = compute_time_freq(signal.samples_array, signal.fs)
+        hist.setLevels(np.min(TFSxx), np.max(TFSxx))
         hist.gradient.restoreState(
             {'mode': 'rgb',
              'ticks': [(0.5, (0, 182, 188, 255)),
                        (1.0, (246, 111, 0, 255)),
                        (0.0, (75, 0, 113, 255))]})
-        img.setImage(signal.TFSxx)
-        img.scale(signal.TFt[-1] / np.size(signal.TFSxx, axis=1),
-                  signal.TFf[-1] / np.size(signal.TFSxx, axis=0))
+        img.setImage(TFSxx)
+        img.scale(TFt[-1] / np.size(TFSxx, axis=1),
+                  TFf[-1] / np.size(TFSxx, axis=0))
         # Limit panning/zooming to the spectrogram
-        p1.setLimits(xMin=0, xMax=signal.TFt[-1], yMin=0, yMax=signal.TFf[-1])
+        p1.setLimits(xMin=0, xMax=TFt[-1], yMin=0, yMax=TFf[-1])
         p1.setLabel('bottom', "Time", units='s')
         p1.setLabel('left', "Frequency", units='Hz')

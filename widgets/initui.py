@@ -4,6 +4,7 @@ from .center import Center
 from .console import Console
 from .secondaryarea import SecondaryArea
 from .simulation_button import SimulateButton
+from .spectrumview import SpectrumView
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QSizePolicy
 
@@ -13,6 +14,7 @@ def init_connect_slots(MAIN):
         MAIN.datasets.signal_loaded_signal.connect(MAIN.center.scope.on_signal_loaded)
         MAIN.center.scope.cursor_moved_signal.connect(MAIN.center.chrono.on_cursor_moved)
         MAIN.datasets.signal_loaded_signal.connect(MAIN.channels.on_signal_loaded)
+        MAIN.center.scope.plot_specview.connect(MAIN.specview.plot_selection)
 
 def init_ui_widgets(MAIN):
     
@@ -21,6 +23,7 @@ def init_ui_widgets(MAIN):
     MAIN.center = Center(MAIN)
     MAIN.info = Info(MAIN)
     MAIN.secondary_area = SecondaryArea(MAIN)
+    MAIN.specview = SpectrumView(MAIN)
     MAIN.setCentralWidget(MAIN.center)
 
     #list of dock widgets
@@ -31,32 +34,46 @@ def init_ui_widgets(MAIN):
              {'name': 'Channels',
               'widget': MAIN.channels,
               'main_area': Qt.LeftDockWidgetArea,
+              'max_width': 200,
               },
              {'name': 'Secondary plotting',
               'widget': MAIN.secondary_area,
               'main_area': Qt.RightDockWidgetArea,
               'min_width': 250,
               },
-             {'name': 'Console',
+             {'name': 'Spectrum View',
+              'widget': MAIN.specview,
+              'main_area': Qt.BottomDockWidgetArea,
+              'max_height': 200,
+              'min_width' : 500,
+              },
+             {'name': 'Output',
               'widget': MAIN.console,
               'main_area': Qt.BottomDockWidgetArea,
-              'max_height': 100,
+              'max_height': 150,
               },
              ]
     #dock widgets
+    MAIN.dock_names = {}
     for dock in docks:
         dockwidget = QDockWidget(dock['name'], MAIN)
         dockwidget.setWidget(dock['widget'])
         dockwidget.setAllowedAreas(dock['main_area'])
         dockwidget.setObjectName(dock['name'])
+        MAIN.dock_names[dock['name']] = dockwidget
         if 'max_height' in dock:
             dockwidget.setMaximumHeight(dock['max_height'])
         if 'min_height' in dock:
             dockwidget.setMinimumHeight(dock['min_height'])
         if 'min_width' in dock:
             dockwidget.setMinimumWidth(dock['min_width'])
+        if 'max_width' in dock:
+            dockwidget.setMaximumWidth(dock['max_width'])
 
         MAIN.addDockWidget(dock['main_area'], dockwidget)
+
+    MAIN.tabifyDockWidget(MAIN.dock_names['Output'], MAIN.dock_names['Spectrum View'])
+    MAIN.dock_names['Output'].raise_()
 
 def init_ui_toolbar(MAIN):
     # create the toolbar

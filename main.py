@@ -24,5 +24,8 @@ if __name__ == "__main__":
     global app
     app = QApplication([])
     q = MainWindow()
+    sshFile = "Aqua.qss"
+    with open(sshFile, "r") as fh:
+        app.setStyleSheet(fh.read())
     q.showMaximized()
     sys.exit(app.exec_())
