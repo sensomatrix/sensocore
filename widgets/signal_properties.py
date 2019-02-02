@@ -24,7 +24,7 @@ class SignalProperties(QGroupBox):
 
 		self._noise_spin_box.setDecimals(4)
 		self._noise_spin_box.setMinimum(0)
-		self._noise_spin_box.setMaximum(0.05)
+		self._noise_spin_box.setMaximum(10)
 		self._noise_spin_box.setSingleStep(0.0001)
 
 	def initResetButton(self):
@@ -94,7 +94,6 @@ class SignalProperties(QGroupBox):
 		layout.addWidget(self._create_button)
 
 		properties = {
-					'N': [self._noise_label, self._noise_spin_box],
 					'F': [self._sampling_freq_label, self.sampling_freq_spin_box],
 					'D': [self._duration_label, self.duration_spin_box],
 					'P': [self._period_label, self._period_spin_box],

@@ -4,6 +4,7 @@
 # Input parameters: duration, sampling frequency, C1, callback function
 # Output: tuple with time and y arrays
 
+import numpy as np
 from numpy import linspace, random, exp, asarray, dtype, around
 from scipy.integrate import ode
 from scipy.interpolate import interp1d
@@ -25,8 +26,7 @@ def func(t, y, noise_interp, A, B, a, b, v0, C1, C2, C3, C4, r, e0):
     dy6dt = B * b * (C4 * sigmoid(v0, e0, r, C3 * y1)) - 2 * b * y6 - b * b * y3
     return [dy1dt, dy2dt, dy3dt, dy4dt, dy5dt, dy6dt]
 
-
-def simulate_eeg_jansen(duration=10, fs=100, C1=135, callback=None):
+def simulate_eeg_jansen(duration=10, fs=100, C1=135, noise_magnitude=0, callback=None):
 
     A = 3.25
     B = 22
@@ -65,5 +65,9 @@ def simulate_eeg_jansen(duration=10, fs=100, C1=135, callback=None):
     ode_time = around(ode_time, 3)
     ode_y = asarray(ode_y, dtype=dtype(float))
 
-    return ode_time, ode_y  # return a tuple with time and y.
+    noise = np.random.normal(0, noise_magnitude, ode_time.shape)
+
+    output = noise + ode_y
+
+    return ode_time, output  # return a tuple with time and y.
 
