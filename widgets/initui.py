@@ -5,8 +5,9 @@ from .console import Console
 from .secondaryarea import SecondaryArea
 from .simulation_button import SimulateButton
 from .spectrumview import SpectrumView
+from .firdesignerdiag import FIRDesignerDialog
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDockWidget, QSizePolicy
+from PyQt5.QtWidgets import QDockWidget, QAction
 
 
 # connect pyqt signals to pyqt slots here
@@ -77,10 +78,24 @@ def init_ui_widgets(MAIN):
 
 def init_ui_toolbar(MAIN):
     # create the toolbar
-    actions = MAIN.datasets.actions
     toolbar = MAIN.addToolBar("file")
     toolbar.addAction(MAIN.datasets.actions['open_dataset'])
-
     simulate_button = SimulateButton(MAIN)
-
     toolbar.addWidget(simulate_button)
+
+def init_ui_menubar(MAIN):
+    menuBar = MAIN.menuBar()
+
+    file_menu = menuBar.addMenu('File')
+
+    # filtering submenu
+    filtering_menu = menuBar.addMenu('Filtering')
+
+    firfilterdesign_action = QAction("FIR Filter Design", MAIN)
+    firfilterdesign_action.triggered.connect(lambda: fir_filter_design_open(MAIN))
+    filtering_menu.addAction(firfilterdesign_action)
+
+
+def fir_filter_design_open(parent):
+    fir_designer_diag = FIRDesignerDialog(parent)
+    fir_designer_diag.exec_()
