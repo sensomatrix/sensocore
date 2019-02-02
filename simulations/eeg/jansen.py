@@ -54,7 +54,7 @@ def simulate_eeg_jansen(duration=10, fs=100, C1=135, noise_magnitude=0, callback
         ode_time.append(r.t)
         ode_y.append(r.y[1] - r.y[2])
         if callback is not None:
-            callback(r.t/(duration+1)) #percentage of completion
+            callback(int(r.t/(duration+1) * 100)) #percentage of completion
 
     duration = int(duration)
 

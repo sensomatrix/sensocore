@@ -38,13 +38,29 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 	y = np.zeros(samples)
 
 	y += generateWave(x, period, total_beats, sampling_frequency, P, p)
+	
+	if callback is not None:
+		callback(20)
+
 	y += generateWave(x, period, total_beats, sampling_frequency, Q, q)
+	
+	if callback is not None:
+		callback(40)
+
 	y += generateWave(x, period, total_beats, sampling_frequency, R, r)
+	
+	if callback is not None:
+		callback(60)
+
 	y += generateWave(x, period, total_beats, sampling_frequency, S, s)
+	
+	if callback is not None:
+		callback(80)
+	
 	y += generateWave(x, period, total_beats, sampling_frequency, T, t)
 
 	if callback is not None:
-		callback((i * 1.0) / total_beats) # percentage of completion
+		callback(100)
 
 	output = y + noise
 
