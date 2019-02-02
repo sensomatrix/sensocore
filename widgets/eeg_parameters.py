@@ -12,8 +12,8 @@ class EEGSimulationParameters(QGroupBox):
 				"C1":
 					{
 						"init_value": 135,
-						"min_value": 100,
-						"max_value": 2000,
+						"min_value": 50,
+						"max_value": 1500,
 					},
 			}
 

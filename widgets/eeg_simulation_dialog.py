@@ -9,7 +9,7 @@ from eeg.jansen import simulate_eeg_jansen
 class EEGSimulation(Simulation):
 	def __init__(self, title, parent):
 		super().__init__(title, parent=parent)
-		self.addSimAndSigParameters(EEGSimulationParameters(), props_to_remove=['N', 'P'])
+		self.addSimAndSigParameters(EEGSimulationParameters(), props_to_remove=['P'])
 		self.sig_params.setDefaultValues(sampling_frequency=100, duration=10)
 		self.setupConnections()
 		self.plotEEGSignal()
@@ -24,12 +24,15 @@ class EEGSimulation(Simulation):
 		self.plotEEGSignal()
 
 	def onCreate(self):
-		self.time_series, self.output = simulate_eeg_jansen(duration=self.sig_params.end_time, fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1)
+		self.time_series, self.output = simulate_eeg_jansen(duration=self.sig_params.end_time,
+							fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1, noise_magnitude=self.sig_params.noise_magnitude)
 
-		self.parent.datasets.loadFromSimulation(self.output, self.time_series, self.sig_params.sampling_frequency, self.sig_params.name_text_field.text(), type=self.title)
+		self.parent.datasets.loadFromSimulation(self.output, self.time_series, self.sig_params.sampling_frequency,
+							self.sig_params.name_text_field.text(), type=self.title)
 		self.close()
 
 	def plotEEGSignal(self):
 		self.sim_graph.clear()
-		time_series, output = simulate_eeg_jansen(duration=self.sig_params.end_time, fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1)
+		time_series, output = simulate_eeg_jansen(duration=self.sig_params.end_time,
+						fs=self.sig_params.sampling_frequency, C1=self.sim_params.C1, noise_magnitude=self.sig_params.noise_magnitude)
 		self.sim_graph.plot(time_series, output, pen='k')
