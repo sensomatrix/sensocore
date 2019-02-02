@@ -56,4 +56,7 @@ class Dataset(QObject):
     def readnextlines(self, fileObject, n):
         return [x.strip() for x in islice(fileObject, n)]
 
+    def getSignalsList(self):
+        return self.signals_dictionary
+
 
