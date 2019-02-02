@@ -1,5 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QHBoxLayout, QScrollArea, QVBoxLayout, QGroupBox, QSplitter
+from PyQt5.QtWidgets import (QDialog, QHBoxLayout, QScrollArea, 
+							QVBoxLayout, QGroupBox, QSplitter, QProgressBar)
+
 import pyqtgraph as pg
 from .signal_properties import SignalProperties
 
@@ -19,6 +21,7 @@ class Simulation(QDialog):
 	def addSimAndSigParameters(self, sim_params, props_to_remove=[]):
 		self._sig_params = SignalProperties(props_to_remove)
 		self._sim_params = sim_params
+		self._progress_bar = QProgressBar()
 
 		splitter = QSplitter()
 
@@ -27,6 +30,7 @@ class Simulation(QDialog):
 		v_box = QVBoxLayout()
 		v_box.addWidget(self._sim_params)
 		v_box.addWidget(self._sig_params)
+		v_box.addWidget(self._progress_bar)
 
 		parameters_group_box.setLayout(v_box)
 
@@ -65,5 +69,10 @@ class Simulation(QDialog):
 	@property
 	def title(self):
 		return self._title
+
+	@property
+	def progress_bar(self):
+		return self._progress_bar
+	
 	
 	
