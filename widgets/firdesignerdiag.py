@@ -1,10 +1,12 @@
 from PyQt5.QtWidgets import QDialog, QFrame, QLineEdit, QWidget, QLabel, \
-    QGroupBox, QComboBox, QVBoxLayout, QDialogButtonBox, QRadioButton, QPushButton, QMessageBox, QGridLayout, QHBoxLayout, QFormLayout, QButtonGroup, QSizePolicy, QSpacerItem
+    QGroupBox, QComboBox, QVBoxLayout, QDialogButtonBox, QFileDialog, QRadioButton, QPushButton, QMessageBox, QGridLayout, QHBoxLayout, QFormLayout, QButtonGroup, QSizePolicy, QSpacerItem
 from PyQt5.QtCore import Qt
 import pyqtgraph as pg
 import numpy as np
 from filtersutils import design_FIR_ls
 from scipy.signal import freqz, convolve
+import pickle
+
 
 
 class FIRDesignerDialog(QDialog):
@@ -63,6 +65,8 @@ class FIRDesignerDialog(QDialog):
         formlayout.addRow(self.ls_weights_label, self.ls_weights_lineedit)
         self.designspecs_gb.setLayout(formlayout)
 
+
+
         #leftside
         layoutleftside = QVBoxLayout()
         layoutleftside.addWidget(self.input_gb)
@@ -94,8 +98,10 @@ class FIRDesignerDialog(QDialog):
         self.buttonbox.addButton(self.apply_button, QDialogButtonBox.ActionRole)
         self.apply_button.clicked.connect(self.apply_filter_to_signal)
 
-        self.export_button = QPushButton("Export")
+        self.export_button = QPushButton("Save filter to file")
+        self.export_button.setEnabled(False)
         self.buttonbox.addButton(self.export_button, QDialogButtonBox.ActionRole)
+        self.export_button.clicked.connect(self.save_filter_to_file)
 
         #content layout
         contentlayout = QHBoxLayout()
@@ -126,6 +132,16 @@ class FIRDesignerDialog(QDialog):
         selected_channel_id = self.channel_combobox.currentData()
         fs_str = str(int(self.signals_dic.get(selected_channel_id).fs))
         self.fs_label.setText("fs: " + fs_str + " Hz")
+
+    def save_filter_to_file(self):
+        savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
+        if savefilepath[0]:
+            self.save_object(self.filter, savefilepath[0])
+
+    def save_object(self, obj, filename):
+        with open(filename, 'wb') as outputfile:
+            pickle.dump(obj, outputfile, pickle.HIGHEST_PROTOCOL)
+
 
 
     def design_filter(self):
@@ -159,6 +175,8 @@ class FIRDesignerDialog(QDialog):
                 return
             weights = np.fromstring(self.ls_weights_lineedit.text(), dtype=float, count=-1, sep=" ")
             self.filter = design_FIR_ls(taps, bands, desired, fs)
+            if self.filter.size != 0:
+                self.export_button.setEnabled(True)
             freq, response = freqz(self.filter)
             self.filterplot.plot_data(data=np.column_stack((0.5*fs*freq/np.pi, np.abs(response))),
                                       logY=True,
