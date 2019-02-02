@@ -1,6 +1,6 @@
 import os
 from itertools import islice
-from signal import Signal
+from signalobject import Signal
 import numpy as np
 from PyQt5.QtWidgets import QAction, QFileDialog
 from PyQt5.QtCore import pyqtSignal, QObject
