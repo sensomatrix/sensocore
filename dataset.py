@@ -41,8 +41,8 @@ class Dataset(QObject):
                 name = lines[0]
                 typeofsignal = lines[1]
                 samplingrate = int(lines[2])
-                time_array = np.fromstring(lines[3].strip(), dtype=np.float32, sep=", ")
-                samples_array = np.fromstring(lines[4].strip(), dtype=np.float32, sep=", ")
+                time_array = (np.asarray(lines[3].split(", "))).astype(np.float32)
+                samples_array = (np.asarray(lines[4].split(", "))).astype(np.float32)
                 sig = Signal(samples_array, time_array=time_array, name=name, type=typeofsignal)
                 self.signals_dictionary[sig.id] = sig
                 lines = self.readnextlines(fileObject, 5)
