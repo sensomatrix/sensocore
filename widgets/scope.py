@@ -26,7 +26,7 @@ class Scope(QObject):
         self.colorpool = cycle(self.colorlist)
 
         # test the console to see if other classes can call it:
-        self.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
+        self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
 
     # do not call the add_trace method directly from outside, go through the signal-slot qt mechanism (see initui.py)
     def on_signal_loaded(self, signal):
@@ -130,7 +130,7 @@ class Scope(QObject):
         lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
         self.plotitems_dictionary.get(id).vb.addItem(lr)
         self.plotitems_dictionary.get(id).vb.sigXRangeChanged.connect(self.lr_vb_x_range_changed)
-        lrsig = self.parent.parent.datasets.signals_dictionary.get(id)
+        lrsig = self.parent.parent.parent.datasets.signals_dictionary.get(id)
         lr.sigRegionChangeFinished.connect(lambda sig: self.regionFinishChanged(sig, lrsig))
 
     def regionFinishChanged(self, regionItem, sig):

@@ -28,7 +28,7 @@ class Chrono(QFrame):
         max_t = 0;
         for id, plotted_plot in self.parent.scope.plotitems_isPlotted_dictionary.items():
             if plotted_plot is True:
-                last_t = (self.parent.parent.datasets.signals_dictionary.get(id)).time_array[-1]
+                last_t = (self.parent.parent.parent.datasets.signals_dictionary.get(id)).time_array[-1]
                 if last_t > max_t:
                     max_t = last_t
         window_size = max_t / 100

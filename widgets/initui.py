@@ -12,10 +12,10 @@ from PyQt5.QtWidgets import QDockWidget, QAction
 
 # connect pyqt signals to pyqt slots here
 def init_connect_slots(MAIN):
-        MAIN.datasets.signal_loaded_signal.connect(MAIN.center.scope.on_signal_loaded)
-        MAIN.center.scope.cursor_moved_signal.connect(MAIN.center.chrono.on_cursor_moved)
+        MAIN.datasets.signal_loaded_signal.connect(MAIN.center.tabScope.scope.on_signal_loaded)
+        MAIN.center.tabScope.scope.cursor_moved_signal.connect(MAIN.center.tabScope.chrono.on_cursor_moved)
         MAIN.datasets.signal_loaded_signal.connect(MAIN.channels.on_signal_loaded)
-        MAIN.center.scope.plot_specview.connect(MAIN.specview.plot_selection)
+        MAIN.center.tabScope.scope.plot_specview.connect(MAIN.specview.plot_selection)
 
 def init_ui_widgets(MAIN):
     

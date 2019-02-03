@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QDialog, QFrame, QLineEdit, QWidget, QLabel, \
+from PyQt5.QtWidgets import QDialog, QFrame, QLineEdit, QLabel, \
     QGroupBox, QComboBox, QVBoxLayout, QDialogButtonBox, QFileDialog, QRadioButton, QPushButton, QMessageBox, QGridLayout, QHBoxLayout, QFormLayout, QButtonGroup, QSizePolicy, QSpacerItem
 from PyQt5.QtCore import Qt
-import pyqtgraph as pg
+from .Plotter import FilterPlotter, FilteredSignalPlotter
 import numpy as np
 from filtersutils import design_FIR_ls
 from scipy.signal import freqz, convolve
@@ -49,7 +49,7 @@ class FIRDesignerDialog(QDialog):
 
         # filter parameters
         self.designspecs_gb = QGroupBox("Design specifications")
-        self.designspecs_gb.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        self.designspecs_gb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.taps_label = QLabel("Taps: ")
         self.taps_lineedit = QLineEdit()
         self.bands_label = QLabel("Band edges: ")
@@ -76,16 +76,17 @@ class FIRDesignerDialog(QDialog):
         layoutleftside.addItem(spacer)
         frameLeft = QFrame()
         frameLeft.setLayout(layoutleftside)
-        frameLeft.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        frameLeft.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         #plotting areas
-        self.filterplot = Plotter(self)
-        self.signalplot = Plotter(self)
+        self.filterplot = FilterPlotter(self)
+        self.signalplot = FilteredSignalPlotter(self)
         layoutplots = QVBoxLayout()
         layoutplots.addWidget(self.filterplot)
         layoutplots.addWidget(self.signalplot)
         framePlots = QFrame()
         framePlots.setLayout(layoutplots)
+        framePlots.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
 
         #button box
         self.buttonbox = QDialogButtonBox()
@@ -97,7 +98,7 @@ class FIRDesignerDialog(QDialog):
         self.apply_button = QPushButton("Apply to signal")
         self.buttonbox.addButton(self.apply_button, QDialogButtonBox.ActionRole)
         self.apply_button.clicked.connect(self.apply_filter_to_signal)
-
+        self.apply_button.setEnabled(False)
         self.export_button = QPushButton("Save filter to file")
         self.export_button.setEnabled(False)
         self.buttonbox.addButton(self.export_button, QDialogButtonBox.ActionRole)
@@ -177,33 +178,18 @@ class FIRDesignerDialog(QDialog):
             self.filter = design_FIR_ls(taps, bands, desired, fs)
             if self.filter.size != 0:
                 self.export_button.setEnabled(True)
+                self.apply_button.setEnabled(True)
             freq, response = freqz(self.filter)
-            self.filterplot.plot_data(data=np.column_stack((0.5*fs*freq/np.pi, np.abs(response))),
-                                      logY=True,
-                                      title="Frequency response",
-                                      xlabel="frequency",
-                                      xunits="Hz",
-                                      ylabel="Magnitude",
-                                      yunits="dB")
+            self.filterplot.plot_data(data=np.column_stack((0.5*fs*freq/np.pi, np.abs(response))))
 
     def apply_filter_to_signal(self):
+        self.apply_button.setEnabled(False)
         selected_channel_id = self.channel_combobox.currentData()
         signal = self.signals_dic.get(selected_channel_id)
         filtered_samples = convolve(signal.samples_array, self.filter, mode='same')
-        self.signalplot.plot_data(data=np.column_stack((signal.time_array, signal.samples_array)),
-                                  logY=False,
-                                  title="Original signal",
-                                  xlabel="time",
-                                  xunits="sec",
-                                  ylabel=" ",
-                                  yunits=" ")
-        self.signalplot.plot_data(data=np.column_stack((signal.time_array, filtered_samples)),
-                                  logY=False,
-                                  title="Filtered signal",
-                                  xlabel="time",
-                                  xunits="sec",
-                                  ylabel="",
-                                  yunits="")
+        self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
+        self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
+
     def showError(self, message):
         error_dialog = QMessageBox(self)
         error_dialog.setWindowModality(Qt.WindowModal)
@@ -211,34 +197,11 @@ class FIRDesignerDialog(QDialog):
         error_dialog.setText(message)
         error_dialog.exec()
 
-class Plotter(QWidget):
-
-    def __init__(self, parent):
-        super().__init__()
-        self.parent = parent
-        self.creategraph()
 
 
-    def creategraph(self):
-        self.pgview = pg.GraphicsView()
-        self.graphLayout = pg.GraphicsLayout()
-        self.graphLayout.layout.setContentsMargins(0, 0, 0, 0)
-        self.pgview.setCentralItem(self.graphLayout)
-        layout = QVBoxLayout()
-        layout.addWidget(self.pgview)
-        layout.setContentsMargins(0,0,0,0)
-        self.setLayout(layout)
 
-    def plot_data(self, data, logY=False, title="", xlabel="", xunits="", ylabel="", yunits=""):
-        self.graphLayout.nextRow()
-        p = pg.PlotItem(title=title)
-        p.setLabel('bottom', text=xlabel, units=xunits)
-        p.setLabel('left', text=ylabel, units=yunits)
-        p.setClipToView(True)
-        if logY:
-            p.setLogMode(y=True)
-        else:
-            p.setLimits(maxXRange=10)
-        p.plot(data)
-        self.graphLayout.addItem(p)
+
+
+
+
 
