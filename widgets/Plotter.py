@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.Qt import QPen
 import pyqtgraph as pg
+import numpy as np
 
 #Abstract class to make adding plots easier
 
@@ -21,7 +23,7 @@ class Plotter(QWidget):
         layout.setContentsMargins(0,0,0,0)
         self.setLayout(layout)
 
-    def plot_data(self):
+    def plot_data(self, data):
         raise NotImplementedError("method not implemented")
 
 
@@ -45,24 +47,28 @@ class FilteredSignalPlotter(Plotter):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-    def plot_data(self, data, title):
-        if self.graphLayout.currentRow == 2:
-            self.graphLayout.removeItem(self.plot1)
-            self.graphLayout.removeItem(self.plot2)
-            self.graphLayout.currentRow = 0
-        p = pg.PlotItem(title=title)
-        p.vb.setMouseEnabled(y=False)
-        p.vb.setLimits(maxXRange=10)
-        p.setLabel('bottom', text="time", units="sec")
-        p.setLabel('left', text="amplitude")
-        p.setClipToView(True)
-        p.setLogMode(y=False)
-        p.plot(data)
-        self.graphLayout.addItem(p)
-        self.graphLayout.nextRow()
-        if self.graphLayout.currentRow == 1:
-            self.plot1 = p
-        if self.graphLayout.currentRow == 2:
-            self.plot2 = p
-            p.setXLink(self.plot1.vb)
-        print("Current row:" + str(self.graphLayout.currentRow))
+        self.p = self.graphLayout.addPlot()
+        self.plotslist = []
+    def plot_data(self, data):
+        if len(self.plotslist) == 0:
+            self.plotslist.append(self.p.plot(data, pen='r'))
+            self.p.legend = self.p.addLegend()
+            self.p.legend.setParentItem(self.p)
+            self.p.legend.addItem(self.plotslist[0], "original")
+        elif len(self.plotslist) == 1:
+            self.plotslist.append(self.p.plot(data, pen='g'))
+            self.p.legend.addItem(self.plotslist[1], "filtered")
+        elif len(self.plotslist) == 2:
+            self.plotslist.clear()
+            self.p.legend = self.p.addLegend()
+            self.p.legend.setParentItem(self.p)
+            self.plotslist.append(self.p.plot(data, clear=True, pen='r'))
+            self.p.legend.addItem(self.plotslist[0], "original")
+        self.p.setClipToView(True)
+        self.p.vb.setMouseEnabled(y=False)
+        self.p.vb.setLimits(maxXRange=5)
+        print("gay")
+
+
+
+

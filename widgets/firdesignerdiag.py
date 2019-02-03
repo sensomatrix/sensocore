@@ -187,8 +187,10 @@ class FIRDesignerDialog(QDialog):
         selected_channel_id = self.channel_combobox.currentData()
         signal = self.signals_dic.get(selected_channel_id)
         filtered_samples = convolve(signal.samples_array, self.filter, mode='same')
-        self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
-        self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
+        self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)))
+        self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)))
+        #self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
+        #self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
 
     def showError(self, message):
         error_dialog = QMessageBox(self)
