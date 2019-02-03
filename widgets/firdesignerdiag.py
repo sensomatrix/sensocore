@@ -54,7 +54,7 @@ class FIRDesignerDialog(QDialog):
         self.taps_lineedit = QLineEdit()
         self.bands_label = QLabel("Band edges: ")
         self.bands_lineedit = QLineEdit()
-        self.desired_label = QLabel("Gain: ")
+        self.desired_label = QLabel("Ideal gain coefficients: ")
         self.desired_lineedit = QLineEdit()
         self.ls_weights_label = QLabel("Weights: ")
         self.ls_weights_lineedit = QLineEdit()
