@@ -1,16 +1,18 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout
-from .scope import Scope
-from .chrono import Chrono
-from .spectrumview import SpectrumView
-class Center(QWidget):
+from PyQt5.QtWidgets import QWidget, QGridLayout, QTabWidget, QTabBar
+from .scopetab import ScopeTab
+
+class Center(QTabWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.scope = Scope(self)
-        gridlayout = QGridLayout()
-        self.setLayout(gridlayout)
-        gridlayout.addWidget(self.scope.pw, 1, 1)
-        self.chrono = Chrono(self)
-        #self.spectrum_view = SpectrumView(self)
-        gridlayout.addWidget(self.chrono, 2,1)
-        #gridlayout.addWidget(self.spectrum_view, 3,1)
+        self.tabScope = ScopeTab(self)
+        self.setTabsClosable(True)
+        self.addTab(self.tabScope,"Oscilloscope")
+        self.hideCloseButton(self.tabScope)
+
+    def hideCloseButton(self, tab):
+        if self.tabBar().tabButton(0, QTabBar.RightSide) is None:
+            self.tabBar().tabButton(0, QTabBar.LeftSide).resize(0, 0)
+            return
+        self.tabBar().tabButton(0, QTabBar.RightSide).resize(0, 0)
+
