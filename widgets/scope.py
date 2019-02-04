@@ -21,12 +21,19 @@ class Scope(QObject):
         self.pw = pg.MultiPlotWidget()
         self.pw.setBackground('w')
         self.pw.setMinimumPlotHeight(100)
-        self.xcursor = None
+        self.addCursor()
         self.colorlist=['r','g','b','c','m','k']
         self.colorpool = cycle(self.colorlist)
 
         # test the console to see if other classes can call it:
         #self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
+
+    def addCursor(self):
+
+        # pen = pg.mkPen(width=1)
+        self.xcursor = pg.InfiniteLine(movable=True, angle=90)
+        self.xcursor.sigPositionChanged.connect(self.xcursor_moved)
+        self.pw.addItem(self.xcursor)
 
     # do not call the add_trace method directly from outside, go through the signal-slot qt mechanism (see initui.py)
     def on_signal_loaded(self, signal):
@@ -54,12 +61,6 @@ class Scope(QObject):
         # trying to display coords
         self.proxy = pg.SignalProxy(self.pw.mPlotItem.plots[last_added_index][0].scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
-        # add infinite line
-        if last_added_index is 0:
-            #pen = pg.mkPen(width=1)
-            self.xcursor = pg.InfiniteLine(movable=True, angle=90)
-            self.xcursor.sigPositionChanged.connect(self.xcursor_moved)
-            self.pw.addItem(self.xcursor)
 
         # link X-axis
         if last_added_index is not 0:
@@ -107,6 +108,8 @@ class Scope(QObject):
         print("hide trace")
 
     def xcursor_moved(self, evt):
+        if not self.plotitems_dictionary:
+            return
         x = evt.value()
         pos = QPointF()
         pos.setX(x)
