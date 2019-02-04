@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PyQt5.Qt import QPen
 import pyqtgraph as pg
 import numpy as np
@@ -31,17 +31,20 @@ class FilterPlotter(Plotter):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.p = self.graphLayout.addPlot()
+        self.p.setLabel('bottom', text="frequency", units="Hz")
+        self.p.setLabel('left', text="magnitude", units="dB")
+        self.plotslist = []
+        self.p.showGrid(x=True,y=True)
 
-    def plot_data(self, data,):
-        self.graphLayout.clear()
-        self.graphLayout.nextRow()
-        p = pg.PlotItem(title="Frequency response")
-        p.setLabel('bottom', text="frequency", units="Hz")
-        p.setLabel('left', text="magnitude", units="dB")
-        p.setClipToView(True)
-        p.setLogMode(y=True)
-        p.plot(data)
-        self.graphLayout.addItem(p)
+    def plot_data(self, data):
+        if len(self.plotslist) == 0:
+            self.plotslist.append(self.p.plot(data, pen='r'))
+        elif len(self.plotslist) == 1:
+            self.plotslist.append(self.p.plot(data, pen='g'))
+        elif len(self.plotslist) == 2:
+            self.plotslist.clear()
+            self.plotslist.append(self.p.plot(data, clear=True, pen='r'))
 
 class FilteredSignalPlotter(Plotter):
     def __init__(self, parent):
