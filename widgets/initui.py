@@ -16,6 +16,7 @@ def init_connect_slots(MAIN):
         MAIN.center.tabScope.scope.cursor_moved_signal.connect(MAIN.center.tabScope.chrono.on_cursor_moved)
         MAIN.datasets.signal_loaded_signal.connect(MAIN.channels.on_signal_loaded)
         MAIN.center.tabScope.scope.plot_specview.connect(MAIN.specview.plot_selection)
+        MAIN.datasets.signal_changed_signal.connect(MAIN.center.tabScope.scope.signalChanged_signal)
 
 def init_ui_widgets(MAIN):
     

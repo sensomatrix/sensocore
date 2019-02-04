@@ -55,6 +55,11 @@ class ChannelsRightClickMenu(QMenu):
         self.exec(parent.mapToGlobal(position))
 
     def create(self):
+        # Remove DC
+        action = self.addAction("Remove DC")
+        action.triggered.connect(lambda: self.parent.parent.datasets.removeDC(self.sig.id))
+        self.addAction(action)
+
         #Plot PSD button
         action = self.addAction("Plot PSD")
         action.triggered.connect(lambda: self.parent.parent.secondary_area.plot_psd_slot(self.sig))
@@ -64,3 +69,5 @@ class ChannelsRightClickMenu(QMenu):
         action = self.addAction("Plot Time-Frequency")
         action.triggered.connect(lambda: self.parent.parent.secondary_area.plot_tf_slot(self.sig))
         self.addAction(action)
+
+

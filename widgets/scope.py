@@ -168,3 +168,11 @@ class Scope(QObject):
                 return True
         print("no")
         return False
+
+    def signalChanged_signal(self, id_):
+        plotitem = self.plotitems_dictionary.get(id_)
+        dataitems = [dataitem for dataitem in plotitem.listDataItems() if isinstance(dataitem, pg.PlotDataItem)]
+        for dataitem in dataitems:
+            dataitem.setData(self.parent.parent.parent.datasets.signals_dictionary.get(id_).time_array,
+                         self.parent.parent.parent.datasets.signals_dictionary.get(id_).samples_array)
+        plotitem.vb.autoRange()

@@ -9,6 +9,7 @@ from PyQt5.QtCore import pyqtSignal, QObject
 class Dataset(QObject):
 
     signal_loaded_signal = pyqtSignal(object)
+    signal_changed_signal = pyqtSignal(int)
 
     def __init__(self, parent):
         super().__init__()
@@ -58,5 +59,9 @@ class Dataset(QObject):
 
     def getSignalsList(self):
         return self.signals_dictionary
+
+    def removeDC(self, id_):
+        self.signals_dictionary.get(id_).removeDC()
+        self.signal_changed_signal.emit(id_)
 
 
