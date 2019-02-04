@@ -1,10 +1,12 @@
-from numpy import random
+from numpy import random, mean
+from PyQt5.QtCore import pyqtSignal
 from scipy.signal import welch, spectrogram
 
 class Signal:
     # function to generate time array out of fs is not implemented yet
 
     id_list = [] # class-wide list that contains list of already-assigned unique IDs
+    signalChanged = pyqtSignal(int)
 
     def __init__(self, samples_array, time_array=None, fs=None, name=None, type=None):
         super().__init__()
@@ -19,3 +21,6 @@ class Signal:
         if time_array is not None:
             self.time_array = time_array
             self.fs = 1/(time_array[1] - time_array[0])
+
+    def removeDC(self):
+        self.samples_array = self.samples_array - mean(self.samples_array)
