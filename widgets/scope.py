@@ -26,7 +26,7 @@ class Scope(QObject):
         self.colorpool = cycle(self.colorlist)
 
         # test the console to see if other classes can call it:
-        self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
+        #self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
 
     # do not call the add_trace method directly from outside, go through the signal-slot qt mechanism (see initui.py)
     def on_signal_loaded(self, signal):

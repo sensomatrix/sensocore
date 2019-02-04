@@ -64,4 +64,8 @@ class Dataset(QObject):
         self.signals_dictionary.get(id_).removeDC()
         self.signal_changed_signal.emit(id_)
 
+    def changeSamplesArray(self, id_, new_samples_array):
+        self.signals_dictionary.get(id_).samples_array = new_samples_array
+        self.signal_changed_signal.emit(id_)
+
 
