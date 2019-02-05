@@ -33,7 +33,7 @@ class FilterPlotter(Plotter):
         self.parent = parent
         self.p = self.graphLayout.addPlot()
         self.p.setLabel('bottom', text="frequency", units="Hz")
-        self.p.setLabel('left', text="magnitude", units="dB")
+        self.p.setLabel('left', text="magnitude", units="")
         self.plotslist = []
         self.p.showGrid(x=True,y=True)
 
@@ -70,7 +70,6 @@ class FilteredSignalPlotter(Plotter):
         self.p.setClipToView(True)
         self.p.vb.setMouseEnabled(y=False)
         self.p.vb.setLimits(maxXRange=5)
-        print("gay")
 
 
 

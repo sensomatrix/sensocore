@@ -37,7 +37,6 @@ class Dataset(QObject):
     def load_from_file(self, path_to_file):
         with open(path_to_file, 'r') as fileObject:
             lines = self.readnextlines(fileObject, 5)
-            print("ostie")
             while len(lines) == 5:
                 name = lines[0]
                 typeofsignal = lines[1]
@@ -47,7 +46,6 @@ class Dataset(QObject):
                 sig = Signal(samples_array, time_array=time_array, name=name, type=typeofsignal)
                 self.signals_dictionary[sig.id] = sig
                 lines = self.readnextlines(fileObject, 5)
-            print("file loaded")
 
     def loadFromSimulation(self, samples_array, time_array, fs, name, type):
         sig = Signal(samples_array, time_array=time_array, fs=fs, name=name, type=type)
