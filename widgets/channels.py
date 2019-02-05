@@ -39,10 +39,11 @@ class Channels(QWidget):
         self.channel_selected_signal.emit(sig)
 
     def create_menu(self, position):
-        item = self.channel_list.selectedItems()[0]
-        id = item.data(Qt.UserRole)
-        sig = self.signal_dict.get(id)
-        ChannelsRightClickMenu(self, sig, position)
+        if self.channel_list.selectedItems() is []:
+            item = self.channel_list.selectedItems()[0]
+            id = item.data(Qt.UserRole)
+            sig = self.signal_dict.get(id)
+            ChannelsRightClickMenu(self, sig, position)
 
 
 class ChannelsRightClickMenu(QMenu):
