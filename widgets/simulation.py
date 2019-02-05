@@ -1,5 +1,4 @@
-import sys
-from PyQt5.QtWidgets import (QDialog, QHBoxLayout, QScrollArea, 
+from PyQt5.QtWidgets import (QDialog, QHBoxLayout, QScrollArea,
 							QVBoxLayout, QGroupBox, QSplitter, QProgressBar)
 
 import pyqtgraph as pg

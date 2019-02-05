@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QGroupBox, QGroupBox, QDoubleSpinBox, QLabel
+from PyQt5.QtWidgets import QGroupBox, QDoubleSpinBox, QLabel, QGridLayout
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGridLayout
 import copy
 
 class ECGSimulationParameters(QGroupBox):

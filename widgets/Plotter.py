@@ -1,7 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
-from PyQt5.Qt import QPen
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 import pyqtgraph as pg
-import numpy as np
 
 #Abstract class to make adding plots easier
 

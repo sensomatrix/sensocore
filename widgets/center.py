@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout, QTabWidget, QTabBar
+from PyQt5.QtWidgets import QTabWidget, QTabBar
 from .scopetab import ScopeTab
 
 class Center(QTabWidget):

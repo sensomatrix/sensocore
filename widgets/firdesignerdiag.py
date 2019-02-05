@@ -101,7 +101,7 @@ class FIRDesignerDialog(QDialog):
         #formlayout.addRow(self.ls_weights_label, self.ls_weights_lineedit)
         self.designparam_gb.setLayout(formlayout)
 
-        # channel list apply filters
+        # channel lis apply filters
         self.applyfilters_gb = QGroupBox("5. Apply filter")
         self.applyfilters_list = QListView()
         self.applyfilters_list.setEnabled(False)

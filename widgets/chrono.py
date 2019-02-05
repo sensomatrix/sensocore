@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QFrame, QSlider, QGridLayout, QLabel, QScrollArea, QSizePolicy, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QFrame, QSlider, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import Qt
-import decimal
 
 
 class Chrono(QFrame):

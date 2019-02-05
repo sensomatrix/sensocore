@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu
-from PyQt5.QtCore import Qt, pyqtSignal, QPoint
+from PyQt5.QtCore import Qt, pyqtSignal
 
 
 # implement a channel list and maybe some buttons for doing actions on select channels
