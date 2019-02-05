@@ -63,6 +63,7 @@ def init_ui_widgets(MAIN):
         dockwidget.setWidget(dock['widget'])
         dockwidget.setAllowedAreas(dock['main_area'])
         dockwidget.setObjectName(dock['name'])
+        dockwidget.setFeatures(QDockWidget.DockWidgetFloatable | QDockWidget.DockWidgetMovable)
         MAIN.dock_names[dock['name']] = dockwidget
         if 'max_height' in dock:
             dockwidget.setMaximumHeight(dock['max_height'])
