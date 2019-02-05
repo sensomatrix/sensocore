@@ -50,5 +50,5 @@ class Chrono(QFrame):
             break
 
     def on_cursor_moved(self, value):
-        string_cursor = "Cursor: " + str(value) + " sec"
+        string_cursor = "Cursor: " + value
         self.cursorValueLabel.setText(string_cursor)
