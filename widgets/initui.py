@@ -3,11 +3,12 @@ from .info import Info
 from .center import Center
 from .console import Console
 from .secondaryarea import SecondaryArea
-from .simulation_button import SimulateButton
 from .spectrumview import SpectrumView
 from .firdesignerdiag import FIRDesignerDialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QAction
+from .ecg_simulation_dialog import ECGSimulation
+from .eeg_simulation_dialog import EEGSimulation
 
 
 # connect pyqt signals to pyqt slots here
@@ -81,8 +82,19 @@ def init_ui_toolbar(MAIN):
     # create the toolbar
     toolbar = MAIN.addToolBar("file")
     toolbar.addAction(MAIN.datasets.actions['open_dataset'])
-    simulate_button = SimulateButton(MAIN)
-    toolbar.addWidget(simulate_button)
+
+    eeg_action = QAction("EEG Simulation", MAIN)
+    eeg_action.triggered.connect(lambda: EEGSimulation('EEG Simulation', MAIN))
+
+    ecg_action = QAction("ECG Simulation", MAIN)
+    ecg_action.triggered.connect(lambda: ECGSimulation('ECG Simulation', MAIN))
+
+    fir_filter_action = QAction("FIR Filter Desiging", MAIN)
+    fir_filter_action.triggered.connect(lambda: fir_filter_design_open(MAIN))
+
+    toolbar.addAction(eeg_action)
+    toolbar.addAction(ecg_action)
+    toolbar.addAction(fir_filter_action)
 
 def init_ui_menubar(MAIN):
     menuBar = MAIN.menuBar()
