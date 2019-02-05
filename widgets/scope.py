@@ -28,6 +28,7 @@ class Scope(QObject):
         # test the console to see if other classes can call it:
         #self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
 
+
     def addCursor(self):
 
         # pen = pg.mkPen(width=1)
@@ -87,7 +88,7 @@ class Scope(QObject):
         for id, plotitem in self.plotitems_dictionary.items():
             if plotitem.sceneBoundingRect().contains(pos):
                 mousePoint = plotitem.vb.mapSceneToView(pos)
-                print(mousePoint.x(), mousePoint.y())
+                self.parent.chrono.coords.setText("<span style='font-size: 12pt'>t=%0.3f, y=%0.3f</span>" % (mousePoint.x(), mousePoint.y()))
 
     def mouseClickedLinearRegion(self, evt):
         # if double click, plot linear region if there isnt one

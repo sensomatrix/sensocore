@@ -7,7 +7,6 @@ from widgets.initui import init_ui_widgets, init_ui_toolbar, init_connect_slots,
 
 
 class MainWindow(QMainWindow):
-    print("Test")
 
     def __init__(self):
         super().__init__()

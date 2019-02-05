@@ -38,6 +38,7 @@ def init_ui_widgets(MAIN):
               'widget': MAIN.channels,
               'main_area': Qt.LeftDockWidgetArea,
               'max_width': 200,
+              'min_width': 200,
               },
              {'name': 'Secondary plotting',
               'widget': MAIN.secondary_area,
@@ -74,13 +75,14 @@ def init_ui_widgets(MAIN):
             dockwidget.setMaximumWidth(dock['max_width'])
 
         MAIN.addDockWidget(dock['main_area'], dockwidget)
+        MAIN.resizeDocks([dockwidget], {0}, Qt.Horizontal)
 
     MAIN.tabifyDockWidget(MAIN.dock_names['Output'], MAIN.dock_names['Spectrum View'])
     MAIN.dock_names['Output'].raise_()
 
 def init_ui_toolbar(MAIN):
     # create the toolbar
-    toolbar = MAIN.addToolBar("file")
+    toolbar = MAIN.addToolBar("Toolbar")
     toolbar.addAction(MAIN.datasets.actions['open_dataset'])
 
     eeg_action = QAction("EEG Simulation", MAIN)
@@ -89,7 +91,7 @@ def init_ui_toolbar(MAIN):
     ecg_action = QAction("ECG Simulation", MAIN)
     ecg_action.triggered.connect(lambda: ECGSimulation('ECG Simulation', MAIN))
 
-    fir_filter_action = QAction("FIR Filter Desiging", MAIN)
+    fir_filter_action = QAction("FIR Filter Designer", MAIN)
     fir_filter_action.triggered.connect(lambda: fir_filter_design_open(MAIN))
 
     toolbar.addAction(eeg_action)

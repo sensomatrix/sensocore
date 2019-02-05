@@ -252,7 +252,6 @@ class FIRDesignerDialog(QDialog):
             fs = int(self.signals_dic.get(selected_channel_id).fs)
         if filtertype_id is self.filter_lookup.index('least_squares') or self.filter_lookup.index('parks'):
             # least squares or parks
-            print("yes..")
             taps = int(self.taps_lineedit.text())
             if taps % 2 is 0:
                 self.showError('Number of taps must be odd for a linear-phase filter.')
@@ -271,9 +270,6 @@ class FIRDesignerDialog(QDialog):
             if (desired.size != bands.size) and filtertype_id is self.filter_lookup.index('least_squares'):
                 self.showError('Least squares: there must be as many gain coefficients as there are frequencies in band edges.')
                 return
-            gay = desired.size
-            tapet = int(bands.size/2)
-            print("lol")
             if (desired.size != int(bands.size/2)) and filtertype_id is self.filter_lookup.index('parks'):
                 self.showError('Parks–McClellan: ideal gain sequence must be half the size of bands')
                 return
