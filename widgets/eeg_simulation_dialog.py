@@ -14,6 +14,7 @@ class EEGSimulation(Simulation):
 		self.sig_params.setDefaultValues(sampling_frequency=100, duration=10)
 		self.setupConnections()
 		self.plotEEGSignal()
+		self.sig_params.setDefaultName('EEG Simulation')
 		self.exec_()
 
 	def setupConnections(self):

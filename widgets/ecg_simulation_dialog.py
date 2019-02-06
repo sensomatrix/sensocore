@@ -12,6 +12,7 @@ class ECGSimulation(Simulation):
 		self.addSimAndSigParameters(ECGSimulationParameters())
 		self.setupConnections()
 		self.plotECGSignal()
+		self.sig_params.setDefaultName('ECG Simulation')
 		self.exec_()
 
 	def setupConnections(self):

@@ -5,9 +5,10 @@ class SignalProperties(QGroupBox):
 	def __init__(self, props_to_remove=[]):
 		super().__init__('Signal Properties')
 
+		self._default_name = 'Sim Example'
 		self.initUI()
 		self.initLayout(props_to_remove)
-		
+
 	def initUI(self):
 		self.initNoise()
 		self.initSamplingFrequency()
@@ -63,7 +64,7 @@ class SignalProperties(QGroupBox):
 		self._name_text_field = QLineEdit(self)
 
 	def setToDefaultValues(self):
-		self._name_text_field.setText('Sim Example')
+		self._name_text_field.setText(self._default_name)
 		self._noise_spin_box.setValue(self._noise_magnitude)
 		self._sampling_freq_spin_box.setValue(self._sampling_frequency)
 		self._duration_spin_box.setValue(self._duration)
@@ -76,6 +77,10 @@ class SignalProperties(QGroupBox):
 		self._duration = duration
 		self._period = period
 		self.setToDefaultValues()
+
+	def setDefaultName(self, name):
+		self._default_name = name
+		self._name_text_field.setText(self._default_name)
 
 	def initLayout(self, props_to_remove):
 		layout = QGridLayout()
