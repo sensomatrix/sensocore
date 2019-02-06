@@ -7,6 +7,7 @@ class Center(QTabWidget):
         super().__init__()
         self.parent = parent
         self.tabs = QTabWidget
+        self.tabCloseRequested.connect(self.remove_and_delete_tab)
         self.tabScope = ScopeTab(self)
         self.tabCrossCorre = CrossCorrelationTab(self)
         self.setTabsClosable(True)
@@ -19,4 +20,8 @@ class Center(QTabWidget):
             self.tabBar().tabButton(0, QTabBar.LeftSide).resize(0, 0)
             return
         self.tabBar().tabButton(0, QTabBar.RightSide).resize(0, 0)
+
+    def remove_and_delete_tab(self, index):
+        self.widget(index).deleteLater()
+        self.removeTab(index)
 
