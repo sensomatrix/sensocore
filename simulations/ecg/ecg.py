@@ -6,7 +6,7 @@ from .t import t
 import numpy as np
 
 
-def generateECG(sampling_frequency, noise_magnitude, end_time, period,
+def generateECG(sampling_frequency, noise_magnitude, end_time, period, delay,
 				P, Q, R, S, T, callback=None, is_for_graphing=True):
 
 	Q = [
@@ -14,9 +14,6 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 			[Q[1], Q[4]],
 			[Q[2], Q[5]],
 		]
-
-	if is_for_graphing:
-		end_time = period
 
 	begin_time = 0
 	period = period
@@ -27,7 +24,10 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 	if total_beats == 0:
 		total_beats = 1
 
-	begin = 0
+	if is_for_graphing:
+		begin_time = delay
+		end_time = begin_time + period
+		total_beats = 1
 
 	time_one_period = np.linspace(0, period, period * sampling_frequency)
 
@@ -62,6 +62,14 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 	x = np.linspace(begin_time, end_time, samples)
 
 	y = p_wave + q_wave + r_wave + s_wave + t_wave
+
+	# Need to find out how much to shift the values by
+	if not is_for_graphing:
+		delay_shift = int(delay * sampling_frequency)
+
+		y = np.roll(y, delay_shift)
+
+		y[:delay_shift] = 0
 
 	noise = np.random.normal(0, noise_magnitude, x.shape)
 
