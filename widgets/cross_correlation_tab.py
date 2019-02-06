@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
-from PyQt5 import Qt
 from widgets.cross_correlation import CrossCorrelation
-import numpy as np
 from scipy import signal
+from timeutils import generateTimeArrayFromNumberOfSamples
 
 
 class CrossCorrelationTab(QWidget):
@@ -33,10 +32,14 @@ class CrossCorrelationTab(QWidget):
             if signal_1 is not None and signal_2 is not None:
                 print('cool')
 
-                self.signal_1.plot_data(signal_1.time_array, signal_1.samples_array)
-                self.signal_2.plot_data(signal_2.time_array, signal_2.samples_array)
-                corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='same')
+                time_array = generateTimeArrayFromNumberOfSamples(signal_2.fs,
+                                                                  len(signal_1.samples_array) + len(signal_2.samples_array) - 1)
 
-                self.output.plot_data(signal_2.time_array, corr)
+                self.signal_1.plot_data(time_array, signal_1.samples_array)
+                self.signal_2.plot_data(time_array, signal_2.samples_array)
+
+                corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
+
+                self.output.plot_data(time_array, corr)
             else:
                 print('not cool')
