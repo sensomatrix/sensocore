@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu
+from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
@@ -22,7 +22,7 @@ class Channels(QWidget):
         self.channel_list.itemSelectionChanged.connect(self.selectionChanged)
         self.channel_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.channel_list.customContextMenuRequested.connect(self.create_menu)
-        # self.channel_list.setSelectionModel()
+        self.channel_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         layout = QVBoxLayout()
         layout.addWidget(self.channel_list)
         self.setLayout(layout)
