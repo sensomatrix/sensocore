@@ -17,14 +17,14 @@ class PhysionetDiag(QDialog):
         self.database_label.setTextInteractionFlags(Qt.TextBrowserInteraction)
         self.database_label.setOpenExternalLinks(True);
         self.database_lineedit = QLineEdit()
-        self.database_lineedit.setToolTip("URL to PhysioBank database: https://physionet.org/physiobank/database/xxxxx")
-        self.databaseexample_label = QLabel("e.g.: https://physionet.org/physiobank/database/eegmat/")
+        self.database_lineedit.setToolTip("URL to PhysioBank database: https://physionet.org/physiobank/database/xxx/xxx")
+        self.databaseexample_label = QLabel("e.g: https://physionet.org/physiobank/database/cebsdb/")
 
 
         self.recordname_label = QLabel("Record name:")
         self.recordname_lineedit = QLineEdit()
-        self.recordname_lineedit.setToolTip("Name of the record without the extension")
-        self.recordnameexample_label = QLabel("gay")
+        self.recordname_lineedit.setToolTip("Name of the record without the extension. Usually listed\nin a file called RECORDS.txt in the database root.")
+        self.recordnameexample_label = QLabel("e.g. b012")
 
         formlayout = QFormLayout()
         formlayout.addRow(self.database_label, self.database_lineedit)
@@ -53,7 +53,7 @@ class PhysionetDiag(QDialog):
         if db:
             if db[-1] == "/":
                 db = db[:-1]
-            db = db.rsplit('/', 1)[-1]
+            db = db.split("database/",1)[1]
         else:
             error = ErrorMessage("Enter the database URL")
             return
