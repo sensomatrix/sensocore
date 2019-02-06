@@ -10,6 +10,6 @@ class CrossCorrelation(Plotter):
         self.plotslist = []
         self.p.showGrid(x=True,y=True)
 
-    def plot_data(self, data):
+    def plot_data(self, time, samples):
             self.plotslist.clear()
-            self.plotslist.append(self.p.plot(data, clear=True, pen='r'))
+            self.plotslist.append(self.p.plot(time, samples, clear=True, pen='r'))
