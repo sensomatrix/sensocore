@@ -19,12 +19,12 @@ class PhysionetDiag(QDialog):
         self.database_lineedit = QLineEdit()
         self.database_lineedit.setToolTip("URL to PhysioBank database: https://physionet.org/physiobank/database/xxx/xxx")
         self.databaseexample_label = QLabel("e.g: https://physionet.org/physiobank/database/cebsdb/")
-
-
+        self.databaseexample_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.recordname_label = QLabel("Record name:")
         self.recordname_lineedit = QLineEdit()
         self.recordname_lineedit.setToolTip("Name of the record without the extension. Usually listed\nin a file called RECORDS.txt in the database root.")
         self.recordnameexample_label = QLabel("e.g. b012")
+        self.recordnameexample_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
         formlayout = QFormLayout()
         formlayout.addRow(self.database_label, self.database_lineedit)
