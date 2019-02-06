@@ -5,6 +5,7 @@ from widgets.cross_correlation_tab import CrossCorrelationTab
 class Center(QTabWidget):
     def __init__(self, parent):
         super().__init__()
+        self.parent = parent
         self.tabs = QTabWidget
         self.tabScope = ScopeTab(self)
         self.tabCrossCorre = CrossCorrelationTab(self)
