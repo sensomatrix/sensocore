@@ -95,9 +95,13 @@ def init_ui_toolbar(MAIN):
     fir_filter_action = QAction("FIR Filter Designer", MAIN)
     fir_filter_action.triggered.connect(lambda: fir_filter_design_open(MAIN))
 
+    cross_corr_action = QAction("Cross Correlation", MAIN)
+    cross_corr_action.triggered.connect(lambda: cross_correlation_open_tab(MAIN))
+
     toolbar.addAction(eeg_action)
     toolbar.addAction(ecg_action)
     toolbar.addAction(fir_filter_action)
+    toolbar.addAction(cross_corr_action)
 
 def init_ui_menubar(MAIN):
     menuBar = MAIN.menuBar()
@@ -115,3 +119,7 @@ def init_ui_menubar(MAIN):
 def fir_filter_design_open(parent):
     fir_designer_diag = FIRDesignerDialog(parent)
     fir_designer_diag.exec_()
+
+def cross_correlation_open_tab(parent):
+    parent.center.setCurrentIndex(1)
+    parent.center.tabCrossCorre.user_clicks_on_button(parent.channels.channel_list)
