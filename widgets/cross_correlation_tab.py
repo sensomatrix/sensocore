@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from widgets.cross_correlation import CrossCorrelation
 from scipy import signal
 from timeutils import generateTimeArrayFromNumberOfSamples
-
+import numpy as np
 
 class CrossCorrelationTab(QWidget):
     def __init__(self, parent):
@@ -40,7 +40,12 @@ class CrossCorrelationTab(QWidget):
                                                                       signal_2.samples_array) - 1)
 
                 corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
+                x_corr_idx = np.arange(corr.size)
+                samples_shift = x_corr_idx - (signal_1.samples_array.size - 1)
+                time_step = 1/signal_1.fs
+                offsets = -samples_shift*time_step
 
-                self.output.plot_data(time_array, corr)
+                print("gay")
+                self.output.plot_data(offsets, corr)
             else:
                 print('not cool')
