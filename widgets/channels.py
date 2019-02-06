@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu
+from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
@@ -19,9 +19,10 @@ class Channels(QWidget):
 
     def create(self):
         self.channel_list = QListWidget()
-        self.channel_list.itemSelectionChanged.connect(self.selectionChanged)
+        #self.channel_list.itemSelectionChanged.connect(self.selectionChanged)
         self.channel_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.channel_list.customContextMenuRequested.connect(self.create_menu)
+        self.channel_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         layout = QVBoxLayout()
         layout.addWidget(self.channel_list)
         self.setLayout(layout)
@@ -31,12 +32,12 @@ class Channels(QWidget):
         item.setData(Qt.UserRole, signal.id)
         self.channel_list.addItem(item)
 
-    # this is not used (old debugging code)
-    def selectionChanged(self):
-        item = self.channel_list.selectedItems()[0]
-        id = item.data(Qt.UserRole)
-        sig = self.signal_dict.get(id)
-        self.channel_selected_signal.emit(sig)
+    # # this is not used (old debugging code)
+    # def selectionChanged(self):
+    #     item = self.channel_list.selectedItems()[0]
+    #     id = item.data(Qt.UserRole)
+    #     sig = self.signal_dict.get(id)
+    #     self.channel_selected_signal.emit(sig)
 
     def create_menu(self, position):
         if self.channel_list.selectedItems():
@@ -44,6 +45,12 @@ class Channels(QWidget):
             id = item.data(Qt.UserRole)
             sig = self.signal_dict.get(id)
             ChannelsRightClickMenu(self, sig, position)
+
+    def getSelectedChannels(self):
+        channel_id_list = []
+        for item in self.channel_list.selectedItems():
+            channel_id_list.append(item.data(Qt.UserRole))
+        return channel_id_list
 
 
 class ChannelsRightClickMenu(QMenu):
