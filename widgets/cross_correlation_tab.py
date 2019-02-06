@@ -4,6 +4,7 @@ from scipy import signal
 from timeutils import generateTimeArrayFromNumberOfSamples
 import numpy as np
 
+
 class CrossCorrelationTab(QWidget):
     def __init__(self, parent):
         super().__init__()
@@ -23,29 +24,25 @@ class CrossCorrelationTab(QWidget):
             if _item == item:
                 return i
 
-    def user_clicks_on_button(self, signals, selected_channels_list_by_id):
-        if len(selected_channels_list_by_id) == 2:
-            print('yes')
-            signal_1 = signals.get(selected_channels_list_by_id[0])
-            signal_2 = signals.get(selected_channels_list_by_id[1])
+    def computeCrossCor(self, signal_1, signal_2):
 
-            if signal_1 is not None and signal_2 is not None:
-                print('cool')
+        if signal_1 is not None and signal_2 is not None:
+            print('cool')
 
-                self.signal_1.plot_data(signal_1.time_array, signal_1.samples_array)
-                self.signal_2.plot_data(signal_2.time_array, signal_2.samples_array)
+            self.signal_1.plot_data(signal_1.time_array, signal_1.samples_array)
+            self.signal_2.plot_data(signal_2.time_array, signal_2.samples_array)
 
-                time_array = generateTimeArrayFromNumberOfSamples(signal_2.fs,
-                                                                  len(signal_1.samples_array) + len(
-                                                                      signal_2.samples_array) - 1)
+            time_array = generateTimeArrayFromNumberOfSamples(signal_2.fs,
+                                                              len(signal_1.samples_array) + len(
+                                                                  signal_2.samples_array) - 1)
 
-                corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
-                x_corr_idx = np.arange(corr.size)
-                samples_shift = x_corr_idx - (signal_1.samples_array.size - 1)
-                time_step = 1/signal_1.fs
-                offsets = -samples_shift*time_step
+            corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
+            x_corr_idx = np.arange(corr.size)
+            samples_shift = x_corr_idx - (signal_1.samples_array.size - 1)
+            time_step = 1 / signal_1.fs
+            offsets = -samples_shift * time_step
 
-                print("gay")
-                self.output.plot_data(offsets, corr)
-            else:
-                print('not cool')
+            print("gay")
+            self.output.plot_data(offsets, corr)
+        else:
+            print('not cool')

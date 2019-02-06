@@ -121,5 +121,4 @@ def fir_filter_design_open(parent):
     fir_designer_diag.exec_()
 
 def cross_correlation_open_tab(parent):
-    parent.center.setCurrentIndex(1)
-    parent.center.tabCrossCorre.user_clicks_on_button(parent.datasets.signals_dictionary, parent.channels.getSelectedChannels())
+    parent.center.user_clicks_on_correlate_button(parent.datasets.signals_dictionary, parent.channels.getSelectedChannels())
