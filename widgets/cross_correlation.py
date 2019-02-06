@@ -10,6 +10,8 @@ class CrossCorrelation(Plotter):
         self.plotslist = []
         self.p.showGrid(x=True,y=True)
 
-    def plot_data(self, time, samples):
+    def plot_data(self, time, samples, **kwargs):
             self.plotslist.clear()
             self.plotslist.append(self.p.plot(time, samples, clear=True, pen='r'))
+            if 'title' in kwargs:
+                self.p.setTitle(kwargs.get('title'))

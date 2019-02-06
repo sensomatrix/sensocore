@@ -5,6 +5,7 @@ from .console import Console
 from .secondaryarea import SecondaryArea
 from .spectrumview import SpectrumView
 from .firdesignerdiag import FIRDesignerDialog
+from .physionetdiag import PhysionetDiag
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QAction
 from .ecg_simulation_dialog import ECGSimulation
@@ -95,6 +96,9 @@ def init_ui_toolbar(MAIN):
     fir_filter_action = QAction("FIR Filter Designer", MAIN)
     fir_filter_action.triggered.connect(lambda: fir_filter_design_open(MAIN))
 
+    physionet_action = QAction("Physionet", MAIN)
+    physionet_action.triggered.connect(lambda: physionet_diag_open(MAIN))
+
     cross_corr_action = QAction("Cross Correlation", MAIN)
     cross_corr_action.triggered.connect(lambda: cross_correlation_open_tab(MAIN))
 
@@ -102,6 +106,7 @@ def init_ui_toolbar(MAIN):
     toolbar.addAction(ecg_action)
     toolbar.addAction(fir_filter_action)
     toolbar.addAction(cross_corr_action)
+    toolbar.addAction(physionet_action)
 
 def init_ui_menubar(MAIN):
     menuBar = MAIN.menuBar()
@@ -122,3 +127,7 @@ def fir_filter_design_open(parent):
 
 def cross_correlation_open_tab(parent):
     parent.center.user_clicks_on_correlate_button(parent.datasets.signals_dictionary, parent.channels.getSelectedChannels())
+
+def physionet_diag_open(parent):
+    physionet_diag = PhysionetDiag(parent)
+    physionet_diag.exec_()
