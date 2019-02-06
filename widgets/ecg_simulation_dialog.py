@@ -44,6 +44,9 @@ class ECGSimulation(Simulation):
 		self.close()
 
 	def plotECGSignal(self):
+		if self.sig_params.delay > self.sig_params.end_time:
+			self.sig_params.duration_spin_box.setValue(self.sig_params.delay)
+
 		self.sim_graph.clear()
 		time, output = generateECG(self.sig_params.sampling_frequency, self.sig_params.noise_magnitude,
 								   self.sig_params.end_time, self.sig_params.period, self.sig_params.delay,

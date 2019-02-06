@@ -66,7 +66,7 @@ class SignalProperties(QGroupBox):
 
 		self._delay_spin_box.setMinimum(0)
 		self._delay_spin_box.setMaximum(100)
-		self._delay_spin_box.setSingleStep(0.01)
+		self._delay_spin_box.setSingleStep(0.1)
 
 	def initNameField(self):
 		self._name_label = QLabel('Signal Name')
