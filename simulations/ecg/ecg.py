@@ -19,13 +19,14 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period, delay,
 	period = period
 	end_time = end_time
 
-	if is_for_graphing:
-		begin_time = delay
-		end_time = begin_time + period
-
 	total_beats = int(end_time / period)
 
 	if total_beats == 0:
+		total_beats = 1
+
+	if is_for_graphing:
+		begin_time = delay
+		end_time = begin_time + period
 		total_beats = 1
 
 	time_one_period = np.linspace(0, period, period * sampling_frequency)
@@ -60,15 +61,15 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period, delay,
 
 	x = np.linspace(begin_time, end_time, samples)
 
-	# Need to find out how much to shift the values by
-
-	delay_shift = int(delay * sampling_frequency)
-
 	y = p_wave + q_wave + r_wave + s_wave + t_wave
 
-	y = np.roll(y, delay_shift)
+	# Need to find out how much to shift the values by
+	if not is_for_graphing:
+		delay_shift = int(delay * sampling_frequency)
 
-	y[:delay_shift] = 0
+		y = np.roll(y, delay_shift)
+
+		y[:delay_shift] = 0
 
 	noise = np.random.normal(0, noise_magnitude, x.shape)
 
