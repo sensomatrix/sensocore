@@ -7,7 +7,6 @@ class Center(QTabWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
-        self.tabs = QTabWidget
         self.tabCloseRequested.connect(self.remove_and_delete_tab)
         self.tabScope = ScopeTab(self)
         self.setTabsClosable(True)
@@ -24,15 +23,17 @@ class Center(QTabWidget):
         if len(selected_channels_list_by_id) == 2:
             signal_1 = signals.get(selected_channels_list_by_id[0])
             signal_2 = signals.get(selected_channels_list_by_id[1])
-            self.tabCrossCorre = CrossCorrelationTab(self)
-            self.tabCrossCorre.computeCrossCor(signal_1, signal_2)
-            index = self.addTab(self.tabCrossCorre,"CROSSCOR("+signal_1.name+","+signal_2.name+")")
+            tabCrossCorre = CrossCorrelationTab(self)
+            tabCrossCorre.computeCrossCor(signal_1, signal_2)
+            index = self.addTab(tabCrossCorre,"CROSSCOR("+signal_1.name+","+signal_2.name+")")
             self.setCurrentIndex(index)
         else:
             ErrorMessage("Select two channels.")
 
     def remove_and_delete_tab(self, index):
-        self.widget(index).deleteLater()
+        widget = self.widget(index)
+        if widget is not None:
+            widget.deleteLater()
         self.removeTab(index)
 
 
