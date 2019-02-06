@@ -25,6 +25,6 @@ if __name__ == "__main__":
     global app
     app = QApplication([])
     q = MainWindow()
-    q.setWindowTitle("SensoMatrix")
+    q.setWindowTitle("Sensomatrix")
     q.showMaximized()
     sys.exit(app.exec_())
