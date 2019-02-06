@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu
-from PyQt5.QtCore import Qt, pyqtSignal, QPoint
+from PyQt5.QtCore import Qt, pyqtSignal
 
 
 # implement a channel list and maybe some buttons for doing actions on select channels
@@ -39,7 +39,7 @@ class Channels(QWidget):
         self.channel_selected_signal.emit(sig)
 
     def create_menu(self, position):
-        if self.channel_list.selectedItems() is []:
+        if self.channel_list.selectedItems():
             item = self.channel_list.selectedItems()[0]
             id = item.data(Qt.UserRole)
             sig = self.signal_dict.get(id)

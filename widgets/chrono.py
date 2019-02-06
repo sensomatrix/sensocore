@@ -1,29 +1,35 @@
-from PyQt5.QtWidgets import QFrame, QSlider, QGridLayout, QLabel, QScrollArea, QSizePolicy
+from PyQt5.QtWidgets import QFrame, QSlider, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import Qt
-import decimal
+
+
 class Chrono(QFrame):
-    
-#class that contains the time-slider
+
+    # class that contains the time-slider
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
         self.create()
-        
+
     def create(self):
-        grid_layout = QGridLayout()
-        self.setLayout(grid_layout)
-
-
-        #cursor in a scroll area to prevent GUI flickering
         self.cursorValueLabel = QLabel("Cursor: ")
-        self.cursorValueLabel.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Minimum)
-        grid_layout.addWidget(self.cursorValueLabel, 1, 1)
-        
+        self.coords = QLabel("")
+        self.coords.setAlignment(Qt.AlignRight)
+        #self.coords.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.slider = QSlider(Qt.Horizontal)
         self.slider.valueChanged.connect(self.sliderValueChanged)
-        grid_layout.addWidget(self.slider, 2, 1)
 
-    #dynamic time steps need to be added
+        frame_horizontal = QFrame()
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(self.cursorValueLabel)
+        hlayout.addWidget(self.coords)
+        frame_horizontal.setLayout(hlayout)
+
+        vlayout = QVBoxLayout()
+        vlayout.addWidget(frame_horizontal)
+        vlayout.addWidget(self.slider)
+        self.setLayout(vlayout)
+
+    # dynamic time steps need to be added
     def sliderValueChanged(self):
         max_t = 0;
         for id, plotted_plot in self.parent.scope.plotitems_isPlotted_dictionary.items():
@@ -36,15 +42,12 @@ class Chrono(QFrame):
         hi_t = lo_t + window_size
         for id, plotted_plot in self.parent.scope.plotitems_isPlotted_dictionary.items():
             if plotted_plot is True:
-                (self.parent.scope.plotitems_dictionary.get(id)).setRange(xRange=[lo_t,hi_t])
+                (self.parent.scope.plotitems_dictionary.get(id)).setRange(xRange=[lo_t, hi_t])
                 break
             else:
                 continue
             break
-            
+
     def on_cursor_moved(self, value):
-        string_cursor = "Cursor: " + str(value) + " sec"
+        string_cursor = "Cursor: " + value
         self.cursorValueLabel.setText(string_cursor)
-
-
-

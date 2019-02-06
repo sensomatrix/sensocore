@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QGroupBox, QSpinBox, QLabel, QPushButton
+from PyQt5.QtWidgets import QGroupBox, QSpinBox, QLabel, QPushButton, QGridLayout
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGridLayout
 import copy
 
 class EEGSimulationParameters(QGroupBox):

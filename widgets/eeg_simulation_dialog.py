@@ -4,7 +4,7 @@ from .simulation import Simulation
 import sys
 
 sys.path.append('simulations')
-from eeg.jansen import simulate_eeg_jansen
+from simulations.eeg.jansen import simulate_eeg_jansen
 
 class EEGSimulation(Simulation):
 	def __init__(self, title, parent):

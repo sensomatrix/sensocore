@@ -4,7 +4,7 @@ from .simulation import Simulation
 import sys
 
 sys.path.append('simulations')
-from ecg.ecg import generateECG
+from simulations.ecg.ecg import generateECG
 
 class ECGSimulation(Simulation):
 	def __init__(self, title, parent):

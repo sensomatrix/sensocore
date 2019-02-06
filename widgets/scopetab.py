@@ -1,7 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout, QTabWidget
+from PyQt5.QtWidgets import QWidget, QGridLayout
 from .scope import Scope
 from .chrono import Chrono
-from .spectrumview import SpectrumView
 
 
 class ScopeTab(QWidget):

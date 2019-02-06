@@ -8,7 +8,7 @@ from frequtils import compute_psd
 
 class Scope(QObject):
 
-    cursor_moved_signal = pyqtSignal(float)
+    cursor_moved_signal = pyqtSignal(str)
     plot_specview = pyqtSignal(np.ndarray)
 
     def __init__(self, parent):
@@ -27,6 +27,7 @@ class Scope(QObject):
 
         # test the console to see if other classes can call it:
         #self.parent.parent.parent.console.write("Scope loaded! (msg to test writing to console from another class).")
+
 
     def addCursor(self):
 
@@ -87,7 +88,7 @@ class Scope(QObject):
         for id, plotitem in self.plotitems_dictionary.items():
             if plotitem.sceneBoundingRect().contains(pos):
                 mousePoint = plotitem.vb.mapSceneToView(pos)
-                print(mousePoint.x(), mousePoint.y())
+                self.parent.chrono.coords.setText("<span style='font-size: 12pt'>t=%s, y=%0.3f</span>" % (self.secondsToHHMMSSMMM(mousePoint.x()), mousePoint.y()))
 
     def mouseClickedLinearRegion(self, evt):
         # if double click, plot linear region if there isnt one
@@ -115,7 +116,7 @@ class Scope(QObject):
         pos.setX(x)
         pos.setY(0)
         mousePoint = (next(iter(self.plotitems_dictionary.values()))).vb.mapSceneToView(pos)
-        self.cursor_moved_signal.emit(mousePoint.x())
+        self.cursor_moved_signal.emit(self.secondsToHHMMSSMMM(mousePoint.x()))
 
     def hideTimeAxis(self, lastAddedPlotItem):
         for id, isPlotted in self.plotitems_isPlotted_dictionary.items():
@@ -179,3 +180,6 @@ class Scope(QObject):
             dataitem.setData(self.parent.parent.parent.datasets.signals_dictionary.get(id_).time_array,
                          self.parent.parent.parent.datasets.signals_dictionary.get(id_).samples_array)
         plotitem.vb.autoRange()
+
+    def secondsToHHMMSSMMM(self, t):
+        return "%02d:%02d:%02d.%03d" % reduce(lambda ll, b: divmod(ll[0], b) + ll[1:], [(t * 1000,), 1000, 60, 60])
