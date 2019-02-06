@@ -24,15 +24,11 @@ class CrossCorrelationTab(QWidget):
             if _item == item:
                 return i
 
-    def user_clicks_on_button(self, signals, channels):
-        items = channels.selectedItems()
-
-        if len(items) == 2:
+    def user_clicks_on_button(self, signals, selected_channels_list_by_id):
+        if len(selected_channels_list_by_id) == 2:
             print('yes')
-            print(items[0].data())
-
-            signal_1 = signals.get(items[0].data(Qt.UserRole))
-            signal_2 = signals.get(items[1].data(Qt.UserRole))
+            signal_1 = signals.get(selected_channels_list_by_id[0])
+            signal_2 = signals.get(selected_channels_list_by_id[1])
 
             if signal_1 is not None and signal_2 is not None:
                 print('cool')

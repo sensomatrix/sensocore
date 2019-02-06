@@ -46,6 +46,12 @@ class Channels(QWidget):
             sig = self.signal_dict.get(id)
             ChannelsRightClickMenu(self, sig, position)
 
+    def getSelectedChannels(self):
+        channel_id_list = []
+        for item in self.channel_list.selectedItems():
+            channel_id_list.append(item.data(Qt.UserRole))
+        return channel_id_list
+
 
 class ChannelsRightClickMenu(QMenu):
 
