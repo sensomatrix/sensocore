@@ -4,6 +4,8 @@ import numpy as np
 from PyQt5.QtCore import QPointF, QObject, pyqtSignal
 from itertools import cycle
 from frequtils import compute_psd
+from timeutils import secondsToHHMMSSMMM
+from .timeaxisitem import TimeAxisItem
 
 
 class Scope(QObject):
@@ -51,6 +53,19 @@ class Scope(QObject):
         self.pw.plot(ma)
         last_added_index = len(self.pw.mPlotItem.plots) - 1
 
+        #time axis injection
+        timeaxis = TimeAxisItem(orientation='bottom', parent=self.pw.mPlotItem.plots[last_added_index][0])
+        timeaxis.setParent(self.pw.mPlotItem.plots[last_added_index][0])
+        timeaxis.linkToView(self.pw.mPlotItem.plots[last_added_index][0].vb)
+        oldaxis = self.pw.mPlotItem.plots[last_added_index][0].axes['bottom']['item']
+        self.pw.mPlotItem.plots[last_added_index][0].layout.removeItem(oldaxis)
+        self.pw.mPlotItem.plots[last_added_index][0].axes['bottom'] = {'item': timeaxis, 'pos': (3,1)}
+        self.pw.mPlotItem.plots[last_added_index][0].layout.addItem(timeaxis, *(3,1))
+        timeaxis.setZValue(-1000)
+        timeaxis.setFlag(timeaxis.ItemNegativeZStacksBehindParent)
+
+
+
         # view settings
         random_color = next(self.colorpool)
         self.pw.mPlotItem.plots[last_added_index][0].listDataItems()[0].setPen(pg.mkPen(random_color))
@@ -88,7 +103,7 @@ class Scope(QObject):
         for id, plotitem in self.plotitems_dictionary.items():
             if plotitem.sceneBoundingRect().contains(pos):
                 mousePoint = plotitem.vb.mapSceneToView(pos)
-                self.parent.chrono.coords.setText("<span style='font-size: 12pt'>t=%s, y=%0.3f</span>" % (self.secondsToHHMMSSMMM(mousePoint.x()), mousePoint.y()))
+                self.parent.chrono.coords.setText("<span style='font-size: 12pt'>t=%s, y=%0.3f</span>" % (secondsToHHMMSSMMM(mousePoint.x()), mousePoint.y()))
 
     def mouseClickedLinearRegion(self, evt):
         # if double click, plot linear region if there isnt one
@@ -116,7 +131,7 @@ class Scope(QObject):
         pos.setX(x)
         pos.setY(0)
         mousePoint = (next(iter(self.plotitems_dictionary.values()))).vb.mapSceneToView(pos)
-        self.cursor_moved_signal.emit(self.secondsToHHMMSSMMM(mousePoint.x()))
+        self.cursor_moved_signal.emit(secondsToHHMMSSMMM(mousePoint.x()))
 
     def hideTimeAxis(self, lastAddedPlotItem):
         for id, isPlotted in self.plotitems_isPlotted_dictionary.items():
@@ -181,5 +196,3 @@ class Scope(QObject):
                          self.parent.parent.parent.datasets.signals_dictionary.get(id_).samples_array)
         plotitem.vb.autoRange()
 
-    def secondsToHHMMSSMMM(self, t):
-        return "%02d:%02d:%02d.%03d" % reduce(lambda ll, b: divmod(ll[0], b) + ll[1:], [(t * 1000,), 1000, 60, 60])

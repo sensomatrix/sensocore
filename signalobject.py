@@ -1,6 +1,5 @@
 from numpy import random, mean
 from PyQt5.QtCore import pyqtSignal
-from scipy.signal import welch, spectrogram
 
 class Signal:
     # function to generate time array out of fs is not implemented yet
