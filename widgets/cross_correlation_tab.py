@@ -27,22 +27,15 @@ class CrossCorrelationTab(QWidget):
     def user_clicks_on_button(self, signals, selected_channels_list_by_id):
         if len(selected_channels_list_by_id) == 2:
             print('yes')
-            signal_1 = signals.get(selected_channels_list_by_id[0])
-            signal_2 = signals.get(selected_channels_list_by_id[1])
+            signal_1 = signals.get(selected_channels_list_by_id[0]).samples_array
+            signal_2 = signals.get(selected_channels_list_by_id[1]).samples_array
 
             if signal_1 is not None and signal_2 is not None:
                 print('cool')
 
-                x = np.linspace(0, 10 * np.pi, 200)
-                cos = np.cos(x)
-
-                self.signal_1.plot_data(cos)
-
-                sin = np.sin(x)
-
-                self.signal_2.plot_data(sin)
-
-                corr = signal.correlate(cos, sin, mode='same')
+                self.signal_1.plot_data(signal_1)
+                self.signal_2.plot_data(signal_2)
+                corr = signal.correlate(signal_1, signal_2, mode='same')
 
                 self.output.plot_data(corr)
             else:
