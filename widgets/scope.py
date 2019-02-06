@@ -70,7 +70,7 @@ class Scope(QObject):
         random_color = next(self.colorpool)
         self.pw.mPlotItem.plots[last_added_index][0].listDataItems()[0].setPen(pg.mkPen(random_color))
         self.pw.mPlotItem.plots[last_added_index][0].disableAutoRange()
-        self.pw.mPlotItem.plots[last_added_index][0].setLimits(maxXRange=10,xMin=0)
+        self.pw.mPlotItem.plots[last_added_index][0].setLimits(maxXRange=15,xMin=0)
         self.pw.mPlotItem.plots[last_added_index][0].setDownsampling(auto=True)
         self.pw.mPlotItem.plots[last_added_index][0].setClipToView(True)
 
