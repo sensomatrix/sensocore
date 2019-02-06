@@ -32,11 +32,12 @@ class CrossCorrelationTab(QWidget):
             if signal_1 is not None and signal_2 is not None:
                 print('cool')
 
-                time_array = generateTimeArrayFromNumberOfSamples(signal_2.fs,
-                                                                  len(signal_1.samples_array) + len(signal_2.samples_array) - 1)
+                self.signal_1.plot_data(signal_1.time_array, signal_1.samples_array)
+                self.signal_2.plot_data(signal_2.time_array, signal_2.samples_array)
 
-                self.signal_1.plot_data(time_array, signal_1.samples_array)
-                self.signal_2.plot_data(time_array, signal_2.samples_array)
+                time_array = generateTimeArrayFromNumberOfSamples(signal_2.fs,
+                                                                  len(signal_1.samples_array) + len(
+                                                                      signal_2.samples_array) - 1)
 
                 corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
 
