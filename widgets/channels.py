@@ -19,7 +19,7 @@ class Channels(QWidget):
 
     def create(self):
         self.channel_list = QListWidget()
-        self.channel_list.itemSelectionChanged.connect(self.selectionChanged)
+        #self.channel_list.itemSelectionChanged.connect(self.selectionChanged)
         self.channel_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.channel_list.customContextMenuRequested.connect(self.create_menu)
         self.channel_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -32,12 +32,12 @@ class Channels(QWidget):
         item.setData(Qt.UserRole, signal.id)
         self.channel_list.addItem(item)
 
-    # this is not used (old debugging code)
-    def selectionChanged(self):
-        item = self.channel_list.selectedItems()[0]
-        id = item.data(Qt.UserRole)
-        sig = self.signal_dict.get(id)
-        self.channel_selected_signal.emit(sig)
+    # # this is not used (old debugging code)
+    # def selectionChanged(self):
+    #     item = self.channel_list.selectedItems()[0]
+    #     id = item.data(Qt.UserRole)
+    #     sig = self.signal_dict.get(id)
+    #     self.channel_selected_signal.emit(sig)
 
     def create_menu(self, position):
         if self.channel_list.selectedItems():
