@@ -113,6 +113,7 @@ class SignalProperties(QGroupBox):
 					'F': [self._sampling_freq_label, self.sampling_freq_spin_box],
 					'D': [self._duration_label, self.duration_spin_box],
 					'P': [self._period_label, self._period_spin_box],
+					'DE': [self._delay_label, self._delay_spin_box]
 		}
 
 		for prop in props_to_remove:

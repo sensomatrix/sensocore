@@ -10,7 +10,7 @@ class EEGSimulation(Simulation):
 	def __init__(self, title, parent):
 		super().__init__(title, parent=parent)
 
-		self.addSimAndSigParameters(EEGSimulationParameters(), props_to_remove=['P'])
+		self.addSimAndSigParameters(EEGSimulationParameters(), props_to_remove=['P', 'DE'])
 		self.sig_params.setDefaultValues(sampling_frequency=100, duration=10)
 		self.setupConnections()
 		self.plotEEGSignal()
