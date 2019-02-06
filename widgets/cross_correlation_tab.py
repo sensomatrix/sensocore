@@ -30,9 +30,11 @@ class CrossCorrelationTab(QWidget):
             print('cool')
             self.signal_1.plot_data(signal_1.time_array, signal_1.samples_array)
             self.signal_2.plot_data(signal_2.time_array, signal_2.samples_array)
-            corr = signal.correlate(signal_1.samples_array, signal_2.samples_array, mode='full')
+            signal1_normalized_samples = (signal_1.samples_array - np.mean(signal_1.samples_array)) / (np.std(signal_1.samples_array) * signal_1.samples_array.size)
+            signal2_normalized_samples = (signal_2.samples_array - np.mean(signal_2.samples_array)) / (np.std(signal_2.samples_array))
+            corr = signal.correlate(signal1_normalized_samples, signal2_normalized_samples, mode='full')
             x_corr_idx = np.arange(corr.size)
-            samples_shift = x_corr_idx - (signal_1.samples_array.size - 1)
+            samples_shift = x_corr_idx - (signal1_normalized_samples.size - 1)
             time_step = 1 / signal_1.fs
             offsets = -samples_shift * time_step
             self.output.plot_data(offsets, corr)
