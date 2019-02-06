@@ -17,6 +17,7 @@ class SignalProperties(QGroupBox):
 		self.initPeriod()
 		self.initCreateButton()
 		self.initNameField()
+		self.initDelay()
 		self.setDefaultValues()
 
 	def initNoise(self):
@@ -59,6 +60,14 @@ class SignalProperties(QGroupBox):
 		self._period_spin_box.setMaximum(1.5)
 		self._period_spin_box.setSingleStep(0.001)
 
+	def initDelay(self):
+		self._delay_label = QLabel('Delay (s)')
+		self._delay_spin_box = QDoubleSpinBox(self)
+
+		self._delay_spin_box.setMinimum(0)
+		self._delay_spin_box.setMaximum(100)
+		self._delay_spin_box.setSingleStep(0.01)
+
 	def initNameField(self):
 		self._name_label = QLabel('Signal Name')
 		self._name_text_field = QLineEdit(self)
@@ -95,6 +104,8 @@ class SignalProperties(QGroupBox):
 		layout.addWidget(self._duration_spin_box)
 		layout.addWidget(self._period_label)
 		layout.addWidget(self._period_spin_box)
+		layout.addWidget(self._delay_label)
+		layout.addWidget(self._delay_spin_box)
 		layout.addWidget(self._reset_button)
 		layout.addWidget(self._create_button)
 
@@ -132,6 +143,10 @@ class SignalProperties(QGroupBox):
 	@property
 	def period(self):
 		return self._period_spin_box.value()
+
+	@property
+	def delay(self):
+		return self._delay_spin_box.value()
 
 	@property
 	def noise_spin_box(self):
