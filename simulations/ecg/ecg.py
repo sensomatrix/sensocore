@@ -4,7 +4,7 @@ from .r import r
 from .s import s
 from .t import t
 import numpy as np
-import math
+
 
 def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 				P, Q, R, S, T, callback=None, is_for_graphing=True):
@@ -29,52 +29,54 @@ def generateECG(sampling_frequency, noise_magnitude, end_time, period,
 
 	begin = 0
 
+	time_one_period = np.linspace(0, period, period * sampling_frequency)
+
 	samples = sampling_frequency * total_beats
 
-	x = np.linspace(begin_time, end_time, samples)
+	diff = samples - len(time_one_period) * total_beats
 
-	noise = np.random.normal(0, noise_magnitude, x.shape)
+	samples = samples - diff
 
-	y = np.zeros(samples)
+	p_wave = np.tile(generateWave(time_one_period, P, p), total_beats)
 
-	y += generateWave(x, period, total_beats, sampling_frequency, P, p)
-	
 	if callback is not None:
 		callback(20)
 
-	y += generateWave(x, period, total_beats, sampling_frequency, Q, q)
-	
+	q_wave = np.tile(generateWave(time_one_period, Q, q), total_beats)
+
 	if callback is not None:
 		callback(40)
 
-	y += generateWave(x, period, total_beats, sampling_frequency, R, r)
-	
+	r_wave = np.tile(generateWave(time_one_period, R, r), total_beats)
+
 	if callback is not None:
 		callback(60)
 
-	y += generateWave(x, period, total_beats, sampling_frequency, S, s)
-	
+	s_wave = np.tile(generateWave(time_one_period, S, s), total_beats)
+
 	if callback is not None:
 		callback(80)
-	
-	y += generateWave(x, period, total_beats, sampling_frequency, T, t)
+
+	t_wave = np.tile(generateWave(time_one_period, T, t), total_beats)
+
+	x = np.linspace(begin_time, end_time, samples)
+
+	y = p_wave + q_wave + r_wave + s_wave + t_wave
+
+	noise = np.random.normal(0, noise_magnitude, x.shape)
+
+	output = y + noise
 
 	if callback is not None:
 		callback(100)
 
-	output = y + noise
-
 	return x, output
 
-def generateWave(x, period, total_beats, sampling_frequency, wave_params, wave):
+
+def generateWave(x, wave_params, wave):
 	y = x.copy()
 
-	for beat in range(total_beats):
-		shift = period * beat
-		start_index = beat * sampling_frequency
-		end_index = start_index + sampling_frequency
-
-		for i in range(start_index, end_index):
-			y[i] = wave(wave_params[0], wave_params[2], wave_params[1], x[i] - shift)
+	for i in range(len(x)):
+		y[i] = wave(wave_params[0], wave_params[2], wave_params[1], x[i])
 
 	return y
