@@ -122,4 +122,4 @@ def fir_filter_design_open(parent):
 
 def cross_correlation_open_tab(parent):
     parent.center.setCurrentIndex(1)
-    parent.center.tabCrossCorre.user_clicks_on_button(parent.channels.channel_list)
+    parent.center.tabCrossCorre.user_clicks_on_button(parent.datasets.signals_dictionary, parent.channels.channel_list)

@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5 import Qt
 from widgets.cross_correlation import CrossCorrelation
 import numpy as np
 from scipy import signal
@@ -18,26 +19,35 @@ class CrossCorrelationTab(QWidget):
         vbox.addWidget(self.signal_2)
         vbox.addWidget(self.output)
 
-    def user_clicks_on_button(self, channels):
-        signals = channels.selectedItems()
-        print(signals)
-        signal_1 = signals[0]
-        signal_2 = signals[1]
+    def find_item_index(self, item, items):
+        for _item, i in enumerate(items):
+            if _item == item:
+                return i
 
-        if signal_1 is not None and signal_2 is not None:
-            print('cool')
+    def user_clicks_on_button(self, signals, channels):
+        items = channels.selectedItems()
 
-            x = np.linspace(0, 10 * np.pi, 200)
-            cos = np.cos(x)
+        if len(items) == 2:
+            print('yes')
+            print(items[0].data())
 
-            self.signal_1.plot_data(cos)
+            signal_1 = signals.get(items[0].data(Qt.UserRole))
+            signal_2 = signals.get(items[1].data(Qt.UserRole))
 
-            sin = np.sin(x)
+            if signal_1 is not None and signal_2 is not None:
+                print('cool')
 
-            self.signal_2.plot_data(sin)
+                x = np.linspace(0, 10 * np.pi, 200)
+                cos = np.cos(x)
 
-            corr = signal.correlate(cos, sin, mode='same')
+                self.signal_1.plot_data(cos)
 
-            self.output.plot_data(corr)
-        else:
-            print('not cool')
+                sin = np.sin(x)
+
+                self.signal_2.plot_data(sin)
+
+                corr = signal.correlate(cos, sin, mode='same')
+
+                self.output.plot_data(corr)
+            else:
+                print('not cool')
