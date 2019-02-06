@@ -26,7 +26,7 @@ def func(t, y, noise_interp, A, B, a, b, v0, C1, C2, C3, C4, r, e0):
     dy6dt = B * b * (C4 * sigmoid(v0, e0, r, C3 * y1)) - 2 * b * y6 - b * b * y3
     return [dy1dt, dy2dt, dy3dt, dy4dt, dy5dt, dy6dt]
 
-def simulate_eeg_jansen(duration=10, fs=100, C1=135, noise_magnitude=0, callback=None):
+def simulate_eeg_jansen(duration=10, fs=256, C1=135, noise_magnitude=0, callback=None):
 
     A = 3.25
     B = 22
