@@ -52,6 +52,10 @@ class Dataset(QObject):
         self.signals_dictionary[sig.id] = sig
         self.signal_loaded_signal.emit(sig)
 
+    def addSignaltoDataset(self, signal):
+        self.signals_dictionary[signal.id] = signal
+        self.signal_loaded_signal.emit(signal)
+
     def readnextlines(self, fileObject, n):
         return [x.strip() for x in islice(fileObject, n)]
 
