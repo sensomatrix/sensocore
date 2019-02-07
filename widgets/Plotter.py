@@ -5,9 +5,8 @@ import pyqtgraph as pg
 
 class Plotter(QWidget):
 
-    def __init__(self, parent):
+    def __init__(self):
         super().__init__()
-        self.parent = parent
         self.creategraph()
 
 
@@ -27,7 +26,7 @@ class Plotter(QWidget):
 
 class FilterPlotter(Plotter):
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__()
         self.parent = parent
         self.p = self.graphLayout.addPlot()
         self.p.setLabel('bottom', text="frequency", units="Hz")
@@ -46,7 +45,7 @@ class FilterPlotter(Plotter):
 
 class FilteredSignalPlotter(Plotter):
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__()
         self.parent = parent
         self.p = self.graphLayout.addPlot()
         self.plotslist = []

@@ -23,7 +23,7 @@ class Center(QTabWidget):
         if len(selected_channels_list_by_id) == 2:
             signal_1 = signals.get(selected_channels_list_by_id[0])
             signal_2 = signals.get(selected_channels_list_by_id[1])
-            tabCrossCorre = CrossCorrelationTab(self)
+            tabCrossCorre = CrossCorrelationTab()
             tabCrossCorre.computeCrossCor(signal_1, signal_2)
             index = self.addTab(tabCrossCorre,"CROSSCOR("+signal_1.name+","+signal_2.name+")")
             self.setCurrentIndex(index)
@@ -33,6 +33,9 @@ class Center(QTabWidget):
     def remove_and_delete_tab(self, index):
         widget = self.widget(index)
         if widget is not None:
+            widget.cleanup()
+            widget.disconnect()
+            widget.close()
             widget.deleteLater()
         self.removeTab(index)
 
