@@ -43,6 +43,9 @@ class CrossCorrelationTab(QWidget):
             print('not cool')
 
     def cleanup(self):
+        self.signal_1.destroyPlots()
+        self.signal_2.destroyPlots()
+        self.output.destroyPlots()
         del self.signal_1
         del self.signal_2
         del self.output

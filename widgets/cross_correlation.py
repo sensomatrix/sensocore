@@ -12,3 +12,9 @@ class CrossCorrelation(Plotter):
             self.p.plot(time, samples, clear=True, pen='r')
             if 'title' in kwargs:
                 self.p.setTitle(kwargs.get('title'))
+
+    # This is what finally solved the crosscorr memory leak:
+    def destroyPlots(self):
+        dataitemslist = self.p.listDataItems()
+        for dataitem in dataitemslist:
+            dataitem.setData(x=[0],y=[0])
