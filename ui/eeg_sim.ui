@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>974</width>
+    <height>559</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>974</width>
+    <height>559</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="minimumSize">
+         <size>
+          <width>394</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>444</width>
+           <height>509</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="c1_label">
+            <property name="text">
+             <string>C1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="c1_spinbox">
+            <property name="minimum">
+             <number>50</number>
+            </property>
+            <property name="maximum">
+             <number>1500</number>
+            </property>
+            <property name="value">
+             <number>135</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="signal_properties_groupbox">
+            <property name="title">
+             <string>Signal Properties</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="4" column="0">
+              <widget class="QLabel" name="sampling_frequency_label">
+               <property name="text">
+                <string>Sampling Frequency</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="noise_label">
+               <property name="text">
+                <string>Noise (Mean Value)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLineEdit" name="simulation_line_edit">
+               <property name="placeholderText">
+                <string>Simulation Example</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="duration_label">
+               <property name="text">
+                <string>Duration (s)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QDoubleSpinBox" name="duration_spinbox">
+               <property name="minimum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>1000.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QDoubleSpinBox" name="noise_double_spinbox"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="signal_name_label">
+               <property name="text">
+                <string>Signal Name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QSpinBox" name="sampling_frequency_spinbox">
+               <property name="minimum">
+                <number>10</number>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>100</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="preview_button">
+            <property name="text">
+             <string>Preview Signal</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="reset_signal_button">
+            <property name="text">
+             <string>Reset Signal</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="create_signal_button">
+            <property name="text">
+             <string>Create Signal</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="PlotWidget" name="graphicsView"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
