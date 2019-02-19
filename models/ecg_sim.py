@@ -1,4 +1,4 @@
-from simulation.ecg.ecg import generate_ecg
+from simulations.ecg.ecg import generate_ecg
 from PyQt5.Qt import pyqtSignal
 from PyQt5.QtCore import QObject
 
@@ -6,7 +6,7 @@ from PyQt5.QtCore import QObject
 class ECGSimulationModel(QObject):
     updated = pyqtSignal()
 
-    def __init__(self, p, q, r, s, t, fs, noise, duration, period):
+    def __init__(self, p, q, r, s, t, fs, noise, duration, delay, period):
         QObject.__init__(self)
         self._p = p
         self._q = q
@@ -17,6 +17,7 @@ class ECGSimulationModel(QObject):
         self._noise = noise
         self._duration = duration
         self._period = period
+        self._delay = delay
         self.time = None
         self.output = None
         self.generate_signal_for_plotting()
@@ -27,11 +28,11 @@ class ECGSimulationModel(QObject):
 
     def generate_signal_for_plotting(self):
         self.time, self.output = generate_ecg(self._fs, self._noise, self._duration, self._period,
-                                              self._p, self._q, self._r, self._s, self._t)
+                                              self._delay, self._p, self._q, self._r, self._s, self._t)
 
     def create_signal(self):
         self.time, self.output = generate_ecg(self._fs, self._noise, self._duration, self._period,
-                                              self._p, self._q, self._r, self._s, self._t, is_for_graphing=False)
+                                              self._delay, self._p, self._q, self._r, self._s, self._t, is_for_graphing=False)
 
     def set_p_magnitude(self, value):
         self._p[0] = value
@@ -119,3 +120,7 @@ class ECGSimulationModel(QObject):
 
     def set_duration(self, value):
         self._duration = value
+
+    def set_delay(self, value):
+        self._delay = value
+        self.update_signal()

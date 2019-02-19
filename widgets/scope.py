@@ -5,7 +5,7 @@ from PyQt5.QtCore import QPointF, QObject, pyqtSignal
 from itertools import cycle
 from frequtils import compute_psd
 from timeutils import secondsToHHMMSSMMM
-from .timeaxisitem import TimeAxisItem
+from widgets.timeaxisitem import TimeAxisItem
 
 
 class Scope(QObject):

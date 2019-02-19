@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'PycharmProjects/SensoMatrix/ui/ecg_sim.ui'
+# Form implementation generated from reading ui file 'ui/ecg_sim.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(868, 583)
+        Dialog.resize(968, 983)
         Dialog.setMinimumSize(QtCore.QSize(868, 583))
         self.horizontalLayout = QtWidgets.QHBoxLayout(Dialog)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -24,7 +24,7 @@ class Ui_Dialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 392, 948))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 441, 1006))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -255,7 +255,7 @@ class Ui_Dialog(object):
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.period_label = QtWidgets.QLabel(self.groupBox_6)
         self.period_label.setObjectName("period_label")
-        self.gridLayout_6.addWidget(self.period_label, 8, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.period_label, 10, 0, 1, 1)
         self.noise_label = QtWidgets.QLabel(self.groupBox_6)
         self.noise_label.setObjectName("noise_label")
         self.gridLayout_6.addWidget(self.noise_label, 2, 0, 1, 1)
@@ -290,13 +290,20 @@ class Ui_Dialog(object):
         self.period_spinbox.setSingleStep(0.001)
         self.period_spinbox.setProperty("value", 0.9)
         self.period_spinbox.setObjectName("period_spinbox")
-        self.gridLayout_6.addWidget(self.period_spinbox, 9, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.period_spinbox, 11, 0, 1, 1)
         self.sampling_frequency_spinbox = QtWidgets.QSpinBox(self.groupBox_6)
         self.sampling_frequency_spinbox.setMinimum(100)
         self.sampling_frequency_spinbox.setMaximum(1000)
         self.sampling_frequency_spinbox.setProperty("value", 256)
         self.sampling_frequency_spinbox.setObjectName("sampling_frequency_spinbox")
         self.gridLayout_6.addWidget(self.sampling_frequency_spinbox, 5, 0, 1, 1)
+        self.delay_label = QtWidgets.QLabel(self.groupBox_6)
+        self.delay_label.setObjectName("delay_label")
+        self.gridLayout_6.addWidget(self.delay_label, 8, 0, 1, 1)
+        self.delay_spin_box = QtWidgets.QDoubleSpinBox(self.groupBox_6)
+        self.delay_spin_box.setSingleStep(0.01)
+        self.delay_spin_box.setObjectName("delay_spin_box")
+        self.gridLayout_6.addWidget(self.delay_spin_box, 9, 0, 1, 1)
         self.verticalLayout_2.addWidget(self.groupBox_6)
         self.reset_signal_button = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
         self.reset_signal_button.setAutoDefault(False)
@@ -348,6 +355,7 @@ class Ui_Dialog(object):
         self.duration_label.setText(_translate("Dialog", "Duration (s)"))
         self.sampling_frequency_label.setText(_translate("Dialog", "Sampling Frequency"))
         self.signal_name_label.setText(_translate("Dialog", "Signal Name"))
+        self.delay_label.setText(_translate("Dialog", "Delay (s)"))
         self.reset_signal_button.setText(_translate("Dialog", "Reset Signal"))
         self.create_signal_button.setText(_translate("Dialog", "Create Signal"))
 

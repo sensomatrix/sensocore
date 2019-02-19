@@ -1,4 +1,4 @@
-from simulation.eeg.jansen import simulate_eeg_jansen
+from simulations.eeg.jansen import simulate_eeg_jansen
 from PyQt5.Qt import pyqtSignal
 from PyQt5.QtCore import QObject
 

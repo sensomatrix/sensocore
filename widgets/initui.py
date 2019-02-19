@@ -8,8 +8,6 @@ from .firdesignerdiag import FIRDesignerDialog
 from .physionetdiag import PhysionetDiag
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDockWidget, QAction
-from .ecg_simulation_dialog import ECGSimulation
-from .eeg_simulation_dialog import EEGSimulation
 
 
 # connect pyqt signals to pyqt slots here

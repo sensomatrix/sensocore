@@ -15,7 +15,7 @@ class ECGSimController(QDialog):
 
         self._ecg_sim = ECGSimulationModel(self.p_values, self.q_values, self.r_values, self.s_values,
                                            self.t_values, self.sampling_frequency, self.noise_magnitude,
-                                           self.duration, self.period)
+                                           self.duration, self.delay, self.period)
 
         self.init_graph()
         self.init_connections()
@@ -52,6 +52,7 @@ class ECGSimController(QDialog):
         self.ui.sampling_frequency_spinbox.valueChanged.connect(self._ecg_sim.set_sampling_frequency)
         self.ui.noise_double_spinbox.valueChanged.connect(self._ecg_sim.set_noise)
         self.ui.period_spinbox.valueChanged.connect(self._ecg_sim.set_period)
+        self.ui.delay_spin_box.valueChanged.connect(self._ecg_sim.set_delay)
         self.ui.duration_spinbox.valueChanged.connect(self._ecg_sim.set_duration)
 
         self.ui.reset_signal_button.clicked.connect(self.reset_values)
@@ -155,6 +156,10 @@ class ECGSimController(QDialog):
     @property
     def duration(self):
         return self.ui.duration_spinbox.value()
+
+    @property
+    def delay(self):
+        return self.ui.delay_spin_box.value()
 
     @property
     def period(self):

@@ -6,7 +6,7 @@ from .t import t
 import numpy as np
 
 
-def generateECG(sampling_frequency, noise_magnitude, end_time, period, delay,
+def generate_ecg(sampling_frequency, noise_magnitude, end_time, period, delay,
 				P, Q, R, S, T, callback=None, is_for_graphing=True):
 
 	Q = [
