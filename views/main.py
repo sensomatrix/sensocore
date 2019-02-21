@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from widgets.oscilloscope_widget import Oscilloscope
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -18,7 +19,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.main_tab = QtWidgets.QTabWidget(self.centralwidget)
         self.main_tab.setObjectName("main_tab")
-        self.oscilloscope_tab = QtWidgets.QWidget()
+        self.oscilloscope_tab = Oscilloscope()
         self.oscilloscope_tab.setObjectName("oscilloscope_tab")
         self.main_tab.addTab(self.oscilloscope_tab, "")
         self.cross_correlation_tab = QtWidgets.QWidget()
