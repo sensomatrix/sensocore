@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         plot = self.get_plot(last_added_index)
         plot.getViewBox().setMouseEnabled(y=False)
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
+        plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
     def create_linear_region(self, evt):
         if evt.double():
@@ -75,6 +76,11 @@ class MainWindow(QMainWindow):
                           isinstance(child, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
                 for child_lr in childitems:
                     plotitem.vb.removeItem(child_lr)
+
+    def singlemouseclick(self, evt):
+        if not evt.double():
+            evt.accept()
+            self.remove_all_linear_regions()
 
     def get_plot(self, index):
         return self.plots[index][0]
