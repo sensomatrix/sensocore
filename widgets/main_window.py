@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
                                         pen=pg.mkPen('r', width=3),
                                         hoverPen=pg.mkPen('g', width=3))
-        self.ui.oscilloscope.multiplot_widget.addItem(self.x_cursor)
+        self.multiplot_widget.addItem(self.x_cursor)
 
     def display_graph(self, x, y):
         data_buffer = np.zeros((1, len(x)))
@@ -43,7 +43,17 @@ class MainWindow(QMainWindow):
         ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Testing"}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
-        self.ui.oscilloscope.multiplot_widget.plot(ma)
+        self.multiplot_widget.plot(ma)
+        last_added_index = len(self.plots) - 1
+        self.plots[last_added_index][0].getViewBox().setMouseEnabled(y=False)
+
+    @property
+    def plots(self):
+        return self.ui.oscilloscope.multiplot_widget.mPlotItem.plots
+
+    @property
+    def multiplot_widget(self):
+        return self.ui.oscilloscope.multiplot_widget
 
 if __name__ == "__main__":
     import sys
