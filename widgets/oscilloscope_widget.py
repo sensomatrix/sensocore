@@ -52,10 +52,10 @@ class Oscilloscope(QWidget):
     def create_linear_region(self, evt):
         if evt.double():
             evt.accept()
-            for plotitem in self.plots[0]:
-                if type(plotitem) is not int:
-                    mousePoint = plotitem.vb.mapSceneToView(evt.scenePos())
-                    self.showLinearRegion(plotitem, mousePoint.x())
+            for plotitem in self.plots:
+                if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
+                    mousePoint = plotitem[0].vb.mapSceneToView(evt.scenePos())
+                    self.showLinearRegion(plotitem[0], mousePoint.x())
 
     def showLinearRegion(self, plotitem, mousepos_x):
         self.remove_all_linear_regions()
@@ -69,12 +69,12 @@ class Oscilloscope(QWidget):
         plotitem.vb.addItem(lr)
 
     def remove_all_linear_regions(self):
-        for plotitem in self.plots[0]:
-            if type(plotitem) is not int:
-                childitems = [child for child in plotitem.vb.allChildren() if
+        for plotitem in self.plots:
+            if type(plotitem[0]) is not int:
+                childitems = [child for child in plotitem[0].vb.allChildren() if
                           isinstance(child, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
                 for child_lr in childitems:
-                    plotitem.vb.removeItem(child_lr)
+                    plotitem[0].vb.removeItem(child_lr)
 
     def singlemouseclick(self, evt):
         if not evt.double():
