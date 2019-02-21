@@ -127,7 +127,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionFIR_Filter_Designer)
 
         self.retranslateUi(MainWindow)
-        self.main_tab.setCurrentIndex(1)
+        self.main_tab.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
