@@ -117,7 +117,7 @@ class Oscilloscope(QWidget):
         ugh = self.x_cursor.value()
         pos = QPointF(ugh, 0)
         mousePoint = self.plots[0][0].vb.mapSceneToView(pos)
-        string_cursor = "Cursor: " + str(mousePoint.x())
+        string_cursor = "Cursor: " + str(round(mousePoint.x(),4))
         self.ui.cursor_label.setText(string_cursor)
 
 
