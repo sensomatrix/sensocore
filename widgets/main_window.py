@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
         self.ui.textBrowser.setText('Testing trying to output something\nWith a new line')
 
     def add_cursor(self):
-        self.x_cursor = pg.InfiniteLine(movable=True, angle=90,
+        self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
                                         pen=pg.mkPen('r', width=3),
                                         hoverPen=pg.mkPen('g', width=3))
         self.ui.oscilloscope.graphicsView.addItem(self.x_cursor)
