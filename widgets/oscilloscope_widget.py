@@ -11,10 +11,14 @@ class Oscilloscope(QWidget):
         super().__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.ui.multiplot_widget.setBackground('w')
         self.x_cursor = None
 
         self.init_cursor()
         self.init_slider()
+
+        self.colorlist=['r','g','b','c','m','k']
+        self.colorpool = cycle(self.colorlist)
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
@@ -33,10 +37,14 @@ class Oscilloscope(QWidget):
         ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Amplitude (mV)"}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
+
+        random_color = next(self.colorpool)
+
         self.multiplot_widget.plot(ma)
         last_added_index = len(self.plots) - 1
         plot = self.get_plot(last_added_index)
         plot.getViewBox().setMouseEnabled(y=False)
+        plot.listDataItems()[0].setPen(pg.mkPen(random_color))
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
