@@ -2,6 +2,7 @@ from views.oscilloscope import Ui_Form
 from PyQt5.QtWidgets import QWidget
 import pyqtgraph as pg
 from pyqtgraph.metaarray import *
+from PyQt5.QtCore import QPointF
 from itertools import cycle
 
 
@@ -20,6 +21,7 @@ class Oscilloscope(QWidget):
                                         pen=pg.mkPen('r', width=3),
                                         hoverPen=pg.mkPen('g', width=3))
         self.multiplot_widget.addItem(self.x_cursor)
+        self.x_cursor.sigPositionChanged.connect(self.on_cursor_moved)
 
     def init_slider(self):
         self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
@@ -28,7 +30,7 @@ class Oscilloscope(QWidget):
         data_buffer = np.zeros((1, len(x)))
         for i in range(len(x)):
             data_buffer[0][i] = y[i]
-        ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Testing"}]},
+        ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Amplitude (mV)"}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
         self.multiplot_widget.plot(ma)
@@ -76,9 +78,16 @@ class Oscilloscope(QWidget):
     # dynamic time steps need to be added
     def sliderValueChanged(self):
         max_t = self.get_largest_time()
+        min_t = self.get_smallest_time()
 
-        window_size = max_t / 100
-        lo_t = (self.ui.horizontal_slider.value() / 100) * max_t
+        window_size = (max_t - min_t) / 100
+
+        lo_t = (self.ui.horizontal_slider.value() / 100) * max_t + min_t
+
+        if lo_t >= max_t:
+            lo_t = max_t - window_size
+            self.ui.horizontal_slider.setValue(100)
+
         hi_t = lo_t + window_size
         for plot in self.plots:
             if plot is not int:
@@ -94,9 +103,22 @@ class Oscilloscope(QWidget):
 
         return max_t
 
+    def get_smallest_time(self):
+        min_t = 10
+        for plot in self.plots[0][0].items:
+            if plot is not int:
+                min_local_t = plot.xData.min()
+                if min_local_t < min_t:
+                    min_t = min_local_t
+
+        return min_t
+
     def on_cursor_moved(self, value):
-        string_cursor = "Cursor: " + value
-        self.cursorValueLabel.setText(string_cursor)
+        ugh = self.x_cursor.value()
+        pos = QPointF(ugh, 0)
+        mousePoint = self.plots[0][0].vb.mapSceneToView(pos)
+        string_cursor = "Cursor: " + str(mousePoint.x())
+        self.ui.cursor_label.setText(string_cursor)
 
 
     @property
