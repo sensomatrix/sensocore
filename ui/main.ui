@@ -16,7 +16,21 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="MultiPlotWidget" name="graphicsView"/>
+     <widget class="QTabWidget" name="main_tab">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="oscilloscope_tab">
+       <attribute name="title">
+        <string>Oscilloscope</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="cross_correlation_tab">
+       <attribute name="title">
+        <string>Cross Correlation</string>
+       </attribute>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -217,11 +231,6 @@
  <customwidgets>
   <customwidget>
    <class>PlotWidget</class>
-   <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
-  </customwidget>
-  <customwidget>
-   <class>MultiPlotWidget</class>
    <extends>QGraphicsView</extends>
    <header>pyqtgraph</header>
   </customwidget>

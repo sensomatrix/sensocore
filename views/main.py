@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'PycharmProjects/SensoMatrix/ui/main.ui'
+# Form implementation generated from reading ui file 'ui/main.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -16,9 +16,15 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.graphicsView = MultiPlotWidget(self.centralwidget)
-        self.graphicsView.setObjectName("graphicsView")
-        self.horizontalLayout.addWidget(self.graphicsView)
+        self.main_tab = QtWidgets.QTabWidget(self.centralwidget)
+        self.main_tab.setObjectName("main_tab")
+        self.oscilloscope_tab = QtWidgets.QWidget()
+        self.oscilloscope_tab.setObjectName("oscilloscope_tab")
+        self.main_tab.addTab(self.oscilloscope_tab, "")
+        self.cross_correlation_tab = QtWidgets.QWidget()
+        self.cross_correlation_tab.setObjectName("cross_correlation_tab")
+        self.main_tab.addTab(self.cross_correlation_tab, "")
+        self.horizontalLayout.addWidget(self.main_tab)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1078, 22))
@@ -121,12 +127,15 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionFIR_Filter_Designer)
 
         self.retranslateUi(MainWindow)
+        self.main_tab.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.main_tab.setTabText(self.main_tab.indexOf(self.oscilloscope_tab), _translate("MainWindow", "Oscilloscope"))
+        self.main_tab.setTabText(self.main_tab.indexOf(self.cross_correlation_tab), _translate("MainWindow", "Cross Correlation"))
         self.menuLoad_Data.setTitle(_translate("MainWindow", "Load Data"))
         self.menuSimulate_Data.setTitle(_translate("MainWindow", "Simulate Data"))
         self.menuFiltering.setTitle(_translate("MainWindow", "Filtering"))
@@ -139,4 +148,4 @@ class Ui_MainWindow(object):
         self.actionECG_Simulation.setText(_translate("MainWindow", "ECG Simulation"))
         self.actionFIR_Filter_Designer.setText(_translate("MainWindow", "FIR Filter Designer"))
 
-from pyqtgraph import MultiPlotWidget, PlotWidget
+from pyqtgraph import PlotWidget
