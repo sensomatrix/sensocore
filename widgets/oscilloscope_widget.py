@@ -39,6 +39,7 @@ class Oscilloscope(QWidget):
         plot.getViewBox().setMouseEnabled(y=False)
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
+        self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
     def create_linear_region(self, evt):
         if evt.double():
@@ -113,13 +114,20 @@ class Oscilloscope(QWidget):
 
         return min_t
 
-    def on_cursor_moved(self, value):
-        ugh = self.x_cursor.value()
-        pos = QPointF(ugh, 0)
+    def on_cursor_moved(self):
+        x = self.x_cursor.value()
+        pos = QPointF(x, 0)
         mousePoint = self.plots[0][0].vb.mapSceneToView(pos)
-        string_cursor = "Cursor: " + str(round(mousePoint.x(),4))
+        string_cursor = "Time: " + str(round(mousePoint.x(),4))
         self.ui.cursor_label.setText(string_cursor)
 
+    def mouseMoved(self, evt):
+        pos = evt[0]
+        for plot_item in self.plots:
+            if plot_item[0].sceneBoundingRect().contains(pos):
+                mousePoint = plot_item[0].vb.mapSceneToView(pos)
+                self.ui.label_x.setText("X: " + str(round(mousePoint.x(),4)))
+                self.ui.label_y.setText("Y: " + str(round(mousePoint.y(),4)))
 
     @property
     def plots(self):

@@ -16,12 +16,12 @@ class Ui_Form(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem, 2, 1, 1, 1)
-        self.label_x = QtWidgets.QLabel(Form)
-        self.label_x.setObjectName("label_x")
-        self.gridLayout_2.addWidget(self.label_x, 2, 3, 1, 1)
         self.label_y = QtWidgets.QLabel(Form)
         self.label_y.setObjectName("label_y")
-        self.gridLayout_2.addWidget(self.label_y, 2, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.label_y, 2, 3, 1, 1)
+        self.label_x = QtWidgets.QLabel(Form)
+        self.label_x.setObjectName("label_x")
+        self.gridLayout_2.addWidget(self.label_x, 2, 2, 1, 1)
         self.cursor_label = QtWidgets.QLabel(Form)
         self.cursor_label.setObjectName("cursor_label")
         self.gridLayout_2.addWidget(self.cursor_label, 2, 0, 1, 1)
@@ -39,8 +39,8 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_x.setText(_translate("Form", "Y:"))
-        self.label_y.setText(_translate("Form", "X:"))
+        self.label_y.setText(_translate("Form", "Y:"))
+        self.label_x.setText(_translate("Form", "X:"))
         self.cursor_label.setText(_translate("Form", "Time: "))
 
 from pyqtgraph import MultiPlotWidget

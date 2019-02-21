@@ -28,14 +28,14 @@
     </spacer>
    </item>
    <item row="2" column="3">
-    <widget class="QLabel" name="label_x">
+    <widget class="QLabel" name="label_y">
      <property name="text">
       <string>Y:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
-    <widget class="QLabel" name="label_y">
+    <widget class="QLabel" name="label_x">
      <property name="text">
       <string>X:</string>
      </property>
