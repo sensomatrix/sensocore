@@ -25,12 +25,12 @@ class MainWindow(QMainWindow):
         self.display_graph([1,2,3,4,5,6,7,8,9,10], np.transpose([0,4,1,2,7,5,3,8,0,1]))
 
     def init_ui(self):
-        self.add_cursor()
+        self.init_cursor()
 
         self.ui.textBrowser.setReadOnly(True)
         self.ui.textBrowser.setText('Testing trying to output something\nWith a new line')
 
-    def add_cursor(self):
+    def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
                                         pen=pg.mkPen('r', width=3),
                                         hoverPen=pg.mkPen('g', width=3))
@@ -45,7 +45,39 @@ class MainWindow(QMainWindow):
                                            "values": x}])
         self.multiplot_widget.plot(ma)
         last_added_index = len(self.plots) - 1
-        self.plots[last_added_index][0].getViewBox().setMouseEnabled(y=False)
+        plot = self.get_plot(last_added_index)
+        plot.getViewBox().setMouseEnabled(y=False)
+        plot.scene().sigMouseClicked.connect(self.create_linear_region)
+
+    def create_linear_region(self, evt):
+        if evt.double():
+            evt.accept()
+            for plotitem in self.plots[0]:
+                if type(plotitem) is not int:
+                    mousePoint = plotitem.vb.mapSceneToView(evt.scenePos())
+                    self.showLinearRegion(plotitem, mousePoint.x())
+
+    def showLinearRegion(self, plotitem, mousepos_x):
+        self.remove_all_linear_regions()
+        values = plotitem.getAxis('bottom').range
+        deltat = values[1] - values[0]
+        minValue = mousepos_x
+        maxValue = mousepos_x + 0.01 * deltat
+        plotdataitemlist = [dataitem for dataitem in plotitem.vb.allChildren()
+                            if isinstance(dataitem, pg.graphicsItems.PlotDataItem.PlotDataItem)]
+        lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
+        plotitem.vb.addItem(lr)
+
+    def remove_all_linear_regions(self):
+        for plotitem in self.plots[0]:
+            if type(plotitem) is not int:
+                childitems = [child for child in plotitem.vb.allChildren() if
+                          isinstance(child, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
+                for child_lr in childitems:
+                    plotitem.vb.removeItem(child_lr)
+
+    def get_plot(self, index):
+        return self.plots[index][0]
 
     @property
     def plots(self):
