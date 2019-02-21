@@ -1,6 +1,5 @@
 from views.main import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from widgets.oscilloscope_widget import Oscilloscope
 import numpy as np
 
 

@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QWidget
 import pyqtgraph as pg
 from pyqtgraph.metaarray import *
 from itertools import cycle
-from PyQt5.QtWidgets import QMainWindow, QApplication
 
 
 class Oscilloscope(QWidget):
@@ -11,14 +10,19 @@ class Oscilloscope(QWidget):
         super().__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.x_cursor = None
 
         self.init_cursor()
+        self.init_slider()
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
                                         pen=pg.mkPen('r', width=3),
                                         hoverPen=pg.mkPen('g', width=3))
         self.multiplot_widget.addItem(self.x_cursor)
+
+    def init_slider(self):
+        self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
 
     def display_graph(self, x, y):
         data_buffer = np.zeros((1, len(x)))
@@ -68,6 +72,31 @@ class Oscilloscope(QWidget):
 
     def get_plot(self, index):
         return self.plots[index][0]
+
+    # dynamic time steps need to be added
+    def sliderValueChanged(self):
+        max_t = self.get_largest_time()
+
+        window_size = max_t / 100
+        lo_t = (self.ui.horizontal_slider.value() / 100) * max_t
+        hi_t = lo_t + window_size
+        for plot in self.plots:
+            if plot is not int:
+                plot[0].setRange(xRange=[lo_t, hi_t])
+
+    def get_largest_time(self):
+        max_t = 0
+        for plot in self.plots[0][0].items:
+            if plot is not int:
+                max_local_t = plot.xData.max()
+                if max_local_t > max_t:
+                    max_t = max_local_t
+
+        return max_t
+
+    def on_cursor_moved(self, value):
+        string_cursor = "Cursor: " + value
+        self.cursorValueLabel.setText(string_cursor)
 
 
     @property
