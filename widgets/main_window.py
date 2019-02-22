@@ -1,14 +1,19 @@
-from views.main import Ui_MainWindow
+import pyqtgraph as pg
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 import numpy as np
+import os
 
 
-class MainWindow(QMainWindow):
+path = os.path.dirname(os.path.abspath(__file__))
+uiFile = os.path.join(path, '../ui/main.ui')
+MainWindowView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+
+class MainWindow(TemplateBaseClass):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = MainWindowView()
         self.ui.setupUi(self)
 
         self.init_ui()

@@ -15,12 +15,24 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QTabWidget" name="main_tab">
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="oscilloscope_tab">
+      <widget class="Oscilloscope" name="oscilloscope_tab">
        <attribute name="title">
         <string>Oscilloscope</string>
        </attribute>
@@ -233,6 +245,12 @@
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
    <header>pyqtgraph</header>
+  </customwidget>
+  <customwidget>
+   <class>Oscilloscope</class>
+   <extends>QWidget</extends>
+   <header location="global">oscilloscope_widget</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

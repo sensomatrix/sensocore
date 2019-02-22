@@ -1,15 +1,18 @@
-from views.oscilloscope import Ui_Form
-from PyQt5.QtWidgets import QWidget
 import pyqtgraph as pg
 from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF
 from itertools import cycle
+import os
+
+path = os.path.dirname(os.path.abspath(__file__))
+uiFile = os.path.join(path, '../ui/oscilloscope.ui')
+OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
-class Oscilloscope(QWidget):
+class Oscilloscope(TemplateBaseClass):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Form()
+        self.ui = OscilloscopeView()
         self.ui.setupUi(self)
         self.ui.multiplot_widget.setBackground('w')
         self.x_cursor = None
