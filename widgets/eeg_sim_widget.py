@@ -53,22 +53,26 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.region = pg.LinearRegionItem()
         self.region.setZValue(10)
 
-        self.region.sigRegionChanged.connect(self.update_region)
+        self.region.sigRegionChanged.connect(self.update_graph)
+        self.ui.zoomed_plot.sigRangeChanged.connect(self.update_region)
 
-        self.update_region()
+        self.update_graph()
 
         self.ui.main_plot.addItem(self.region, ignoreBounds=True)
 
         self.show()
 
-    def update_region(self):
+# Methods
+###############################################################################################
+    def update_graph(self):
         self.region.setZValue(10)
         minX, maxX = self.region.getRegion()
         self.ui.zoomed_plot.setXRange(minX, maxX, padding=0)
 
+    def update_region(self, window, viewRange):
+        rgn = viewRange[0]
+        self.region.setRegion(rgn)
 
-# Methods
-###############################################################################################
     def generate_plot(self):
         self.current_percentage = 0
 
