@@ -10,8 +10,8 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.init_ui()
-        self.ui.oscilloscope_tab.display_graph([0,1,2,3,4,5,6,7,8,9,10], np.transpose([-10,0,4,1,2,7,5,3,8,0,1]))
-        self.ui.oscilloscope_tab.display_graph([0,1,2,3,4,5,6,7,8,9,10], np.transpose([1,5,3,8,9,24,2,5,12,10,33]))
+        self.ui.oscilloscope_tab.display_graph([1,2,3,4,5,6,7,8,9,10], np.transpose([-10,0,4,1,2,7,5,3,8,0]))
+        self.ui.oscilloscope_tab.display_graph([0,1,2,3,4,5,6,7,8,9,20], np.transpose([1,5,3,8,9,24,2,5,12,10,33]))
 
     def init_ui(self):
         self.ui.textBrowser.setReadOnly(True)

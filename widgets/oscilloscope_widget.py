@@ -104,9 +104,9 @@ class Oscilloscope(QWidget):
 
     def get_largest_time(self):
         max_t = 0
-        for plot in self.plots[0][0].items:
-            if plot is not int:
-                max_local_t = plot.xData.max()
+        for plot in self.plots:
+            if plot[0].items is not int:
+                max_local_t = plot[0].items[0].xData.max()
                 if max_local_t > max_t:
                     max_t = max_local_t
 
@@ -114,9 +114,9 @@ class Oscilloscope(QWidget):
 
     def get_smallest_time(self):
         min_t = 10
-        for plot in self.plots[0][0].items:
-            if plot is not int:
-                min_local_t = plot.xData.min()
+        for plot in self.plots:
+            if plot[0].items is not int:
+                min_local_t = plot[0].items[0].xData.min()
                 if min_local_t < min_t:
                     min_t = min_local_t
 
