@@ -79,20 +79,20 @@ class MainWindow(TemplateBaseClass):
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
 ###############################################################################################
 
-        time, ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
+        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
                            self.p, self.q, self.r, self.s, self.t)
 
-        self.plot = self.ui.plot.plot(time, ecg_output)
+        self.plot = self.ui.plot.plot(self.time, self.ecg_output)
 
         self.show()
 
 # Methods
 ###############################################################################################
     def update_plot(self):
-        time, ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
+        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
                            self.p, self.q, self.r, self.s, self.t)
 
-        self.plot.setData(time, ecg_output)
+        self.plot.setData(self.time, self.ecg_output)
 
     def reset_to_default(self):
         self.ui.p_mag_double_spinbox.setValue(self.p_default[0])
@@ -129,7 +129,9 @@ class MainWindow(TemplateBaseClass):
         if self.ui.plot.sceneBoundingRect().contains(pos):
             mousePoint = self.ui.plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
-            self.hLine.setPos(mousePoint.y())
+
+            index = min(range(len(self.time)), key=lambda i: abs(self.time[i] - mousePoint.x()))
+            self.hLine.setPos(self.ecg_output[index])
 ###############################################################################################
 
     # Properties
