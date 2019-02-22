@@ -83,6 +83,7 @@ class MainWindow(TemplateBaseClass):
         self.generate_plot()
 
         self.plot = self.ui.plot.plot(self.time, self.ecg_output)
+        self.plot.getViewBox().setMouseEnabled(y=False)
 
         self.show()
 
