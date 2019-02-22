@@ -20,8 +20,8 @@ class MainWindow(TemplateBaseClass):
         self.ui.setupUi(self)
 
         # cross hair
-        self.vLine = pg.InfiniteLine(angle=90, movable=False)
-        self.hLine = pg.InfiniteLine(angle=0, movable=False)
+        self.vLine = pg.InfiniteLine(angle=90, movable=False, label='x={value:0.2f}')
+        self.hLine = pg.InfiniteLine(angle=0, movable=False, label='y={value:0.2f}')
         self.ui.plot.addItem(self.vLine, ignoreBounds=True)
         self.ui.plot.addItem(self.hLine, ignoreBounds=True)
         self.proxy = pg.SignalProxy(self.ui.plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
