@@ -23,6 +23,18 @@
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QScrollArea" name="scrollArea">
         <property name="minimumSize">
@@ -39,7 +51,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>441</width>
+           <width>465</width>
            <height>1006</height>
           </rect>
          </property>

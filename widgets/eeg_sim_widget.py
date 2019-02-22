@@ -1,16 +1,13 @@
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtCore, QtGui
 from simulations.eeg.jansen import simulate_eeg_jansen
 import os
 
-
-pg.mkQApp()
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/eeg_sim.ui')
 ECGSimulation, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
-class MainWindow(TemplateBaseClass):
+class EEGSimulationWidget(TemplateBaseClass):
     def __init__(self):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
@@ -112,13 +109,3 @@ class MainWindow(TemplateBaseClass):
     @property
     def duration(self):
         return self.ui.duration_spinbox.value()
-###############################################################################################
-
-win = MainWindow()
-
-## Start Qt event loop unless running in interactive mode or using pyside.
-if __name__ == '__main__':
-    import sys
-
-    if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
-        QtGui.QApplication.instance().exec_()
