@@ -22,9 +22,9 @@ class MainWindow(TemplateBaseClass):
         # cross hair
         self.vLine = pg.InfiniteLine(angle=90, movable=False, label='x={value:0.2f}')
         self.hLine = pg.InfiniteLine(angle=0, movable=False, label='y={value:0.2f}')
-        self.ui.plot.addItem(self.vLine, ignoreBounds=True)
-        self.ui.plot.addItem(self.hLine, ignoreBounds=True)
-        self.proxy = pg.SignalProxy(self.ui.plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouse_moved)
+        self.ui.zoomed_plot.addItem(self.vLine, ignoreBounds=True)
+        self.ui.zoomed_plot.addItem(self.hLine, ignoreBounds=True)
+        self.proxy = pg.SignalProxy(self.ui.zoomed_plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouse_moved)
 
 # Saving default values
 ###############################################################################################
@@ -44,10 +44,28 @@ class MainWindow(TemplateBaseClass):
 ###############################################################################################
         self.generate_plot()
 
-        self.plot = self.ui.plot.plot(self.time, self.eeg_output)
-        self.plot.getViewBox().setMouseEnabled(y=False)
+        self.zoomed_plot = self.ui.zoomed_plot.plot(self.time, self.eeg_output, pen="g")
+        self.zoomed_plot.getViewBox().setMouseEnabled(y=False)
+
+        self.main_plot = self.ui.main_plot.plot(self.time, self.eeg_output)
+        self.main_plot.getViewBox().setMouseEnabled(x=False, y=False)
+
+        self.region = pg.LinearRegionItem()
+        self.region.setZValue(10)
+
+        self.region.sigRegionChanged.connect(self.update_region)
+
+        self.update_region()
+
+        self.ui.main_plot.addItem(self.region, ignoreBounds=True)
 
         self.show()
+
+    def update_region(self):
+        self.region.setZValue(10)
+        minX, maxX = self.region.getRegion()
+        self.ui.zoomed_plot.setXRange(minX, maxX, padding=0)
+
 
 # Methods
 ###############################################################################################
@@ -57,7 +75,8 @@ class MainWindow(TemplateBaseClass):
 
     def update_plot(self):
         self.generate_plot()
-        self.plot.setData(self.time, self.eeg_output)
+        self.zoomed_plot.setData(self.time, self.eeg_output)
+        self.main_plot.setData(self.time, self.eeg_output)
 
     def reset_to_default(self):
         self.ui.c1_spinbox.setValue(self.c1_default)
@@ -68,8 +87,8 @@ class MainWindow(TemplateBaseClass):
 
     def mouse_moved(self, evt):
         pos = evt[0]
-        if self.ui.plot.sceneBoundingRect().contains(pos):
-            mousePoint = self.ui.plot.plotItem.vb.mapSceneToView(pos)
+        if self.ui.zoomed_plot.sceneBoundingRect().contains(pos):
+            mousePoint = self.ui.zoomed_plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
 
             index = min(range(len(self.time)), key=lambda i: abs(self.time[i] - mousePoint.x()))
