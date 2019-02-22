@@ -24,7 +24,7 @@ class MainWindow(TemplateBaseClass):
         self.hLine = pg.InfiniteLine(angle=0, movable=False, label='y={value:0.2f}')
         self.ui.plot.addItem(self.vLine, ignoreBounds=True)
         self.ui.plot.addItem(self.hLine, ignoreBounds=True)
-        self.proxy = pg.SignalProxy(self.ui.plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
+        self.proxy = pg.SignalProxy(self.ui.plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouse_moved)
 
 # Saving default values
 ###############################################################################################
@@ -37,6 +37,8 @@ class MainWindow(TemplateBaseClass):
         self.delay_default = self.delay
         self.noise_default = self.noise
         self.period_default = self.period
+        self.time = []
+        self.ecg_output = []
 ###############################################################################################
 
 # Connections
@@ -78,9 +80,7 @@ class MainWindow(TemplateBaseClass):
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
 ###############################################################################################
-
-        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
-                           self.p, self.q, self.r, self.s, self.t)
+        self.generate_plot()
 
         self.plot = self.ui.plot.plot(self.time, self.ecg_output)
 
@@ -88,10 +88,12 @@ class MainWindow(TemplateBaseClass):
 
 # Methods
 ###############################################################################################
-    def update_plot(self):
-        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period, self.delay,
-                           self.p, self.q, self.r, self.s, self.t)
+    def generate_plot(self):
+        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
+                                                  self.delay, self.p, self.q, self.r, self.s, self.t)
 
+    def update_plot(self):
+        self.generate_plot()
         self.plot.setData(self.time, self.ecg_output)
 
     def reset_to_default(self):
@@ -124,8 +126,8 @@ class MainWindow(TemplateBaseClass):
         self.ui.period_spinbox.setValue(self.period_default)
         self.ui.noise_double_spinbox.setValue(self.noise_default)
 
-    def mouseMoved(self, evt):
-        pos = evt[0]  ## using signal proxy turns original arguments into a tuple
+    def mouse_moved(self, evt):
+        pos = evt[0]
         if self.ui.plot.sceneBoundingRect().contains(pos):
             mousePoint = self.ui.plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
