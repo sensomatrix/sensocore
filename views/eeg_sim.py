@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'PycharmProjects/SensoMatrix/ui/eeg_sim.ui'
+# Form implementation generated from reading ui file 'ui/eeg_sim.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -86,9 +86,9 @@ class Ui_Dialog(object):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
         self.horizontalLayout.addWidget(self.widget)
-        self.graphicsView = PlotWidget(Dialog)
-        self.graphicsView.setObjectName("graphicsView")
-        self.horizontalLayout.addWidget(self.graphicsView)
+        self.plot = PlotWidget(Dialog)
+        self.plot.setObjectName("plot")
+        self.horizontalLayout.addWidget(self.plot)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
