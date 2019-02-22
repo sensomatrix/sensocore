@@ -7,7 +7,7 @@ import time
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/eeg_sim.ui')
-ECGSimulation, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+EEGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 class EEGSimulationWidget(TemplateBaseClass):
     def __init__(self):
@@ -15,7 +15,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.setWindowTitle('ECG Simulation')
 
         # Create the main window
-        self.ui = ECGSimulation()
+        self.ui = EEGSimulationView()
         self.ui.setupUi(self)
 
         # cross hair

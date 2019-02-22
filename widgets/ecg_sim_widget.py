@@ -5,7 +5,8 @@ import os
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/ecg_sim.ui')
-ECGSimulation, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+ECGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+
 
 class ECGSimulationWidget(TemplateBaseClass):
     def __init__(self):
@@ -13,7 +14,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.setWindowTitle('ECG Simulation')
 
         # Create the main window
-        self.ui = ECGSimulation()
+        self.ui = ECGSimulationView()
         self.ui.setupUi(self)
 
         # cross hair

@@ -29,6 +29,9 @@
     </property>
     <item>
      <widget class="QTabWidget" name="main_tab">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -100,7 +103,7 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListView" name="channel_listview"/>
+      <widget class="Channels" name="widget" native="true"/>
      </item>
     </layout>
    </widget>
@@ -250,6 +253,12 @@
    <class>Oscilloscope</class>
    <extends>QWidget</extends>
    <header location="global">oscilloscope_widget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Channels</class>
+   <extends>QWidget</extends>
+   <header>channels_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
