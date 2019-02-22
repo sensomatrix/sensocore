@@ -85,6 +85,6 @@ def generateWave(x, wave_params, wave):
 	y = x.copy()
 
 	for i in range(len(x)):
-		y[i] = wave(wave_params[0], wave_params[2], wave_params[1], x[i])
+		y[i] = wave(wave_params[0], wave_params[1], wave_params[2], x[i])
 
 	return y

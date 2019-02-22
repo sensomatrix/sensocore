@@ -699,7 +699,7 @@
     </widget>
    </item>
    <item>
-    <widget class="PlotWidget" name="graphicsView"/>
+    <widget class="PlotWidget" name="plot"/>
    </item>
   </layout>
  </widget>
