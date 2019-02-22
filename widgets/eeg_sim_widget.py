@@ -2,6 +2,7 @@ import pyqtgraph as pg
 from simulations.eeg.jansen import simulate_eeg_jansen
 import os
 import _thread
+import time
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +82,7 @@ class EEGSimulationWidget(TemplateBaseClass):
     def simulate_progress_bar(self):
         with pg.ProgressDialog("Simulating EEG Signal", maximum=100) as dlg:
             while self.current_percentage != 100:
+                time.sleep(0.02)
                 dlg.setValue(self.current_percentage)
 
     def simulate_eeg(self):
