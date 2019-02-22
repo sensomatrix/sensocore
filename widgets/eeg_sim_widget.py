@@ -1,6 +1,7 @@
 import pyqtgraph as pg
 from simulations.eeg.jansen import simulate_eeg_jansen
 import os
+import _thread
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +23,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.ui.zoomed_plot.addItem(self.vLine, ignoreBounds=True)
         self.ui.zoomed_plot.addItem(self.hLine, ignoreBounds=True)
         self.proxy = pg.SignalProxy(self.ui.zoomed_plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouse_moved)
+        self.current_percentage = 0
 
 # Saving default values
 ###############################################################################################
@@ -67,8 +69,26 @@ class EEGSimulationWidget(TemplateBaseClass):
 # Methods
 ###############################################################################################
     def generate_plot(self):
+        self.current_percentage = 0
+
+        _thread.start_new_thread(self.simulate_eeg, ())
+
+        self.simulate_progress_bar()
+
+        while _thread._count() > 0:
+            pass
+
+    def simulate_progress_bar(self):
+        with pg.ProgressDialog("Simulating EEG Signal", maximum=100) as dlg:
+            while self.current_percentage != 100:
+                dlg.setValue(self.current_percentage)
+
+    def simulate_eeg(self):
         self.time, self.eeg_output = simulate_eeg_jansen(fs=self.sampling_frequency, C1=self.c1,
-                                                         noise_magnitude=self.noise)
+                                                         noise_magnitude=self.noise, callback=self.current_progress)
+
+    def current_progress(self, current_percentage):
+        self.current_percentage = current_percentage
 
     def update_plot(self):
         self.generate_plot()
