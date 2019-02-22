@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from widgets.oscilloscope_widget import Oscilloscope
+from widgets.cross_correlation_widget import CrossCorrelation
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -22,7 +23,7 @@ class Ui_MainWindow(object):
         self.oscilloscope_tab = Oscilloscope()
         self.oscilloscope_tab.setObjectName("oscilloscope_tab")
         self.main_tab.addTab(self.oscilloscope_tab, "")
-        self.cross_correlation_tab = QtWidgets.QWidget()
+        self.cross_correlation_tab = CrossCorrelation()
         self.cross_correlation_tab.setObjectName("cross_correlation_tab")
         self.main_tab.addTab(self.cross_correlation_tab, "")
         self.horizontalLayout.addWidget(self.main_tab)
