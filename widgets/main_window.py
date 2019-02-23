@@ -4,6 +4,7 @@ from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
+import numpy as np
 import os
 
 
@@ -31,12 +32,14 @@ class MainWindow(TemplateBaseClass):
         # TODO: Provide parent
         eeg_sim_widget = EEGSimulationWidget()
         eeg_sim_widget.create_signal.connect(self.ui.channels.on_signal_loaded)
+        eeg_sim_widget.create_signal.connect(self.plot_signal)
         eeg_sim_widget.exec_()
 
     def launch_ecg_widget(self):
         # TODO: Provide parent
         ecg_sim_widget = ECGSimulationWidget()
         ecg_sim_widget.create_signal.connect(self.ui.channels.on_signal_loaded)
+        ecg_sim_widget.create_signal.connect(self.plot_signal)
         ecg_sim_widget.exec_()
 
     def launch_physionet_widget(self):
@@ -46,6 +49,9 @@ class MainWindow(TemplateBaseClass):
     def launch_fir_filter_widget(self):
         fir_filter = FIRDesignerDialog(self)
         fir_filter.exec_()
+
+    def plot_signal(self, signal):
+        self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
 
 
 if __name__ == "__main__":
