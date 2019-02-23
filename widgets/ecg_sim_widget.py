@@ -39,7 +39,6 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.delay_default = self.delay
         self.noise_default = self.noise
         self.period_default = self.period
-        self.ecg_signal_name = self.name
         self.time = []
         self.ecg_output = []
 ###############################################################################################
@@ -192,4 +191,4 @@ class ECGSimulationWidget(TemplateBaseClass):
 
     @property
     def name(self):
-        return self.ui.simulation_line_edit.text()
+        return self.ui.simulation_line_edit.placeholderText()
