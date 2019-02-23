@@ -185,7 +185,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="usesScrollButtons">
         <bool>false</bool>
@@ -202,14 +202,23 @@
        <property name="tabBarAutoHide">
         <bool>false</bool>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="ConsoleWidget" name="console_widget_tab">
         <attribute name="title">
-         <string>Output</string>
+         <string>Console</string>
         </attribute>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QTextBrowser" name="textBrowser"/>
-         </item>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2">
@@ -217,9 +226,18 @@
          <string>Spectrum View</string>
         </attribute>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="PlotWidget" name="graphicsView_2"/>
-         </item>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
         </layout>
        </widget>
       </widget>
@@ -252,13 +270,19 @@
   <customwidget>
    <class>Oscilloscope</class>
    <extends>QWidget</extends>
-   <header location="global">oscilloscope_widget</header>
+   <header>oscilloscope_widget</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Channels</class>
    <extends>QWidget</extends>
    <header>channels_widget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ConsoleWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">pyqtgraph.console</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

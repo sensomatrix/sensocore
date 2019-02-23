@@ -77,6 +77,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.ui.delay_spin_box.valueChanged.connect(self.update_plot)
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
+        self.ui.create_signal_button.clicked.connect(self.create_signal)
 ###############################################################################################
         self.generate_plot()
 
@@ -94,6 +95,9 @@ class ECGSimulationWidget(TemplateBaseClass):
     def update_plot(self):
         self.generate_plot()
         self.plot.setData(self.time, self.ecg_output)
+
+    def create_signal(self):
+        pass
 
     def reset_to_default(self):
         self.ui.p_mag_double_spinbox.setValue(self.p_default[0])
