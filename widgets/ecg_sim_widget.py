@@ -1,5 +1,7 @@
 import pyqtgraph as pg
+from PyQt5.QtCore import pyqtSignal
 from simulations.ecg.ecg import generate_ecg
+from models.signal import Signal
 import os
 
 
@@ -9,6 +11,8 @@ ECGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class ECGSimulationWidget(TemplateBaseClass):
+    create_signal = pyqtSignal(Signal)
+
     def __init__(self):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
@@ -35,6 +39,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.delay_default = self.delay
         self.noise_default = self.noise
         self.period_default = self.period
+        self.ecg_signal_name = self.name
         self.time = []
         self.ecg_output = []
 ###############################################################################################
@@ -77,7 +82,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.ui.delay_spin_box.valueChanged.connect(self.update_plot)
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
-        self.ui.create_signal_button.clicked.connect(self.create_signal)
+        self.ui.create_signal_button.clicked.connect(self.generate_signal)
 ###############################################################################################
         self.generate_plot()
 
@@ -88,16 +93,19 @@ class ECGSimulationWidget(TemplateBaseClass):
 
 # Methods
 ###############################################################################################
-    def generate_plot(self):
+    def generate_plot(self, is_for_graphing=True):
         self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
-                                                  self.delay, self.p, self.q, self.r, self.s, self.t)
+                                                  self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=is_for_graphing)
 
     def update_plot(self):
         self.generate_plot()
         self.plot.setData(self.time, self.ecg_output)
 
-    def create_signal(self):
-        pass
+    def generate_signal(self):
+        self.generate_plot(is_for_graphing=False)
+        signal = Signal(self.ecg_output, self.time, self.sampling_frequency, self.name, 'ECG')
+        self.create_signal.emit(signal)
+        self.close()
 
     def reset_to_default(self):
         self.ui.p_mag_double_spinbox.setValue(self.p_default[0])
@@ -181,3 +189,7 @@ class ECGSimulationWidget(TemplateBaseClass):
     @property
     def duration(self):
         return self.ui.duration_spinbox.value()
+
+    @property
+    def name(self):
+        return self.ui.simulation_line_edit.text()

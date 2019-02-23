@@ -16,7 +16,7 @@ class Channels(QListWidget):
 
     def on_signal_loaded(self, signal):
         item = QListWidgetItem(signal.name)
-        item.setData(Qt.UserRole, signal.id)
+        item.setData(Qt.UserRole, signal)
         self.addItem(item)
 
     # # this is not used (old debugging code)
@@ -29,9 +29,8 @@ class Channels(QListWidget):
     def create_menu(self, position):
         if self.selectedItems():
             item = self.selectedItems()[0]
-            id = item.data(Qt.UserRole)
-            sig = self.signal_dict.get(id)
-            ChannelsRightClickMenu(self, sig, position)
+            signal = item.data(Qt.UserRole)
+            ChannelsRightClickMenu(self, signal, position)
 
     def getSelectedChannels(self):
         channel_id_list = []
@@ -51,7 +50,7 @@ class ChannelsRightClickMenu(QMenu):
     def init(self):
         # Remove DC
         action = self.addAction("Remove DC")
-        action.triggered.connect(lambda: self.parent.parent.datasets.removeDC(self.sig.id))
+        action.triggered.connect(lambda: self.parent.parent.datasets.removeDC(self.sig))
         self.addAction(action)
 
         #Plot PSD button

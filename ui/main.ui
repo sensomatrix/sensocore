@@ -104,7 +104,7 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Channels" name="widget" native="true"/>
+      <widget class="Channels" name="channels" native="true"/>
      </item>
     </layout>
    </widget>
