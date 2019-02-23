@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
+from widgets.physionet_widget import PhysioNetWidget
 import os
 
 
@@ -24,6 +25,7 @@ class MainWindow(TemplateBaseClass):
         self.ui.actionEEG_Simulation.triggered.connect(self.launch_eeg_widget)
         self.ui.actionECG_Simulation.triggered.connect(self.launch_ecg_widget)
         self.ui.actionFIR_Filter_Designer.triggered.connect(self.launch_fir_filter_widget)
+        self.ui.actionPhysioNet.triggered.connect(self.launch_physionet_widget)
 
     def launch_eeg_widget(self):
         # TODO: Provide parent
@@ -34,6 +36,10 @@ class MainWindow(TemplateBaseClass):
         # TODO: Provide parent
         ecg_sim_widget = ECGSimulationWidget()
         ecg_sim_widget.exec_()
+
+    def launch_physionet_widget(self):
+        physionet = PhysioNetWidget(self)
+        physionet.exec_()
 
     def launch_fir_filter_widget(self):
         fir_filter = FIRDesignerDialog(self)

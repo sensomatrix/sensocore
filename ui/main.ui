@@ -62,6 +62,7 @@
     <property name="title">
      <string>Load Data</string>
     </property>
+    <addaction name="actionPhysioNet"/>
    </widget>
    <widget class="QMenu" name="menuSimulate_Data">
     <property name="title">
@@ -238,6 +239,11 @@
   <action name="actionFIR_Filter_Designer">
    <property name="text">
     <string>FIR Filter Designer</string>
+   </property>
+  </action>
+  <action name="actionPhysioNet">
+   <property name="text">
+    <string>PhysioNet</string>
    </property>
   </action>
  </widget>
