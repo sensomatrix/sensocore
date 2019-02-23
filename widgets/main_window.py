@@ -19,7 +19,7 @@ class MainWindow(TemplateBaseClass):
         self.ui = MainWindowView()
         self.ui.setupUi(self)
 
-        self.ui.main_tab.setEnabled(True)
+        self.ui.main_tab.setEnabled(False)
 
         self.ui.actionEEG_Simulation.triggered.connect(self.launch_eeg_widget)
         self.ui.actionECG_Simulation.triggered.connect(self.launch_ecg_widget)
@@ -49,6 +49,8 @@ class MainWindow(TemplateBaseClass):
         fir_filter.exec_()
 
     def plot_signal(self, signal):
+        if not self.ui.main_tab.isEnabled():
+            self.ui.main_tab.setEnabled(True)
         self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
 
 
