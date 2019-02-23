@@ -21,7 +21,6 @@ class FIRDesignerDialog(QDialog):
         self.filter_lookup = ('least_squares', 'parks')
         self.filter = None
         self.create()
-        self.signals_dic = self.parent.datasets.getSignalsList()
         self.populate_channels_combobox()
         self.populate_channels_apply_list()
         self.checked_channels_list = []
@@ -180,19 +179,10 @@ class FIRDesignerDialog(QDialog):
         self.show()
 
     def populate_channels_combobox(self):
-        for id_, signal in self.signals_dic.items():
-            self.channel_combobox.addItem(signal.name, signal.id)
-        if self.signals_dic:
-            self.applyfilters_list.setEnabled(True)
+        pass
 
     def populate_channels_apply_list(self):
-        for id_, signal in self.signals_dic.items():
-            item = QStandardItem(signal.name + " (" + str(int(signal.fs)) + " Hz)")
-            item.setCheckable(True)
-            item.setEditable(False)
-            item.setCheckState(Qt.Unchecked)
-            item.setData(id_, Qt.UserRole)
-            self.applyfilters_itemomodel.appendRow(item)
+        pass
 
     def combobox_item_changed(self):
         selected_channel_id = self.channel_combobox.currentData()

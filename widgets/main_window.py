@@ -2,6 +2,7 @@ import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
+from widgets.firdesignerdiag import FIRDesignerDialog
 import os
 
 
@@ -22,14 +23,21 @@ class MainWindow(TemplateBaseClass):
 
         self.ui.actionEEG_Simulation.triggered.connect(self.launch_eeg_widget)
         self.ui.actionECG_Simulation.triggered.connect(self.launch_ecg_widget)
+        self.ui.actionFIR_Filter_Designer.triggered.connect(self.launch_fir_filter_widget)
 
     def launch_eeg_widget(self):
+        # TODO: Provide parent
         eeg_sim_widget = EEGSimulationWidget()
         eeg_sim_widget.exec_()
 
     def launch_ecg_widget(self):
+        # TODO: Provide parent
         ecg_sim_widget = ECGSimulationWidget()
         ecg_sim_widget.exec_()
+
+    def launch_fir_filter_widget(self):
+        fir_filter = FIRDesignerDialog(self)
+        fir_filter.exec_()
 
 
 if __name__ == "__main__":
