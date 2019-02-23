@@ -137,8 +137,8 @@ class Oscilloscope(TemplateBaseClass):
         for plot_item in self.plots:
             if plot_item[0].sceneBoundingRect().contains(pos):
                 mousePoint = plot_item[0].vb.mapSceneToView(pos)
-                self.ui.label_x.setText("X: " + str(round(mousePoint.x(),4)))
-                self.ui.label_y.setText("Y: " + str(round(mousePoint.y(),4)))
+                self.ui.label_x.setText("X: " + str(round(mousePoint.x(), 4)))
+                self.ui.label_y.setText("Y: " + str(round(mousePoint.y(), 4)))
 
     @property
     def plots(self):

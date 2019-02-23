@@ -198,7 +198,7 @@
          <string>Console</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="spectrum_view_tab">
         <attribute name="title">
          <string>Spectrum View</string>
         </attribute>
@@ -215,6 +215,9 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <widget class="PlotWidget" name="spectrum_view_plot"/>
+         </item>
         </layout>
        </widget>
       </widget>
@@ -240,6 +243,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">pyqtgraph</header>
+  </customwidget>
+  <customwidget>
    <class>Oscilloscope</class>
    <extends>QWidget</extends>
    <header>oscilloscope_widget</header>
@@ -260,7 +268,7 @@
   <customwidget>
    <class>SecondaryArea</class>
    <extends>QWidget</extends>
-   <header location="global">secondaryarea</header>
+   <header>secondaryarea</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
