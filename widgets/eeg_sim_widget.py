@@ -41,8 +41,9 @@ class EEGSimulationWidget(TemplateBaseClass):
         # C1 values being updated
         self.ui.preview_button.clicked.connect(self.update_plot)
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
+        # self.ui.create_signal_button.clicked.connect(self.generate_signal)
 ###############################################################################################
-        self.generate_plot()
+        self.generate_plot(True)
 
         self.zoomed_plot = self.ui.zoomed_plot.plot(self.time, self.eeg_output, pen="g")
         self.zoomed_plot.getViewBox().setMouseEnabled(y=False)
@@ -73,10 +74,13 @@ class EEGSimulationWidget(TemplateBaseClass):
         rgn = viewRange[0]
         self.region.setRegion(rgn)
 
-    def generate_plot(self):
+    # def generate_siganl(self):
+    #
+
+    def generate_plot(self, for_graphing):
         self.current_percentage = 0
 
-        _thread.start_new_thread(self.simulate_eeg, ())
+        _thread.start_new_thread(self.simulate_eeg, (for_graphing,))
 
         self.simulate_progress_bar()
 
@@ -89,9 +93,11 @@ class EEGSimulationWidget(TemplateBaseClass):
                 time.sleep(0.02)
                 dlg.setValue(self.current_percentage)
 
-    def simulate_eeg(self):
+    def simulate_eeg(self, for_graphing):
+        duration = self.duration_default if for_graphing else self.duration
+
         self.time, self.eeg_output = simulate_eeg_jansen(fs=self.sampling_frequency, C1=self.c1,
-                                                         noise_magnitude=self.noise, callback=self.current_progress)
+                                                         noise_magnitude=self.noise, callback=self.current_progress, duration=duration)
 
     def current_progress(self, current_percentage):
         self.current_percentage = current_percentage
