@@ -2,10 +2,10 @@ from PyQt5.QtWidgets import QDialog, QFrame, QLineEdit, QLabel, \
     QGroupBox, QComboBox, QVBoxLayout, QDialogButtonBox, QFileDialog, QListView, QRadioButton, \
     QPushButton, QMessageBox, QGridLayout, QHBoxLayout, QFormLayout, QButtonGroup, QSizePolicy, QSpacerItem
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel
 from .Plotter import FilterPlotter, FilteredSignalPlotter
 import numpy as np
-from filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
+from utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
 from scipy.signal import freqz, convolve
 import pickle
 

@@ -1,14 +1,18 @@
-from views.cross_correlation import Ui_Form
-from PyQt5.QtWidgets import QWidget
 import weakref
 from scipy import signal
 import numpy as np
+import pyqtgraph as pg
+import os
 
 
-class CrossCorrelation(QWidget):
+path = os.path.dirname(os.path.abspath(__file__))
+uiFile = os.path.join(path, '../ui/cross_correlation.ui')
+CrossCorrelationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+
+class CrossCorrelation(TemplateBaseClass):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Form()
+        self.ui = CrossCorrelationView()
         self.ui.setupUi(self)
 
     def compute_cross_correlation(self, signal_1, signal_2):
