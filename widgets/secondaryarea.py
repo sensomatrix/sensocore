@@ -1,14 +1,13 @@
 from pyqtgraph.dockarea import *
-from .graphdock import GraphDock
+from widgets.graphdock import GraphDock
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtCore import QSize
 
 
 class SecondaryArea(QWidget):
 
-    def __init__(self, parent):
+    def __init__(self):
         super().__init__()
-        self.parent = parent
         self.area = DockArea()
         layout = QVBoxLayout()
         layout.addWidget(self.area)

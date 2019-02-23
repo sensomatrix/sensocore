@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SensoMatrix</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -130,16 +130,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="PlotWidget" name="graphicsView_3"/>
-     </item>
-     <item>
-      <widget class="PlotWidget" name="graphicsView_4"/>
-     </item>
-    </layout>
-   </widget>
+   <widget class="SecondaryArea" name="secondary_area"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -206,20 +197,6 @@
         <attribute name="title">
          <string>Console</string>
         </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-        </layout>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -263,11 +240,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlotWidget</class>
-   <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
-  </customwidget>
-  <customwidget>
    <class>Oscilloscope</class>
    <extends>QWidget</extends>
    <header>oscilloscope_widget</header>
@@ -282,7 +254,13 @@
   <customwidget>
    <class>ConsoleWidget</class>
    <extends>QWidget</extends>
-   <header location="global">pyqtgraph.console</header>
+   <header>pyqtgraph.console</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SecondaryArea</class>
+   <extends>QWidget</extends>
+   <header location="global">secondaryarea</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
