@@ -42,16 +42,20 @@ class MainWindow(TemplateBaseClass):
 
     def launch_physionet_widget(self):
         physionet = PhysioNetWidget(self)
+        physionet.create_signal.connect(self.ui.channels.on_signal_loaded)
+        physionet.create_signal.connect(self.plot_signal)
         physionet.exec_()
 
     def launch_fir_filter_widget(self):
         fir_filter = FIRDesignerDialog(self)
         fir_filter.exec_()
 
-    def plot_signal(self, signal):
+    def plot_signal(self, signals):
         if not self.ui.main_tab.isEnabled():
             self.ui.main_tab.setEnabled(True)
-        self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
+
+        for signal in signals:
+            self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
 
 
 if __name__ == "__main__":

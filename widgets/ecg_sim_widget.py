@@ -11,7 +11,7 @@ ECGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class ECGSimulationWidget(TemplateBaseClass):
-    create_signal = pyqtSignal(Signal)
+    create_signal = pyqtSignal(list)
 
     def __init__(self):
         TemplateBaseClass.__init__(self)
@@ -103,7 +103,7 @@ class ECGSimulationWidget(TemplateBaseClass):
     def generate_signal(self):
         self.generate_plot(is_for_graphing=False)
         signal = Signal(self.ecg_output, self.time, self.sampling_frequency, self.name, 'ECG')
-        self.create_signal.emit(signal)
+        self.create_signal.emit([signal])
         self.close()
 
     def reset_to_default(self):

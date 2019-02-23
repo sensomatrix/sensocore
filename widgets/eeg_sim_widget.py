@@ -13,7 +13,7 @@ EEGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class EEGSimulationWidget(TemplateBaseClass):
-    create_signal = pyqtSignal(Signal)
+    create_signal = pyqtSignal(list)
 
     def __init__(self):
         TemplateBaseClass.__init__(self)
@@ -82,7 +82,7 @@ class EEGSimulationWidget(TemplateBaseClass):
     def generate_signal(self):
         self.generate_plot(False)
         signal = Signal(self.eeg_output, self.time, self.sampling_frequency, self.name, 'EEG')
-        self.create_signal.emit(signal)
+        self.create_signal.emit([signal])
         self.close()
 
     def generate_plot(self, for_graphing):

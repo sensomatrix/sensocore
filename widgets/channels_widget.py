@@ -14,10 +14,11 @@ class Channels(QListWidget):
         self.customContextMenuRequested.connect(self.create_menu)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
-    def on_signal_loaded(self, signal):
-        item = QListWidgetItem(signal.name)
-        item.setData(Qt.UserRole, signal)
-        self.addItem(item)
+    def on_signal_loaded(self, signals):
+        for signal in signals:
+            item = QListWidgetItem(signal.name)
+            item.setData(Qt.UserRole, signal)
+            self.addItem(item)
 
     # # this is not used (old debugging code)
     # def selectionChanged(self):
