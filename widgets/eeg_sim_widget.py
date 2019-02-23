@@ -1,5 +1,7 @@
 import pyqtgraph as pg
+from PyQt5.QtCore import pyqtSignal
 from simulations.eeg.jansen import simulate_eeg_jansen
+from models.signal import Signal
 import os
 import _thread
 import time
@@ -9,7 +11,10 @@ path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/eeg_sim.ui')
 EEGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
+
 class EEGSimulationWidget(TemplateBaseClass):
+    create_signal = pyqtSignal(Signal)
+
     def __init__(self):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
@@ -41,7 +46,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         # C1 values being updated
         self.ui.preview_button.clicked.connect(self.update_plot)
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
-        # self.ui.create_signal_button.clicked.connect(self.generate_signal)
+        self.ui.create_signal_button.clicked.connect(self.generate_signal)
 ###############################################################################################
         self.generate_plot(True)
 
@@ -74,8 +79,11 @@ class EEGSimulationWidget(TemplateBaseClass):
         rgn = viewRange[0]
         self.region.setRegion(rgn)
 
-    # def generate_siganl(self):
-    #
+    def generate_signal(self):
+        self.generate_plot(False)
+        signal = Signal(self.eeg_output, self.time, self.sampling_frequency, self.name, 'EEG')
+        self.create_signal.emit(signal)
+        self.close()
 
     def generate_plot(self, for_graphing):
         self.current_percentage = 0
@@ -103,13 +111,12 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.current_percentage = current_percentage
 
     def update_plot(self):
-        self.generate_plot()
+        self.generate_plot(True)
         self.zoomed_plot.setData(self.time, self.eeg_output)
         self.main_plot.setData(self.time, self.eeg_output)
 
     def reset_to_default(self):
         self.ui.c1_spinbox.setValue(self.c1_default)
-
         self.ui.sampling_frequency_spinbox.setValue(self.fs_default)
         self.ui.noise_double_spinbox.setValue(self.noise_default)
         self.ui.duration_spinbox.setValue(self.duration_default)
@@ -141,3 +148,7 @@ class EEGSimulationWidget(TemplateBaseClass):
     @property
     def duration(self):
         return self.ui.duration_spinbox.value()
+
+    @property
+    def name(self):
+        return self.ui.simulation_line_edit.text()

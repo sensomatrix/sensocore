@@ -30,6 +30,7 @@ class MainWindow(TemplateBaseClass):
     def launch_eeg_widget(self):
         # TODO: Provide parent
         eeg_sim_widget = EEGSimulationWidget()
+        eeg_sim_widget.create_signal.connect(self.ui.channels.on_signal_loaded)
         eeg_sim_widget.exec_()
 
     def launch_ecg_widget(self):
