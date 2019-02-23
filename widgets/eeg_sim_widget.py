@@ -151,4 +151,4 @@ class EEGSimulationWidget(TemplateBaseClass):
 
     @property
     def name(self):
-        return self.ui.simulation_line_edit.text()
+        return self.ui.simulation_line_edit.placeholderText()
