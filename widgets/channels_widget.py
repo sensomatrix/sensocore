@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QWidget, QListWidget, QVBoxLayout, QListWidgetItem, QMenu, QAbstractItemView
+from PyQt5.QtWidgets import QListView, QListWidgetItem, QMenu, QAbstractItemView
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
 # implement a channel list and maybe some buttons for doing actions on select channels
-class Channels(QListWidget):
+class Channels(QListView):
 
     channel_selected_signal = pyqtSignal(object)
     plot_PSD_requested = pyqtSignal(object)
@@ -13,19 +13,6 @@ class Channels(QListWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.create_menu)
         self.setSelectionMode(QAbstractItemView.ExtendedSelection)
-
-    def on_signal_loaded(self, signals):
-        for signal in signals:
-            item = QListWidgetItem(signal.name)
-            item.setData(Qt.UserRole, signal)
-            self.addItem(item)
-
-    # # this is not used (old debugging code)
-    # def selectionChanged(self):
-    #     item = self.channel_list.selectedItems()[0]
-    #     id = item.data(Qt.UserRole)
-    #     sig = self.signal_dict.get(id)
-    #     self.channel_selected_signal.emit(sig)
 
     def create_menu(self, position):
         if self.selectedItems():

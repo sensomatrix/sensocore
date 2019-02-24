@@ -11,15 +11,15 @@ ECGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class ECGSimulationWidget(TemplateBaseClass):
-    create_signal = pyqtSignal(list)
-
-    def __init__(self):
+    def __init__(self, signals):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
 
         # Create the main window
         self.ui = ECGSimulationView()
         self.ui.setupUi(self)
+
+        self.signals = signals
 
         # cross hair
         self.vLine = pg.InfiniteLine(angle=90, movable=False, label='x={value:0.2f}')
@@ -103,7 +103,7 @@ class ECGSimulationWidget(TemplateBaseClass):
     def generate_signal(self):
         self.generate_plot(is_for_graphing=False)
         signal = Signal(self.ecg_output, self.time, self.sampling_frequency, self.name, 'ECG')
-        self.create_signal.emit([signal])
+        self.signals.add_signal(signal)
         self.close()
 
     def reset_to_default(self):

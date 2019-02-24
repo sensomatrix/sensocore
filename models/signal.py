@@ -1,10 +1,23 @@
 from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal
+
+
+class Signal:
+    def __init__(self, samples_array, time_array, fs, name, signal_type):
+        self.samples_array = samples_array
+        self.time_array = time_array
+        self.fs = fs
+        self.name = name
+        self.type = signal_type
 
 
 class SignalListModel(QtCore.QAbstractListModel):
-    def __init__(self, signals=[], parent=None):
+    added_signal = pyqtSignal(Signal)
+    added_signals= pyqtSignal(list)
+
+    def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
-        self._signals = signals
+        self._signals = []
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self._signals)
@@ -38,15 +51,17 @@ class SignalListModel(QtCore.QAbstractListModel):
             else:
                 return QtCore.Qt.Unchecked
 
-    def insertRows(self, p_int, p_int_1, parent=None, *args, **kwargs):
-        self.beginInsertRows(QtCore.QModelIndex(), p_int, p_int_1)
-        self._signals.insert(p_int, args[0])
+    def add_signal(self, signal):
+        self.beginInsertRows(QtCore.QModelIndex(), self.rowCount(), self.rowCount())
+        self._signals.append(signal)
         self.endInsertRows()
 
-class Signal():
-    def __init__(self, samples_array, time_array, fs, name, signal_type):
-        self.samples_array = samples_array
-        self.time_array = time_array
-        self.fs = fs
-        self.name = name
-        self.type = signal_type
+        self.added_signal.emit(signal)
+
+    def add_signals(self, signals):
+        self.beginInsertRows(QtCore.QModelIndex(), self.rowCount(), self.rowCount())
+        for signal in signals:
+            self._signals.append(signal)
+        self.endInsertRows()
+
+        self.added_signals.emit(signals)

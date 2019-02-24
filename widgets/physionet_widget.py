@@ -12,14 +12,14 @@ PhysioNetView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class PhysioNetWidget(TemplateBaseClass):
-    create_signal = pyqtSignal(list)
-
-    def __init__(self, parent):
-        TemplateBaseClass.__init__(self, parent=parent)
+    def __init__(self, signals=None):
+        TemplateBaseClass.__init__(self)
 
         # Create the main window
         self.ui = PhysioNetView()
         self.ui.setupUi(self)
+
+        self.signals = signals
 
         self.ui.import_button.clicked.connect(self.import_from_physio)
 
@@ -43,7 +43,8 @@ class PhysioNetWidget(TemplateBaseClass):
                          name=sig_name,signal_type='no type')
             siglist.append(sig)
 
-        self.create_signal.emit(siglist)
+        self.signals.add_signals(siglist)
+
         self.close()
 
     @property
