@@ -14,7 +14,6 @@ class Oscilloscope(TemplateBaseClass):
         super().__init__()
         self.ui = OscilloscopeView()
         self.ui.setupUi(self)
-        self.ui.multiplot_widget.setBackground('w')
         self.x_cursor = None
 
         self.init_cursor()
