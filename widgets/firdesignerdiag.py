@@ -33,6 +33,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
         self.ui.design_filter_button.clicked.connect(self.design_filter)
+        self.ui.preview_output_button.clicked.connect(self.apply_filter_to_test_signal)
 
     def item_changed(self, index):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
@@ -124,20 +125,17 @@ class FIRDesignerDialog(TemplateBaseClass):
                 desired = np.asarray(desired_new, dtype=np.float32)
             self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r')
             self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g')
-    #
-    # def apply_filter_to_test_signal(self):
-    #     selected_channel_id = self.channel_combobox.currentData()
-    #     if selected_channel_id is None:
-    #         self.showError("Select an input channel")
-    #         return
-    #     self.preview_button.setEnabled(False)
-    #     selected_channel_id = self.channel_combobox.currentData()
-    #     signal = self.signals_dic.get(selected_channel_id)
-    #     filtered_samples = convolve(signal.samples_array, self.filter, mode='same')
-    #     self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)))
-    #     self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)))
-    #     #self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
-    #     #self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
+
+    def apply_filter_to_test_signal(self):
+        if self.current_signal is None:
+            self.showError("Select an input channel")
+            return
+        self.ui.preview_output_button.setEnabled(False)
+        filtered_samples = convolve(self.current_signal.samples_array, self.filter, mode='same')
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, self.current_signal.samples_array)), pen='r')
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, filtered_samples)), pen='g')
+        #self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
+        #self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
     #
     # def apply_list_selected_item_change(self, item):
     #     id_ = item.data(Qt.UserRole)
