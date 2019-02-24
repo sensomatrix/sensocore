@@ -123,8 +123,10 @@ class FIRDesignerDialog(TemplateBaseClass):
                     desired_new.append(gain)
                     desired_new.append(gain)
                 desired = np.asarray(desired_new, dtype=np.float32)
-            self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r')
-            self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g')
+
+            self.ui.filter_graphics_view.addLegend()
+            self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r', name='Ideal Filter')
+            self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g', name='Actual Filter')
 
     def apply_filter_to_test_signal(self):
         if self.current_signal is None:
@@ -132,8 +134,12 @@ class FIRDesignerDialog(TemplateBaseClass):
             return
         self.ui.preview_output_button.setEnabled(False)
         filtered_samples = convolve(self.current_signal.samples_array, self.filter, mode='same')
-        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, self.current_signal.samples_array)), pen='r')
-        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, filtered_samples)), pen='g')
+
+        self.ui.signal_filter_graphics_view.addLegend()
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, self.current_signal.samples_array)), pen='r' ,
+                                                 name='Raw Signal')
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, filtered_samples)), pen='g',
+                                                 name='Filtered Signal')
 
     def apply_list_selected_item_change(self, item):
         id_ = item.data(Qt.UserRole)
