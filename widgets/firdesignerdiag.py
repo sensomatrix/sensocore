@@ -1,5 +1,5 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from .Plotter import FilterPlotter, FilteredSignalPlotter
@@ -24,6 +24,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.setupUi(self)
 
         self.signals = signals
+        self.current_signal = None
 
         self.ui.channel_combo_box.setModel(self.signals)
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
@@ -31,10 +32,11 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
+        self.ui.design_filter_button.clicked.connect(self.design_filter)
 
     def item_changed(self, index):
-        signal = self.ui.channel_combo_box.itemData(index)
-        self.ui.sampling_frequency_label.setText('fs: ' + str(signal.fs) + 'Hz')
+        self.current_signal = self.ui.channel_combo_box.itemData(index)
+        self.ui.sampling_frequency_label.setText('fs: ' + str(self.current_signal.fs) + 'Hz')
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
@@ -66,65 +68,62 @@ class FIRDesignerDialog(TemplateBaseClass):
         else:
             self.ui.taps_line_edit.setText(str(taps))
 
-    # def design_filter(self):
-    #     if '' in [self.taps_lineedit.text(), self.bands_lineedit.text(), self.desired_lineedit.text()]:
-    #         self.showError('Fill in the design parameters.')
-    #         return
-    #
-    #
-    #     # The number of taps is the same as the filter length
-    #     # The order of an FIR filter is filter length minus 1
-    #     # Keep number of taps odd for linear phase
-    #
-    #     filtertype_id = self.filtertype_buttgroup.id(self.filtertype_buttgroup.checkedButton())
-    #     selected_channel_id = self.channel_combobox.currentData()
-    #     if selected_channel_id is None:
-    #         if not self.fsinput_lineedit.text():
-    #             self.showError('Select a channel or enter a sampling frequency.')
-    #             return
-    #         fs = int(self.fsinput_lineedit.text())
-    #     else:
-    #         fs = int(self.signals_dic.get(selected_channel_id).fs)
-    #     if filtertype_id is self.filter_lookup.index('least_squares') or self.filter_lookup.index('parks'):
-    #         # least squares or parks
-    #         taps = int(self.taps_lineedit.text())
-    #         if taps % 2 is 0:
-    #             self.showError('Number of taps must be odd for a linear-phase filter.')
-    #             return
-    #         bands = np.fromstring(self.bands_lineedit.text(), dtype=float, count=-1, sep=" ")
-    #         if bands.size % 2 is not 0:
-    #             self.showError('Band edges are pairs of frequencies and must be even-numbered.')
-    #             return
-    #         if not np.all(np.diff(bands) > 0):
-    #             self.showError('Band edges must be monotically increasing.')
-    #             return
-    #         if not all(i <= fs/2 for i in bands):
-    #             self.showError('Band edges must be less or equal than Nyquist.')
-    #             return
-    #         desired = np.fromstring(self.desired_lineedit.text(), dtype=float, count=-1, sep=" ")
-    #         if (desired.size != bands.size) and filtertype_id is self.filter_lookup.index('least_squares'):
-    #             self.showError('Least squares: there must be as many gain coefficients as there are frequencies in band edges.')
-    #             return
-    #         if (desired.size != int(bands.size/2)) and filtertype_id is self.filter_lookup.index('parks'):
-    #             self.showError('Parks–McClellan: ideal gain sequence must be half the size of bands')
-    #             return
-    #         #weights = np.fromstring(self.ls_weights_lineedit.text(), dtype=float, count=-1, sep=" ")
-    #         if filtertype_id is self.filter_lookup.index('least_squares'):
-    #             self.filter = design_FIR_ls(taps, bands, desired, fs)
-    #         elif filtertype_id is self.filter_lookup.index('parks'):
-    #             self.filter = design_FIR_parks(taps, bands, desired, fs)
-    #         if self.filter.size != 0:
-    #             self.export_button.setEnabled(True)
-    #             self.preview_button.setEnabled(True)
-    #         freq, response = freqz(self.filter)
-    #         if filtertype_id is self.filter_lookup.index('parks'):
-    #             desired_new = []
-    #             for gain in desired:
-    #                 desired_new.append(gain)
-    #                 desired_new.append(gain)
-    #             desired = np.asarray(desired_new, dtype=np.float32)
-    #         self.filterplot.plot_data(np.column_stack((bands, desired)))
-    #         self.filterplot.plot_data(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))))
+    def design_filter(self):
+        if '' in [self.ui.taps_line_edit.text(), self.ui.band_edges_line_edit.text(), self.ui.ideal_gain_coefficients_line_edit.text()]:
+            self.showError('Fill in the design parameters.')
+            return
+
+        # The number of taps is the same as the filter length
+        # The order of an FIR filter is filter length minus 1
+        # Keep number of taps odd for linear phase
+
+        if self.current_signal is None:
+            if not self.ui.sampling_frequency_line_edit.text():
+                self.showError('Select a channel or enter a sampling frequency.')
+                return
+            fs = int(self.fsinput_lineedit.text())
+        else:
+            fs = int(self.current_signal.fs)
+        if self.ui.least_squares_radio.isChecked() or self.ui.parks_mcclellan_radio.isChecked():
+            # least squares or parks
+            taps = int(self.ui.taps_line_edit.text())
+            if taps % 2 is 0:
+                self.showError('Number of taps must be odd for a linear-phase filter.')
+                return
+            bands = np.fromstring(self.ui.band_edges_line_edit.text(), dtype=float, count=-1, sep=" ")
+            if bands.size % 2 is not 0:
+                self.showError('Band edges are pairs of frequencies and must be even-numbered.')
+                return
+            if not np.all(np.diff(bands) > 0):
+                self.showError('Band edges must be monotically increasing.')
+                return
+            if not all(i <= fs/2 for i in bands):
+                self.showError('Band edges must be less or equal than Nyquist.')
+                return
+            desired = np.fromstring(self.ui.ideal_gain_coefficients_line_edit.text(), dtype=float, count=-1, sep=" ")
+            if (desired.size != bands.size) and self.ui.least_squares_radio.isChecked():
+                self.showError('Least squares: there must be as many gain coefficients as there are frequencies in band edges.')
+                return
+            if (desired.size != int(bands.size/2)) and self.ui.parks_mcclellan_radio.isChecked():
+                self.showError('Parks–McClellan: ideal gain sequence must be half the size of bands')
+                return
+            #weights = np.fromstring(self.ls_weights_lineedit.text(), dtype=float, count=-1, sep=" ")
+            if self.ui.least_squares_radio.isChecked():
+                self.filter = design_FIR_ls(taps, bands, desired, fs)
+            elif self.ui.parks_mcclellan_radio.isChecked():
+                self.filter = design_FIR_parks(taps, bands, desired, fs)
+            if self.filter.size != 0:
+                self.ui.save_to_file_button.setEnabled(True)
+                self.ui.preview_output_button.setEnabled(True)
+            freq, response = freqz(self.filter)
+            if self.ui.parks_mcclellan_radio.isChecked():
+                desired_new = []
+                for gain in desired:
+                    desired_new.append(gain)
+                    desired_new.append(gain)
+                desired = np.asarray(desired_new, dtype=np.float32)
+            self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r')
+            self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g')
     #
     # def apply_filter_to_test_signal(self):
     #     selected_channel_id = self.channel_combobox.currentData()
@@ -162,12 +161,12 @@ class FIRDesignerDialog(TemplateBaseClass):
     #         self.parent.console.write("Filter applied to channel " + signal.name)
     #     self.close()
     #
-    # def showError(self, message):
-    #     error_dialog = QMessageBox(self)
-    #     error_dialog.setWindowModality(Qt.WindowModal)
-    #     error_dialog.setIcon(QMessageBox.Critical)
-    #     error_dialog.setText(message)
-    #     error_dialog.exec()
+    def showError(self, message):
+        error_dialog = QMessageBox(self)
+        error_dialog.setWindowModality(Qt.WindowModal)
+        error_dialog.setIcon(QMessageBox.Critical)
+        error_dialog.setText(message)
+        error_dialog.exec()
 
 
 
