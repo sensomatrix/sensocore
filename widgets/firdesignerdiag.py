@@ -1,4 +1,5 @@
 import pyqtgraph as pg
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel
 from .Plotter import FilterPlotter, FilteredSignalPlotter
@@ -25,44 +26,46 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.signals = signals
 
         self.ui.channel_combo_box.setModel(self.signals)
-
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
         self.item_changed(0)
+
+        self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
+        self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
 
     def item_changed(self, index):
         signal = self.ui.channel_combo_box.itemData(index)
         self.ui.sampling_frequency_label.setText('fs: ' + str(signal.fs) + 'Hz')
 
-    # def save_filter_to_file(self):
-    #     savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
-    #     if savefilepath[0]:
-    #         self.save_object(self.filter, savefilepath[0])
-    #
-    # def save_object(self, obj, filename):
-    #     with open(filename, 'wb') as outputfile:
-    #         pickle.dump(obj, outputfile, pickle.HIGHEST_PROTOCOL)
-    #
-    # def estimate_taps_button_pressed(self):
-    #     if '' in [self.pbripple_lineedit.text(), self.sbrejection_lineedit.text(),
-    #               self.fsinput_lineedit.text(), self.pbedge_lineedit.text(), self.sbedge_lineedit.text()]:
-    #         self.showError('Fill in  the design specifications.')
-    #         return
-    #
-    #     pbripple = abs(float(self.pbripple_lineedit.text()))
-    #     sbrejection = -1*abs(float(self.sbrejection_lineedit.text()))
-    #     fs = int(self.fsinput_lineedit.text())
-    #     pbedge = float(self.pbedge_lineedit.text())
-    #     sbedge = float(self.sbedge_lineedit.text())
-    #
-    #     pbdelta = (10**(pbripple/20))-1
-    #     sbdelta = (10**(sbrejection/20))
-    #     normalized_bw = (sbedge - pbedge) / fs
-    #     taps = int(estimate_order(pbdelta, sbdelta, normalized_bw)) + 1
-    #     if taps % 2 == 0:
-    #         self.taps_lineedit.setText(str(taps + 1))
-    #     else:
-    #         self.taps_lineedit.setText(str(taps))
-    #
+    def save_filter_to_file(self):
+        savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
+        if savefilepath[0]:
+            self.save_object(self.filter, savefilepath[0])
+
+    def save_object(self, obj, filename):
+        with open(filename, 'wb') as outputfile:
+            pickle.dump(obj, outputfile, pickle.HIGHEST_PROTOCOL)
+
+    def estimate_taps_button_pressed(self):
+        if '' in [self.ui.passband_ripple_line_edit.text(), self.ui.stopband_rejection_line_edit.text(),
+                  self.ui.sampling_frequency_line_edit.text(), self.ui.passband_edge_line_edit.text(), self.ui.stopband_edge_line_edit.text()]:
+            self.showError('Fill in  the design specifications.')
+            return
+
+        pbripple = abs(float(self.ui.passband_ripple_line_edit.text()))
+        sbrejection = -1*abs(float(self.ui.stopband_rejection_line_edit.text()))
+        fs = int(self.ui.sampling_frequency_line_edit.text())
+        pbedge = float(self.ui.passband_edge_line_edit.text())
+        sbedge = float(self.ui.stopband_edge_line_edit.text())
+
+        pbdelta = (10**(pbripple/20))-1
+        sbdelta = (10**(sbrejection/20))
+        normalized_bw = (sbedge - pbedge) / fs
+        taps = int(estimate_order(pbdelta, sbdelta, normalized_bw)) + 1
+        if taps % 2 == 0:
+            self.ui.taps_line_edit.setText(str(taps + 1))
+        else:
+            self.ui.taps_line_edit.setText(str(taps))
+
     # def design_filter(self):
     #     if '' in [self.taps_lineedit.text(), self.bands_lineedit.text(), self.desired_lineedit.text()]:
     #         self.showError('Fill in the design parameters.')
