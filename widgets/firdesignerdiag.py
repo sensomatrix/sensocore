@@ -22,21 +22,17 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui = FIRDesignerView()
         self.ui.setupUi(self)
 
-        self.ui.channel_combo_box.setModel(signals)
-    #
-    # def populate_channels_combobox(self):
-    #     pass
-    #
-    # def populate_channels_apply_list(self):
-    #     pass
-    #
-    # def combobox_item_changed(self):
-    #     selected_channel_id = self.channel_combobox.currentData()
-    #     if selected_channel_id is not None:
-    #         fs_str = str(int(self.signals_dic.get(selected_channel_id).fs))
-    #         self.fs_label.setText("fs: " + fs_str + " Hz")
-    #         self.fsinput_lineedit.setText(fs_str)
-    #
+        self.signals = signals
+
+        self.ui.channel_combo_box.setModel(self.signals)
+
+        self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
+        self.item_changed(0)
+
+    def item_changed(self, index):
+        signal = self.ui.channel_combo_box.itemData(index)
+        self.ui.sampling_frequency_label.setText('fs: ' + str(signal.fs) + 'Hz')
+
     # def save_filter_to_file(self):
     #     savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
     #     if savefilepath[0]:
