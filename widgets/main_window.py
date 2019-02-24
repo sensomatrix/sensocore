@@ -46,7 +46,7 @@ class MainWindow(TemplateBaseClass):
         physionet.exec_()
 
     def launch_fir_filter_widget(self):
-        fir_filter = FIRDesignerDialog()
+        fir_filter = FIRDesignerDialog(self.signals)
         fir_filter.exec_()
 
     def plot_signals(self, signals):

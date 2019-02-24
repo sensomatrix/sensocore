@@ -13,14 +13,16 @@ path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/fir_filter_designer.ui')
 FIRDesignerView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
-class FIRDesignerDialog(TemplateBaseClass):
 
-    def __init__(self):
+class FIRDesignerDialog(TemplateBaseClass):
+    def __init__(self, signals):
         TemplateBaseClass.__init__(self)
 
         # Create the main window
         self.ui = FIRDesignerView()
         self.ui.setupUi(self)
+
+        self.ui.channel_combo_box.setModel(signals)
     #
     # def populate_channels_combobox(self):
     #     pass
