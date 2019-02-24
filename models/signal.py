@@ -22,7 +22,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self._signals)
 
-    def data(self, QModelIndex, role=None):
+    def data(self, QModelIndex, role=QtCore.Qt.UserRole):
         if role == QtCore.Qt.DisplayRole:
             row = QModelIndex.row()
             signal = self._signals[row]

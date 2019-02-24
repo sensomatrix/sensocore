@@ -22,10 +22,19 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui = FIRDesignerView()
         self.ui.setupUi(self)
 
-        self.ui.channel_combo_box.setModel(signals)
-    #
-    # def populate_channels_combobox(self):
-    #     pass
+        self.signals = signals
+
+        self.ui.channel_combo_box.setModel(self.signals)
+
+        self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
+        signal = self.ui.channel_combo_box.itemData(0)
+        self.ui.sampling_frequency_label.setText('fs: ' + str(signal.fs) + 'Hz')
+
+
+    def item_changed(self, index):
+        signal = self.ui.channel_combo_box.itemData(index)
+        self.ui.sampling_frequency_label.setText('fs: ' + str(signal.fs) + 'Hz')
+
     #
     # def populate_channels_apply_list(self):
     #     pass
