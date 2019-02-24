@@ -68,7 +68,11 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QListView" name="channel_list_view"/>
+       <widget class="QListView" name="apply_filter_list_view">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -269,7 +273,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
+   <header location="global">pyqtgraph</header>
   </customwidget>
  </customwidgets>
  <resources/>

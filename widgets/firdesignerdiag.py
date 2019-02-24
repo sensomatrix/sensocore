@@ -1,8 +1,6 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItemModel
-from .Plotter import FilterPlotter, FilteredSignalPlotter
 import numpy as np
 from utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
 from scipy.signal import freqz, convolve
@@ -26,7 +24,9 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.signals = signals
         self.current_signal = None
 
+        self.ui.apply_filter_list_view.setModel(self.signals)
         self.ui.channel_combo_box.setModel(self.signals)
+
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
         self.item_changed(0)
 
@@ -134,22 +134,20 @@ class FIRDesignerDialog(TemplateBaseClass):
         filtered_samples = convolve(self.current_signal.samples_array, self.filter, mode='same')
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, self.current_signal.samples_array)), pen='r')
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, filtered_samples)), pen='g')
-        #self.signalplot.plot_data(np.column_stack((signal.time_array, signal.samples_array)), "Original signal")
-        #self.signalplot.plot_data(np.column_stack((signal.time_array, filtered_samples)), "Filtered signal")
-    #
-    # def apply_list_selected_item_change(self, item):
-    #     id_ = item.data(Qt.UserRole)
-    #     if item.checkState() == Qt.Checked:
-    #         if id_ not in self.checked_channels_list:
-    #             self.checked_channels_list.append(id_)
-    #     else:
-    #         if id_ in self.checked_channels_list:
-    #             self.checked_channels_list.remove(id_)
-    #     if not self.checked_channels_list:
-    #         self.apply_filter_button.setEnabled(False)
-    #     else:
-    #         if self.filter is not None:
-    #             self.apply_filter_button.setEnabled(True)
+
+    def apply_list_selected_item_change(self, item):
+        id_ = item.data(Qt.UserRole)
+        if item.checkState() == Qt.Checked:
+            if id_ not in self.checked_channels_list:
+                self.checked_channels_list.append(id_)
+        else:
+            if id_ in self.checked_channels_list:
+                self.checked_channels_list.remove(id_)
+        if not self.checked_channels_list:
+            self.apply_filter_button.setEnabled(False)
+        else:
+            if self.filter is not None:
+                self.apply_filter_button.setEnabled(True)
     #
     # def apply_filter(self):
     #     for id_ in self.checked_channels_list:
