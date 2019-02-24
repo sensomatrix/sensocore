@@ -80,7 +80,8 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.region.setRegion(rgn)
 
     def generate_signal(self):
-        self.generate_plot(False)
+        if self.duration != self.duration_default:
+            self.generate_plot(False)
         signal = Signal(self.eeg_output, self.time, self.sampling_frequency, self.name, 'EEG')
         self.signals.add_signal(signal)
         self.close()
