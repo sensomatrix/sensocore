@@ -5,6 +5,8 @@ from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
 from models.signal import SignalListModel
+from PyQt5.QtCore import QModelIndex
+from utils.frequtils import compute_psd
 import numpy as np
 import os
 
@@ -62,8 +64,13 @@ class MainWindow(TemplateBaseClass):
         self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
 
     def display_psd(self, output, index):
-        print(output)
-        print(index)
+
+        fs = self.signals.data(self.signals.index(index)).fs
+
+        fbins, pxx = compute_psd(output, fs)
+
+        self.ui.spectrum_view_plot.clear()
+        self.ui.spectrum_view_plot.plot(fbins, pxx)
 
 
 if __name__ == "__main__":
