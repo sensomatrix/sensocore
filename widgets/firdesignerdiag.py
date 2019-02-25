@@ -154,6 +154,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         else:
             if self.filter is not None:
                 self.apply_filter_button.setEnabled(True)
+
     #
     # def apply_filter(self):
     #     for id_ in self.checked_channels_list:
