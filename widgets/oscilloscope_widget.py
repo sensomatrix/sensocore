@@ -11,6 +11,7 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
+    region_cleared = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -94,6 +95,7 @@ class Oscilloscope(TemplateBaseClass):
             if self.lr in plotitem[0].vb.addedItems:
                 plotitem[0].vb.removeItem(self.lr)
                 self.lr = None
+                self.region_cleared.emit()
 
 
     def singlemouseclick(self, evt):

@@ -27,6 +27,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.added_signals.connect(self.plot_signals)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
+        self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
 
         self.ui.channels.setModel(self.signals)
 
@@ -71,6 +72,9 @@ class MainWindow(TemplateBaseClass):
 
         self.ui.spectrum_view_plot.clear()
         self.ui.spectrum_view_plot.plot(fbins, pxx)
+
+    def clear_psd(self):
+        self.ui.spectrum_view_plot.clear()
 
 
 if __name__ == "__main__":
