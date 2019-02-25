@@ -24,6 +24,8 @@ class MainWindow(TemplateBaseClass):
         self.signals.added_signal.connect(self.plot_signal)
         self.signals.added_signals.connect(self.plot_signals)
 
+        self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
+
         self.ui.channels.setModel(self.signals)
 
         self.ui.main_tab.setEnabled(False)
@@ -58,6 +60,10 @@ class MainWindow(TemplateBaseClass):
             self.ui.main_tab.setEnabled(True)
 
         self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
+
+    def display_psd(self, output, index):
+        print(output)
+        print(index)
 
 
 if __name__ == "__main__":

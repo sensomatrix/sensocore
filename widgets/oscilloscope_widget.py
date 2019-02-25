@@ -1,6 +1,6 @@
 import pyqtgraph as pg
 from pyqtgraph.metaarray import *
-from PyQt5.QtCore import QPointF
+from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
 import os
 
@@ -10,6 +10,8 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class Oscilloscope(TemplateBaseClass):
+    region_updated = pyqtSignal(np.ndarray, int)
+
     def __init__(self):
         super().__init__()
         self.ui = OscilloscopeView()
@@ -19,8 +21,10 @@ class Oscilloscope(TemplateBaseClass):
         self.init_cursor()
         self.init_slider()
 
-        self.colorlist=['r','g','b','c','m','k']
+        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'k']
         self.colorpool = cycle(self.colorlist)
+
+        self.lr = None
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
@@ -36,6 +40,7 @@ class Oscilloscope(TemplateBaseClass):
         data_buffer = np.zeros((1, len(x)))
         for i in range(len(x)):
             data_buffer[0][i] = y[i]
+
         ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Amplitude (mV)"}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
@@ -67,16 +72,29 @@ class Oscilloscope(TemplateBaseClass):
         maxValue = mousepos_x + 0.01 * deltat
         plotdataitemlist = [dataitem for dataitem in plotitem.vb.allChildren()
                             if isinstance(dataitem, pg.graphicsItems.PlotDataItem.PlotDataItem)]
-        lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
-        plotitem.vb.addItem(lr)
+        self.lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
+
+        self.lr.sigRegionChanged.connect(self.update_graph)
+
+        plotitem.vb.addItem(self.lr)
+
+    def update_graph(self):
+        for index, plotitem in enumerate(self.plots):
+            if self.lr in plotitem[0].vb.addedItems:
+                minX, maxX = self.lr.getRegion()
+                time = plotitem[0].dataItems[0].xData
+                output = plotitem[0].dataItems[0].yData
+                min_index = min(range(len(time)), key=lambda i: abs(time[i] - minX))
+                max_index = min(range(len(time)), key=lambda i: abs(time[i] - maxX))
+                self.region_updated.emit(output[min_index:max_index], index)
 
     def remove_all_linear_regions(self):
+        # self.lr = None
         for plotitem in self.plots:
-            if type(plotitem[0]) is not int:
-                childitems = [child for child in plotitem[0].vb.allChildren() if
-                          isinstance(child, pg.graphicsItems.LinearRegionItem.LinearRegionItem)]
-                for child_lr in childitems:
-                    plotitem[0].vb.removeItem(child_lr)
+            if self.lr in plotitem[0].vb.addedItems:
+                plotitem[0].vb.removeItem(self.lr)
+                self.lr = None
+
 
     def singlemouseclick(self, evt):
         if not evt.double():
