@@ -5,6 +5,7 @@ from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
 from models.signal import SignalListModel
+from utils import file_read
 from PyQt5.QtCore import QModelIndex
 from utils.frequtils import compute_psd
 import numpy as np
@@ -37,6 +38,7 @@ class MainWindow(TemplateBaseClass):
         self.ui.actionECG_Simulation.triggered.connect(self.launch_ecg_widget)
         self.ui.actionFIR_Filter_Designer.triggered.connect(self.launch_fir_filter_widget)
         self.ui.actionPhysioNet.triggered.connect(self.launch_physionet_widget)
+        self.ui.actionLocally.triggered.connect(self.launch_local_file)
 
     def launch_eeg_widget(self):
         eeg_sim_widget = EEGSimulationWidget(self.signals)
@@ -53,6 +55,11 @@ class MainWindow(TemplateBaseClass):
     def launch_fir_filter_widget(self):
         fir_filter = FIRDesignerDialog(self.signals)
         fir_filter.exec_()
+
+    def launch_local_file(self):
+        signals = file_read.open_dataset_dialog(self)
+        if signals is not None:
+            self.signals.add_signals(signals)
 
     def plot_signals(self, signals):
         for signal in signals:

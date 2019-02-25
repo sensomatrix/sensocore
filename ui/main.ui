@@ -63,6 +63,7 @@
      <string>Load Data</string>
     </property>
     <addaction name="actionPhysioNet"/>
+    <addaction name="actionLocally"/>
    </widget>
    <widget class="QMenu" name="menuSimulate_Data">
     <property name="title">
@@ -244,6 +245,11 @@
   <action name="actionPhysioNet">
    <property name="text">
     <string>PhysioNet</string>
+   </property>
+  </action>
+  <action name="actionLocally">
+   <property name="text">
+    <string>Locally</string>
    </property>
   </action>
  </widget>
