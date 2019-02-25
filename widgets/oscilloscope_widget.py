@@ -90,7 +90,6 @@ class Oscilloscope(TemplateBaseClass):
                 self.region_updated.emit(output[min_index:max_index], index)
 
     def remove_all_linear_regions(self):
-        # self.lr = None
         for plotitem in self.plots:
             if self.lr in plotitem[0].vb.addedItems:
                 plotitem[0].vb.removeItem(self.lr)
