@@ -22,7 +22,7 @@ class Oscilloscope(TemplateBaseClass):
         self.init_cursor()
         self.init_slider()
 
-        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'k']
+        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
 
         self.lr = None
