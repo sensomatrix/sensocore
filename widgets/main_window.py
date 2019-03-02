@@ -26,6 +26,7 @@ class MainWindow(TemplateBaseClass):
         self.signals = SignalListModel(self)
         self.signals.added_signal.connect(self.plot_signal)
         self.signals.added_signals.connect(self.plot_signals)
+        self.signals.plot_psd_signal.connect(self.plot_psd_secondary)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -70,6 +71,9 @@ class MainWindow(TemplateBaseClass):
             self.ui.main_tab.setEnabled(True)
 
         self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
+
+    def plot_psd_secondary(self, signal):
+        self.ui.secondary_area.plot_psd_slot(signal)
 
     def display_psd(self, output, index):
 

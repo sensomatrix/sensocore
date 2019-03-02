@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
+from numpy import mean
 
 
 class Signal:
@@ -10,10 +11,14 @@ class Signal:
         self.name = name
         self.type = signal_type
 
+    def remove_dc(self):
+        self.samples_array = self.samples_array - mean(self.samples_array)
+
 
 class SignalListModel(QtCore.QAbstractListModel):
     added_signal = pyqtSignal(Signal)
-    added_signals= pyqtSignal(list)
+    added_signals = pyqtSignal(list)
+    plot_psd_signal = pyqtSignal(Signal)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -65,3 +70,21 @@ class SignalListModel(QtCore.QAbstractListModel):
         self.endInsertRows()
 
         self.added_signals.emit(signals)
+
+    def remove_dc(self, QModelIndex):
+        row = QModelIndex.row()
+        signal = self._signals[row]
+        signal.remove_dc()
+
+    def print(self):
+        print('what is going on')
+
+    def plot_psd(self, QModelIndex):
+        row = QModelIndex.row()
+        signal = self._signals[row]
+
+        self.plot_psd_signal.emit(signal)
+
+
+
+
