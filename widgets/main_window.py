@@ -27,6 +27,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.added_signal.connect(self.plot_signal)
         self.signals.added_signals.connect(self.plot_signals)
         self.signals.plot_psd_signal.connect(self.plot_psd_secondary)
+        self.signals.plot_time_freq_signal.connect(self.plot_time_freq_secondary)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -83,6 +84,9 @@ class MainWindow(TemplateBaseClass):
 
         self.ui.spectrum_view_plot.clear()
         self.ui.spectrum_view_plot.plot(fbins, pxx)
+
+    def plot_time_freq_secondary(self, signal):
+        self.ui.secondary_area.plot_tf_slot(signal)
 
     def clear_psd(self):
         self.ui.spectrum_view_plot.clear()

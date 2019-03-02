@@ -19,6 +19,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     added_signal = pyqtSignal(Signal)
     added_signals = pyqtSignal(list)
     plot_psd_signal = pyqtSignal(Signal)
+    plot_time_freq_signal = pyqtSignal(Signal)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -29,13 +30,11 @@ class SignalListModel(QtCore.QAbstractListModel):
 
     def data(self, QModelIndex, role=QtCore.Qt.UserRole):
         if role == QtCore.Qt.DisplayRole:
-            row = QModelIndex.row()
-            signal = self._signals[row]
+            signal = self.get_signal(QModelIndex)
             return signal.name
 
         if role == QtCore.Qt.UserRole:
-            row = QModelIndex.row()
-            signal = self._signals[row]
+            signal = self.get_signal(QModelIndex)
             return signal
 
     def flags(self, QModelIndex):
@@ -72,18 +71,20 @@ class SignalListModel(QtCore.QAbstractListModel):
         self.added_signals.emit(signals)
 
     def remove_dc(self, QModelIndex):
-        row = QModelIndex.row()
-        signal = self._signals[row]
+        signal = self.get_signal(QModelIndex)
         signal.remove_dc()
 
-    def print(self):
-        print('what is going on')
-
     def plot_psd(self, QModelIndex):
-        row = QModelIndex.row()
-        signal = self._signals[row]
-
+        signal = self.get_signal(QModelIndex)
         self.plot_psd_signal.emit(signal)
+
+    def plot_time_freq(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        self.plot_time_freq_signal.emit(signal)
+
+    def get_signal(self, QModelIndex):
+        row = QModelIndex.row()
+        return self._signals[row]
 
 
 

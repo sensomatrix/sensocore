@@ -20,24 +20,15 @@ class Channels(QListView):
 
         action = menu.addAction("Remove DC")
         action.triggered.connect(lambda: self.signals.remove_dc(item_index))
-        # menu.addAction(action)
 
         # Plot PSD button
         action = menu.addAction("Plot PSD")
         action.triggered.connect(lambda: self.model().plot_psd(item_index))
-        # self.addAction(action)
 
         # Plot Time-frequency button
         action = menu.addAction("Plot Time-Frequency")
-        # action.triggered.connect(lambda: self.parent.parent.secondary_area.plot_tf_slot(self.sig))
-        # self.addA/ction(action)
+        action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
 
         menu.exec_(self.mapToGlobal(pos))
-
-    def getSelectedChannels(self):
-        channel_id_list = []
-        for item in self.channel_list.selectedItems():
-            channel_id_list.append(item.data(Qt.UserRole))
-        return channel_id_list
 
 
