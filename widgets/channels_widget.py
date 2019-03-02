@@ -19,7 +19,7 @@ class Channels(QListView):
         item_index = self.selectedIndexes()[0]
 
         action = menu.addAction("Remove DC")
-        action.triggered.connect(lambda: self.signals.remove_dc(item_index))
+        action.triggered.connect(lambda: self.model().remove_dc(item_index))
 
         # Plot PSD button
         action = menu.addAction("Plot PSD")
