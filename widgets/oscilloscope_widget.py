@@ -30,6 +30,7 @@ class Oscilloscope(TemplateBaseClass):
         self.colorpool = cycle(self.colorlist)
 
         self.lr = None
+        self.save_lr = None
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
@@ -104,6 +105,7 @@ class Oscilloscope(TemplateBaseClass):
             if self.lr in plotitem[0].vb.addedItems:
                 plotitem[0].vb.removeItem(self.lr)
                 self.lr = None
+                self.save_lr = None
                 self.region_cleared.emit()
 
     def singlemouseclick(self, evt):
@@ -111,8 +113,9 @@ class Oscilloscope(TemplateBaseClass):
             for plotitem in self.plots:
                 if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
                     view = plotitem[0].vb
-                    save_lr = view.menu.addAction('Hello world')
-                    save_lr.triggered.connect(self.create_lr)
+                    if self.save_lr is None:
+                        self.save_lr = view.menu.addAction('Save selected window')
+                        self.save_lr.triggered.connect(self.create_lr)
 
         elif not evt.double():
             evt.accept()
