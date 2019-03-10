@@ -29,7 +29,11 @@ class Channels(QListView):
         action = menu.addAction("Plot Time-Frequency")
         action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
 
-        action = menu.addAction("View Raw Signal")
+        is_raw = self.model().is_current_mode_raw(item_index)
+
+        action_title = "View Filtered Signal" if is_raw else "View Raw Signal"
+
+        action = menu.addAction(action_title)
         action.triggered.connect(lambda: self.model().toggle_mode(item_index))
 
         menu.exec_(self.mapToGlobal(pos))
