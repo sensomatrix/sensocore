@@ -1,6 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
-from numpy import mean, array
+from numpy import mean
 
 
 class Signal:

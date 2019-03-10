@@ -63,7 +63,6 @@ class Oscilloscope(TemplateBaseClass):
 
         plot.plot(x, y)
 
-
     def create_linear_region(self, evt):
         if evt.double():
             evt.accept()
