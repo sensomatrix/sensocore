@@ -32,6 +32,7 @@ class MainWindow(TemplateBaseClass):
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
+        self.ui.oscilloscope_tab.create_signal.connect(self.create_signal)
 
         self.ui.channels.setModel(self.signals)
 
@@ -94,6 +95,9 @@ class MainWindow(TemplateBaseClass):
 
     def update_plot(self, signal, index):
         self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
+
+    def create_signal(self, time, output, index):
+        self.signals.create_child_signal(time, output, index)
 
 
 if __name__ == "__main__":

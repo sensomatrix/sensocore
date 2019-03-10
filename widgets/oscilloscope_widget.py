@@ -13,6 +13,7 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
     region_cleared = pyqtSignal()
+    create_signal = pyqtSignal(np.ndarray, np.ndarray, int)
 
     def __init__(self):
         super().__init__()
@@ -110,11 +111,22 @@ class Oscilloscope(TemplateBaseClass):
             for plotitem in self.plots:
                 if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
                     view = plotitem[0].vb
-                    view.menu.addAction('Hello world')
+                    save_lr = view.menu.addAction('Hello world')
+                    save_lr.triggered.connect(self.create_lr)
 
         elif not evt.double():
             evt.accept()
             self.remove_all_linear_regions()
+
+    def create_lr(self):
+        for index, plotitem in enumerate(self.plots):
+            if self.lr in plotitem[0].vb.addedItems:
+                minX, maxX = self.lr.getRegion()
+                time = plotitem[0].dataItems[0].xData
+                output = plotitem[0].dataItems[0].yData
+                min_index = min(range(len(time)), key=lambda i: abs(time[i] - minX))
+                max_index = min(range(len(time)), key=lambda i: abs(time[i] - maxX))
+                self.create_signal.emit(time[min_index:max_index], output[min_index:max_index], index)
 
     def get_plot(self, index):
         return self.plots[index][0]

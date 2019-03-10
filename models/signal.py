@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from numpy import mean
+import copy
 
 
 class Signal:
@@ -106,6 +107,15 @@ class SignalListModel(QtCore.QAbstractListModel):
     def get_signal(self, QModelIndex):
         row = QModelIndex.row()
         return self._signals[row]
+
+    def create_child_signal(self, time, output, index):
+        child_signal = copy.deepcopy(self._signals[index])
+        child_signal.time_array = time
+        child_signal.raw = output
+        child_signal.filtered = None
+        child_signal.current_mode = child_signal.raw
+        self.add_signal(child_signal)
+
 
 
 
