@@ -1,6 +1,6 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QModelIndex
 import numpy as np
 from utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
 from scipy.signal import freqz, convolve
@@ -23,6 +23,7 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.signals = signals
         self.current_signal = None
+        self.apply_filter_to_signal = None
 
         self.ui.apply_filter_list_view.setModel(self.signals)
         self.ui.channel_combo_box.setModel(self.signals)
@@ -30,10 +31,15 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
         self.item_changed(0)
 
+        self.filter = None
+
+        self.ui.apply_filter_list_view.clicked[QModelIndex].connect(self.apply_list_selected_item_change)
+
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
         self.ui.design_filter_button.clicked.connect(self.design_filter)
         self.ui.preview_output_button.clicked.connect(self.apply_filter_to_test_signal)
+        self.ui.apply_filter_button.clicked.connect(self.apply_filter)
 
     def item_changed(self, index):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
@@ -133,37 +139,26 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.showError("Select an input channel")
             return
         self.ui.preview_output_button.setEnabled(False)
-        filtered_samples = convolve(self.current_signal.samples_array, self.filter, mode='same')
+        filtered_samples = convolve(self.current_signal.raw, self.filter, mode='same')
 
         self.ui.signal_filter_graphics_view.addLegend()
-        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, self.current_signal.samples_array)), pen='r' ,
-                                                 name='Raw Signal')
-        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array, filtered_samples)), pen='g',
-                                                 name='Filtered Signal')
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
+                                                                  self.current_signal.raw)), pen='r', name='Raw Signal')
+        self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
+                                                                  filtered_samples)), pen='g', name='Filtered Signal')
 
-    def apply_list_selected_item_change(self, item):
-        id_ = item.data(Qt.UserRole)
-        if item.checkState() == Qt.Checked:
-            if id_ not in self.checked_channels_list:
-                self.checked_channels_list.append(id_)
-        else:
-            if id_ in self.checked_channels_list:
-                self.checked_channels_list.remove(id_)
-        if not self.checked_channels_list:
-            self.apply_filter_button.setEnabled(False)
-        else:
-            if self.filter is not None:
-                self.apply_filter_button.setEnabled(True)
+    def apply_list_selected_item_change(self, index):
+        self.apply_filter_to_signal = self.signals.getItem(index)
 
-    #
-    # def apply_filter(self):
-    #     for id_ in self.checked_channels_list:
-    #         signal = self.signals_dic.get(id_)
-    #         filtered_samples = convolve(signal.samples_array, self.filter, mode='same')
-    #         self.parent.datasets.changeSamplesArray(id_, filtered_samples)
-    #         self.parent.console.write("Filter applied to channel " + signal.name)
-    #     self.close()
-    #
+        if not self.ui.apply_filter_list_view:
+            self.ui.apply_filter_button.setEnabled(False)
+        elif self.filter is not None:
+            self.ui.apply_filter_button.setEnabled(True)
+
+    def apply_filter(self):
+        self.apply_filter_to_signal.filtered = convolve(self.current_signal.raw, self.filter, mode='same')
+        self.close()
+
     def showError(self, message):
         error_dialog = QMessageBox(self)
         error_dialog.setWindowModality(Qt.WindowModal)

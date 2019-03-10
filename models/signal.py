@@ -5,14 +5,17 @@ from numpy import mean
 
 class Signal:
     def __init__(self, samples_array, time_array, fs, name, signal_type):
-        self.samples_array = samples_array
+        self.raw = samples_array
+        self.filtered = None
         self.time_array = time_array
         self.fs = fs
         self.name = name
         self.type = signal_type
 
     def remove_dc(self):
-        self.samples_array = self.samples_array - mean(self.samples_array)
+        self.raw = self.raw - mean(self.raw)
+        if self.filtered:
+            self.filtered = self.filtered - mean(self.filtered)
 
 
 class SignalListModel(QtCore.QAbstractListModel):
@@ -24,6 +27,10 @@ class SignalListModel(QtCore.QAbstractListModel):
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
         self._signals = []
+
+    def getItem(self, QModelIndex):
+        index = QModelIndex.row()
+        return self._signals[index]
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self._signals)
