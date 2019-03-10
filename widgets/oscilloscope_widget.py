@@ -105,7 +105,11 @@ class Oscilloscope(TemplateBaseClass):
             if self.lr in plotitem[0].vb.addedItems:
                 plotitem[0].vb.removeItem(self.lr)
                 self.lr = None
-                self.save_lr = None
+
+                if self.save_lr is not None:
+                    plotitem[0].vb.menu.removeAction(self.save_lr)
+                    self.save_lr = None
+
                 self.region_cleared.emit()
 
     def singlemouseclick(self, evt):
