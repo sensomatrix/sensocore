@@ -1,4 +1,5 @@
 import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore, QtGui
 from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
@@ -21,6 +22,8 @@ class Oscilloscope(TemplateBaseClass):
 
         self.init_cursor()
         self.init_slider()
+
+        # self.multiplot_widget.mPlotItem.setMenuEnabled(False)
 
         self.colorlist = ['r', 'g', 'b', 'c', 'm', 'k']
         self.colorpool = cycle(self.colorlist)
@@ -103,7 +106,13 @@ class Oscilloscope(TemplateBaseClass):
                 self.region_cleared.emit()
 
     def singlemouseclick(self, evt):
-        if not evt.double():
+        if evt.button() == QtCore.Qt.RightButton and self.lr is not None:
+            for plotitem in self.plots:
+                if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
+                    view = plotitem[0].vb
+                    view.menu.addAction('Hello world')
+
+        elif not evt.double():
             evt.accept()
             self.remove_all_linear_regions()
 
