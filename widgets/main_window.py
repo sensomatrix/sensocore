@@ -28,6 +28,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.added_signals.connect(self.plot_signals)
         self.signals.plot_psd_signal.connect(self.plot_psd_secondary)
         self.signals.plot_time_freq_signal.connect(self.plot_time_freq_secondary)
+        self.signals.update_plot.connect(self.update_plot)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -71,7 +72,7 @@ class MainWindow(TemplateBaseClass):
         if not self.ui.main_tab.isEnabled():
             self.ui.main_tab.setEnabled(True)
 
-        self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.samples_array))
+        self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.raw))
 
     def plot_psd_secondary(self, signal):
         self.ui.secondary_area.plot_psd_slot(signal)
@@ -90,6 +91,9 @@ class MainWindow(TemplateBaseClass):
 
     def clear_psd(self):
         self.ui.spectrum_view_plot.clear()
+
+    def update_plot(self, signal, index):
+        self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
 
 
 if __name__ == "__main__":

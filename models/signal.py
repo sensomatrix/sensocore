@@ -5,14 +5,18 @@ from numpy import mean
 
 class Signal:
     def __init__(self, samples_array, time_array, fs, name, signal_type):
-        self.samples_array = samples_array
+        self.raw = samples_array
+        self.filtered = None
         self.time_array = time_array
         self.fs = fs
         self.name = name
         self.type = signal_type
+        self.current_mode = self.raw
 
     def remove_dc(self):
-        self.samples_array = self.samples_array - mean(self.samples_array)
+        self.raw = self.raw - mean(self.raw)
+        if self.filtered:
+            self.filtered = self.filtered - mean(self.filtered)
 
 
 class SignalListModel(QtCore.QAbstractListModel):
@@ -20,6 +24,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     added_signals = pyqtSignal(list)
     plot_psd_signal = pyqtSignal(Signal)
     plot_time_freq_signal = pyqtSignal(Signal)
+    update_plot = pyqtSignal(Signal, int)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -81,6 +86,22 @@ class SignalListModel(QtCore.QAbstractListModel):
     def plot_time_freq(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         self.plot_time_freq_signal.emit(signal)
+
+    def plot_filtered_signal(self, signal):
+        if signal.filtered is not None:
+            signal.current_mode = signal.filtered
+            self.update_plot.emit(signal, self._signals.index(signal))
+
+    def toggle_mode(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+
+        if signal.filtered is not None:
+            signal.current_mode = signal.filtered if signal.current_mode is signal.raw else signal.raw
+            self.update_plot.emit(signal, self._signals.index(signal))
+
+    def is_current_mode_raw(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.current_mode is signal.raw
 
     def get_signal(self, QModelIndex):
         row = QModelIndex.row()
