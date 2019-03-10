@@ -93,7 +93,7 @@ class MainWindow(TemplateBaseClass):
         self.ui.spectrum_view_plot.clear()
 
     def update_plot(self, signal, index):
-        self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.filtered), index)
+        self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
 
 
 if __name__ == "__main__":

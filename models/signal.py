@@ -92,6 +92,13 @@ class SignalListModel(QtCore.QAbstractListModel):
             signal.current_mode = signal.filtered
             self.update_plot.emit(signal, self._signals.index(signal))
 
+    def toggle_mode(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+
+        if signal.filtered is not None:
+            signal.current_mode = signal.filtered if signal.current_mode is signal.raw else signal.raw
+            self.update_plot.emit(signal, self._signals.index(signal))
+
     def get_signal(self, QModelIndex):
         row = QModelIndex.row()
         return self._signals[row]

@@ -29,6 +29,9 @@ class Channels(QListView):
         action = menu.addAction("Plot Time-Frequency")
         action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
 
+        action = menu.addAction("View Raw Signal")
+        action.triggered.connect(lambda: self.model().toggle_mode(item_index))
+
         menu.exec_(self.mapToGlobal(pos))
 
 
