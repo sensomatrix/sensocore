@@ -148,7 +148,7 @@ class FIRDesignerDialog(TemplateBaseClass):
                                                                   filtered_samples)), pen='g', name='Filtered Signal')
 
     def apply_list_selected_item_change(self, index):
-        self.apply_filter_to_signal = self.signals.getItem(index)
+        self.apply_filter_to_signal = self.signals.get_signal(index)
 
         if not self.ui.apply_filter_list_view:
             self.ui.apply_filter_button.setEnabled(False)
@@ -157,6 +157,7 @@ class FIRDesignerDialog(TemplateBaseClass):
 
     def apply_filter(self):
         self.apply_filter_to_signal.filtered = convolve(self.current_signal.raw, self.filter, mode='same')
+        self.signals.plot_filtered_signal(self.apply_filter_to_signal)
         self.close()
 
     def showError(self, message):

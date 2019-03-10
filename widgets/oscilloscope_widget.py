@@ -57,6 +57,13 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
+    def update_plot(self, x, y, index):
+        plot = self.get_plot(index)
+        plot.clear()
+
+        plot.plot(x, y)
+
+
     def create_linear_region(self, evt):
         if evt.double():
             evt.accept()
