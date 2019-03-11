@@ -5,7 +5,7 @@ class Channel:
     """object that stores each channel's info"""
 
     def __init__(self, name=None, fs=None, samples_array=None, channel_dimens=None, sensor=None, description=None,
-                 unit=None):
+                 unit=None, start_time=None, end_time=None, epochs=None):
         self.name = name
         self.fs = fs  # sampling rate
         self.samples_array = samples_array  # array of sample arrays
@@ -13,6 +13,9 @@ class Channel:
         self.sensor = sensor
         self.description = description
         self.unit = unit  # unit of the signal ex: nW, BPM
+        self.start_time = start_time
+        self.end_time = end_time
+        self.epochs = epochs
         # time array based on fs for 1 dimension channel
         if not isinstance(fs, list) and fs != "_NaN_":
             self.time_array = generateTimeArrayFromNumberOfSamples(fs, len(samples_array))
