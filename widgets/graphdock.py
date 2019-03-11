@@ -15,6 +15,7 @@ class GraphDock(Dock):
         self.graphLayout = pg.GraphicsLayout()
         self.pgview.setCentralItem(self.graphLayout)
         self.p = pg.PlotItem()
+        self.p.addLegend()
         self.graphLayout.addItem(self.p)
         self.addWidget(self.pgview)
         self.current_index = 0
@@ -31,7 +32,7 @@ class GraphDock(Dock):
         }
         # p = pg.PlotItem(title=title, axisItems=axisdict)
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
-        self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]))
+        self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
         self.current_index = (self.current_index + 1) % len(LINECOLORS)
         self.p.vb.autoRange()
         self.p.replot()
