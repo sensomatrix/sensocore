@@ -46,8 +46,8 @@ class MainWindow(TemplateBaseClass):
         self.ui.actionPhysioNet.triggered.connect(self.launch_physionet_widget)
         self.ui.actionLocally.triggered.connect(self.launch_local_file)
 
-    def launch_ecg_summary(self):
-        ecg_summary_widget = ECGSummaryWidget()
+    def launch_ecg_summary(self, ecg, raw):
+        ecg_summary_widget = ECGSummaryWidget(ecg, raw)
         ecg_summary_widget.exec_()
 
     def launch_eeg_widget(self):

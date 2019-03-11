@@ -18,7 +18,7 @@
     <widget class="PlotWidget" name="raw"/>
    </item>
    <item row="0" column="1" rowspan="3">
-    <widget class="PlotWidget" name="template_2"/>
+    <widget class="PlotWidget" name="template_plot"/>
    </item>
    <item row="1" column="0">
     <widget class="PlotWidget" name="filtered"/>
