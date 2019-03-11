@@ -36,6 +36,12 @@ class Channels(QListView):
         action = menu.addAction(action_title)
         action.triggered.connect(lambda: self.model().toggle_mode(item_index))
 
+        is_ecg = self.model().is_ecg_signal(item_index)
+
+        if is_ecg:
+            action = menu.addAction('View ECG Summary')
+            action.triggered.connect(lambda: self.model().view_ecg_summary(item_index))
+
         menu.exec_(self.mapToGlobal(pos))
 
 
