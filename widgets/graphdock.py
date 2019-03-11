@@ -25,11 +25,9 @@ class GraphDock(Dock):
             'bottom': XAxis,
             'left': YAxis
         }
-        p = pg.PlotItem(title=title, name=str(signal.id), axisItems=axisdict)
+        p = pg.PlotItem(title=title, axisItems=axisdict)
         PSDfbins, PSDxx = compute_psd(signal.samples_array, signal.fs)
         p.plot(PSDfbins, PSDxx)
-        #p.vb.setLimits(xMin=0, xMax=PSDfbins[-1], yMin=0, yMax=1.1*np.max(PSDxx))
-        #p.vb.setLimits(xMin=0, yMin=0, yMax=1.1*np.max(PSDxx))
         self.graphLayout.addItem(p)
         p.vb.autoRange()
 

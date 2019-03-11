@@ -96,7 +96,6 @@ class Oscilloscope(TemplateBaseClass):
                 self.lr = None
                 self.region_cleared.emit()
 
-
     def singlemouseclick(self, evt):
         if not evt.double():
             evt.accept()

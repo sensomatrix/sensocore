@@ -27,7 +27,7 @@ class SecondaryArea(QWidget):
         return QSize(50, 50)
 
     def plot_psd_slot(self, signal):
-        self.psd_dock.plot(signal, title="PSD - " + signal.name, XAxisLabel="frequency", YAxisLabel="PSD", XAxisUnits="Hz")
+        self.psd_dock.plot(signal, title="PSD vs Frequency", XAxisLabel="frequency", YAxisLabel="PSD", XAxisUnits="Hz")
 
     def plot_tf_slot(self, signal):
         self.tf_dock.plot_TF(signal)
