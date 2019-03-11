@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from numpy import mean
 import copy
+from biosppy.signals import ecg
 
 
 class Signal:
@@ -26,6 +27,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     plot_psd_signal = pyqtSignal(Signal)
     plot_time_freq_signal = pyqtSignal(Signal)
     update_plot = pyqtSignal(Signal, int)
+    plot_ecg_summary = pyqtSignal(object, object)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -100,9 +102,18 @@ class SignalListModel(QtCore.QAbstractListModel):
             signal.current_mode = signal.filtered if signal.current_mode is signal.raw else signal.raw
             self.update_plot.emit(signal, self._signals.index(signal))
 
+    def view_ecg_summary(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        output = ecg.ecg(signal=signal.current_mode, sampling_rate=signal.fs, show=False)
+        self.plot_ecg_summary.emit(output, signal.raw)
+
     def is_current_mode_raw(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         return signal.current_mode is signal.raw
+
+    def is_ecg_signal(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.type == 'ECG'
 
     def get_signal(self, QModelIndex):
         row = QModelIndex.row()
