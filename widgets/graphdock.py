@@ -10,17 +10,16 @@ class GraphDock(Dock):
     def __init__(self, parent, name):
         super().__init__(name, size=(1, 1), closable=True)
         self.parent = parent
-        # pg.setConfigOptions(imageAxisOrder='row-major')
         self.pgview = pg.GraphicsView()
         self.graphLayout = pg.GraphicsLayout()
         self.pgview.setCentralItem(self.graphLayout)
         self.p = pg.PlotItem()
+        self.p.addLegend()
         self.graphLayout.addItem(self.p)
         self.addWidget(self.pgview)
         self.current_index = 0
 
     def plot(self, signal, title="", XAxisLabel="", YAxisLabel="", XAxisUnits="", YAxisUnits=""):
-        # self.graphLayout.nextRow()
         XAxis = pg.AxisItem(orientation='bottom')
         XAxis.setLabel(text=XAxisLabel, units=XAxisUnits)
         YAxis = pg.AxisItem(orientation='left')
@@ -29,9 +28,8 @@ class GraphDock(Dock):
             'bottom': XAxis,
             'left': YAxis
         }
-        # p = pg.PlotItem(title=title, axisItems=axisdict)
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
-        self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]))
+        self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
         self.current_index = (self.current_index + 1) % len(LINECOLORS)
         self.p.vb.autoRange()
         self.p.replot()
