@@ -1,4 +1,5 @@
 import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore, QtGui
 from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
@@ -12,6 +13,7 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
     region_cleared = pyqtSignal()
+    create_signal = pyqtSignal(np.ndarray, np.ndarray, int)
 
     def __init__(self):
         super().__init__()
@@ -22,10 +24,13 @@ class Oscilloscope(TemplateBaseClass):
         self.init_cursor()
         self.init_slider()
 
-        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
+        # self.multiplot_widget.mPlotItem.setMenuEnabled(False)
+
+        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'k']
         self.colorpool = cycle(self.colorlist)
 
         self.lr = None
+        self.save_lr = None
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
@@ -56,6 +61,12 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
+
+    def update_plot(self, x, y, index):
+        plot = self.get_plot(index)
+        plot.clear()
+
+        plot.plot(x, y)
 
     def create_linear_region(self, evt):
         if evt.double():
@@ -94,12 +105,35 @@ class Oscilloscope(TemplateBaseClass):
             if self.lr in plotitem[0].vb.addedItems:
                 plotitem[0].vb.removeItem(self.lr)
                 self.lr = None
+
+                if self.save_lr is not None:
+                    plotitem[0].vb.menu.removeAction(self.save_lr)
+                    self.save_lr = None
+
                 self.region_cleared.emit()
 
     def singlemouseclick(self, evt):
-        if not evt.double():
+        if evt.button() == QtCore.Qt.RightButton and self.lr is not None:
+            for plotitem in self.plots:
+                if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
+                    view = plotitem[0].vb
+                    if self.save_lr is None:
+                        self.save_lr = view.menu.addAction('Save selected window')
+                        self.save_lr.triggered.connect(self.create_lr)
+
+        elif not evt.double():
             evt.accept()
             self.remove_all_linear_regions()
+
+    def create_lr(self):
+        for index, plotitem in enumerate(self.plots):
+            if self.lr in plotitem[0].vb.addedItems:
+                minX, maxX = self.lr.getRegion()
+                time = plotitem[0].dataItems[0].xData
+                output = plotitem[0].dataItems[0].yData
+                min_index = min(range(len(time)), key=lambda i: abs(time[i] - minX))
+                max_index = min(range(len(time)), key=lambda i: abs(time[i] - maxX))
+                self.create_signal.emit(time[min_index:max_index], output[min_index:max_index], index)
 
     def get_plot(self, index):
         return self.plots[index][0]
