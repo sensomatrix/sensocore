@@ -4,6 +4,8 @@ from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
 import os
+from scipy import random
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/oscilloscope.ui')
@@ -27,6 +29,8 @@ class Oscilloscope(TemplateBaseClass):
         self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
 
+        self.multiplot_widget.setMinimumPlotHeight(150)
+
         self.lr = None
         self.save_lr = None
 
@@ -41,6 +45,8 @@ class Oscilloscope(TemplateBaseClass):
         self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
 
     def display_graph(self, x, y):
+        self.multiplot_widget.resizeEvent(None)
+
         data_buffer = np.zeros((1, len(x)))
         for i in range(len(x)):
             data_buffer[0][i] = y[i]
