@@ -24,9 +24,7 @@ class Oscilloscope(TemplateBaseClass):
         self.init_cursor()
         self.init_slider()
 
-        # self.multiplot_widget.mPlotItem.setMenuEnabled(False)
-
-        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'k']
+        self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
 
         self.lr = None
