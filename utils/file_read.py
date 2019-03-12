@@ -4,12 +4,17 @@ from models.signal import Signal
 import numpy as np
 from PyQt5.QtWidgets import QAction, QFileDialog
 from PyQt5.QtCore import pyqtSignal, QObject
-
+from pathlib import Path
 
 # dialog used to load a complete dataset. to do: deal with the case user clicks on "cancel"
 def open_dataset_dialog(parent):
-    openfilepath = QFileDialog.getOpenFileName(parent)
-    if openfilepath[0]:
+    home = str(Path.home())
+    dir = os.path.join(home, 'Bio Signals')
+
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    openfilepath = QFileDialog.getExistingDirectory(None, 'Select a folder:', dir, QFileDialog.ShowDirsOnly)
+    if openfilepath != '':
         return load_from_file(openfilepath[0])
         # for signal in signals:
         #     self.signal_loaded_signal.emit(sig)
