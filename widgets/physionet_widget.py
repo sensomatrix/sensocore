@@ -36,14 +36,22 @@ class PhysioNetWidget(TemplateBaseClass):
         siglist = []
         for index, channel in enumerate(record.sig_name):
             sig_name = channel
-            sig_samples = record.p_signal[:, index].reshape(record.p_signal.size, 1)
-            sig_timearray = generateTimeArrayFromNumberOfSamples(fs, sig_samples.size).reshape(sig_samples.size, 1)
+            sig_samples = record.p_signal[:, index].reshape(record.p_signal.shape[0], 1)
+            sig_timearray = generateTimeArrayFromNumberOfSamples(fs, sig_samples.shape[0]).reshape(sig_samples.shape)
 
             output = np.hstack([sig_timearray, sig_samples])
 
+            signal_type = ''
+
+            if self.ui.ecg.isChecked():
+                signal_type = 'ECG'
+            elif self.ui.eeg.isChecked():
+                signal_type = 'EEG'
+
+
             sig = Signal(output,
                          fs=fs,
-                         name='Physionet {0} Signal'.format(sig_name), signal_type=sig_name)
+                         name='Physionet {0} Signal'.format(sig_name), signal_type=signal_type)
             siglist.append(sig)
 
         self.signals.add_signals(siglist)
