@@ -37,9 +37,23 @@ class EEGSummaryWidget(TemplateBaseClass):
         gamma_band = np.linspace(25, 40, eeg[7].size)
 
         self.ui.theta.plot(theta_band, eeg[3].reshape((eeg[3].size,)), pwn='w')
+        self.ui.theta.setLabel('left', "Amplitude", units='A')
+        self.ui.theta.setLabel('bottom', "Frequency", units='Hz')
+
         self.ui.alpha_low.plot(alpha_low_band, eeg[4].reshape((eeg[4].size,)), pen='w')
+        self.ui.alpha_low.setLabel('left', "Amplitude", units='A')
+        self.ui.alpha_low.setLabel('bottom', "Frequency", units='Hz')
+
         self.ui.alpha_high.plot(alpha_high_band, eeg[5].reshape((eeg[5].size,)), pen='w')
+        self.ui.alpha_high.setLabel('left', "Amplitude", units='A')
+        self.ui.alpha_high.setLabel('bottom', "Frequency", units='Hz')
+
         self.ui.beta.plot(beta_band, eeg[6].reshape((eeg[6].size,)), pen='w')
+        self.ui.beta.setLabel('left', "Amplitude", units='A')
+        self.ui.beta.setLabel('bottom', "Frequency", units='Hz')
+
         self.ui.gamma.plot(gamma_band, eeg[7].reshape((eeg[7].size,)), pen='w')
+        self.ui.gamma.setLabel('left', "Amplitude", units='A')
+        self.ui.gamma.setLabel('bottom', "Frequency", units='Hz')
 
         self.show()
