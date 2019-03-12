@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1048</width>
+    <height>685</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="PlotWidget" name="raw"/>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="filtered"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0">
+     <item>
+      <widget class="PlotWidget" name="theta"/>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="alpha_low"/>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="alpha_high"/>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="beta"/>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="gamma"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

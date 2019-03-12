@@ -5,6 +5,7 @@ from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
 from widgets.ecg_summary_widget import ECGSummaryWidget
+from widgets.eeg_summary_widget import EEGSummaryWidget
 from models.signal import SignalListModel
 from utils import file_read
 from PyQt5.QtCore import QModelIndex
@@ -31,6 +32,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.plot_time_freq_signal.connect(self.plot_time_freq_secondary)
         self.signals.update_plot.connect(self.update_plot)
         self.signals.plot_ecg_summary.connect(self.launch_ecg_summary)
+        self.signals.plot_eeg_summary.connect(self.launch_eeg_summary)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -49,6 +51,10 @@ class MainWindow(TemplateBaseClass):
     def launch_ecg_summary(self, ecg, raw):
         ecg_summary_widget = ECGSummaryWidget(ecg, raw)
         ecg_summary_widget.exec_()
+
+    def launch_eeg_summary(self, eeg, raw):
+        eeg_summary_widget = EEGSummaryWidget(eeg, raw)
+        eeg_summary_widget.exec_()
 
     def launch_eeg_widget(self):
         eeg_sim_widget = EEGSimulationWidget(self.signals)
@@ -79,7 +85,7 @@ class MainWindow(TemplateBaseClass):
         if not self.ui.main_tab.isEnabled():
             self.ui.main_tab.setEnabled(True)
 
-        self.ui.oscilloscope_tab.display_graph(signal.time_array, np.transpose(signal.raw))
+        self.ui.oscilloscope_tab.display_graph(signal.time_array, signal.raw)
 
     def plot_psd_secondary(self, signal):
         self.ui.secondary_area.plot_psd_slot(signal)

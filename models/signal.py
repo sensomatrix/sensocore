@@ -2,14 +2,23 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from numpy import mean
 import copy
-from biosppy.signals import ecg
+from biosppy import signals
+import numpy as np
 
 
 class Signal:
-    def __init__(self, samples_array, time_array, fs, name, signal_type):
-        self.raw = samples_array
+    def __init__(self, samples_array, fs, name, signal_type):
+        self.summary = None
+        if signal_type == 'EEG':
+            eeg = np.transpose(samples_array)[1]
+            eeg = np.reshape(eeg, (eeg.size, 1))
+            self.summary = signals.eeg.eeg(eeg, fs, show=False)
+        elif signal_type == 'ECG':
+            ecg = np.transpose(samples_array)[1]
+            self.summary = signals.ecg.ecg(ecg, fs, show=False)
+        self.raw = samples_array.T[1]
         self.filtered = None
-        self.time_array = time_array
+        self.time_array = samples_array.T[0]
         self.fs = fs
         self.name = name
         self.type = signal_type
@@ -28,6 +37,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     plot_time_freq_signal = pyqtSignal(Signal)
     update_plot = pyqtSignal(Signal, int)
     plot_ecg_summary = pyqtSignal(object, object)
+    plot_eeg_summary = pyqtSignal(object, object)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -104,8 +114,11 @@ class SignalListModel(QtCore.QAbstractListModel):
 
     def view_ecg_summary(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
-        output = ecg.ecg(signal=signal.current_mode, sampling_rate=signal.fs, show=False)
-        self.plot_ecg_summary.emit(output, signal.raw)
+        self.plot_ecg_summary.emit(signal.summary, signal.raw)
+
+    def view_eeg_summary(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        self.plot_eeg_summary.emit(signal.summary, signal.raw)
 
     def is_current_mode_raw(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
@@ -114,6 +127,10 @@ class SignalListModel(QtCore.QAbstractListModel):
     def is_ecg_signal(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         return signal.type == 'ECG'
+
+    def is_eeg_signal(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.type == 'EEG'
 
     def get_signal(self, QModelIndex):
         row = QModelIndex.row()

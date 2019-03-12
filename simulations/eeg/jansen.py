@@ -62,11 +62,19 @@ def simulate_eeg_jansen(duration=10, fs=256, C1=135, noise_magnitude=0, callback
     ode_y = ode_y[-(duration * fs + 1):]
     ode_time = asarray(ode_time, dtype=dtype(float))
     ode_time = ode_time - ode_time[0]
+
+    ode_time = np.reshape(ode_time, (ode_time.size, 1))
     ode_y = asarray(ode_y, dtype=dtype(float))
+    ode_y = np.reshape(ode_y, (ode_y.shape[0], 1))
 
     noise = np.random.normal(0, noise_magnitude, ode_time.shape)
 
     output = noise + ode_y
 
-    return ode_time, output  # return a tuple with time and y.
+    ode_time = np.reshape(ode_time, (ode_time.shape[0], 1))
+    output = np.reshape(output, (output.shape[0], 1))
+
+    eeg = np.hstack([ode_time, output])
+
+    return eeg  # return a tuple with time and y.
 
