@@ -591,7 +591,7 @@
              <double>21600.000000000000000</double>
             </property>
             <property name="value">
-             <double>0.900000000000000</double>
+             <double>10.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -701,7 +701,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header>pyqtgraph</header>
+   <header location="global">pyqtgraph</header>
   </customwidget>
  </customwidgets>
  <resources/>

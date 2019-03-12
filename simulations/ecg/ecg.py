@@ -78,7 +78,12 @@ def generate_ecg(sampling_frequency, noise_magnitude, end_time, period, delay,
 	if callback is not None:
 		callback(100)
 
-	return x, output
+	x = np.reshape(x, (x.shape[0], 1))
+	output = np.reshape(output, (output.shape[0], 1))
+
+	ecg = np.hstack([x, output])
+
+	return ecg
 
 
 def generateWave(x, wave_params, wave):

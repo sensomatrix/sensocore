@@ -39,7 +39,6 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.delay_default = self.delay
         self.noise_default = self.noise
         self.period_default = self.period
-        self.time = []
         self.ecg_output = []
 ###############################################################################################
 
@@ -85,7 +84,7 @@ class ECGSimulationWidget(TemplateBaseClass):
 ###############################################################################################
         self.generate_plot()
 
-        self.plot = self.ui.plot.plot(self.time, self.ecg_output)
+        self.plot = self.ui.plot.plot(self.ecg_output)
         self.plot.getViewBox().setMouseEnabled(y=False)
 
         self.show()
@@ -93,16 +92,16 @@ class ECGSimulationWidget(TemplateBaseClass):
 # Methods
 ###############################################################################################
     def generate_plot(self, is_for_graphing=True):
-        self.time, self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
+        self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
                                                   self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=is_for_graphing)
 
     def update_plot(self):
         self.generate_plot()
-        self.plot.setData(self.time, self.ecg_output)
+        self.plot.setData(self.ecg_output)
 
     def generate_signal(self):
         self.generate_plot(is_for_graphing=False)
-        signal = Signal(self.ecg_output, self.time, self.sampling_frequency, self.name, 'ECG')
+        signal = Signal(self.ecg_output, self.sampling_frequency, self.name, 'ECG')
         self.signals.add_signal(signal)
         self.close()
 
@@ -142,8 +141,8 @@ class ECGSimulationWidget(TemplateBaseClass):
             mousePoint = self.ui.plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
 
-            index = min(range(len(self.time)), key=lambda i: abs(self.time[i] - mousePoint.x()))
-            self.hLine.setPos(self.ecg_output[index])
+            index = min(range(len(self.ecg_output[0])), key=lambda i: abs(self.ecg_output[0][i] - mousePoint.x()))
+            self.hLine.setPos(self.ecg_output[1][index])
 ###############################################################################################
 
     # Properties

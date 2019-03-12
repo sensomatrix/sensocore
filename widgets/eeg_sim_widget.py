@@ -5,6 +5,7 @@ from models.signal import Signal
 import os
 import _thread
 import time
+import sys
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +38,6 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.fs_default = self.sampling_frequency
         self.duration_default = self.duration
         self.noise_default = self.noise
-        self.time = []
         self.eeg_output = []
 ###############################################################################################
 
@@ -50,10 +50,10 @@ class EEGSimulationWidget(TemplateBaseClass):
 ###############################################################################################
         self.generate_plot(True)
 
-        self.zoomed_plot = self.ui.zoomed_plot.plot(self.time, self.eeg_output, pen="g")
+        self.zoomed_plot = self.ui.zoomed_plot.plot(self.eeg_output, pen="g")
         self.zoomed_plot.getViewBox().setMouseEnabled(y=False)
 
-        self.main_plot = self.ui.main_plot.plot(self.time, self.eeg_output)
+        self.main_plot = self.ui.main_plot.plot(self.eeg_output)
         self.main_plot.getViewBox().setMouseEnabled(x=False, y=False)
 
         self.region = pg.LinearRegionItem()
@@ -82,7 +82,7 @@ class EEGSimulationWidget(TemplateBaseClass):
     def generate_signal(self):
         if self.duration != self.duration_default:
             self.generate_plot(False)
-        signal = Signal(self.eeg_output, self.time, self.sampling_frequency, self.name, 'EEG')
+        signal = Signal(self.eeg_output, self.sampling_frequency, self.name, 'EEG')
         self.signals.add_signal(signal)
         self.close()
 
@@ -93,7 +93,7 @@ class EEGSimulationWidget(TemplateBaseClass):
 
         self.simulate_progress_bar()
 
-        while _thread._count() > 0:
+        while (_thread._count() > 1 and sys.gettrace() is None) and _thread._count() > 0:
             pass
 
     def simulate_progress_bar(self):
@@ -105,7 +105,7 @@ class EEGSimulationWidget(TemplateBaseClass):
     def simulate_eeg(self, for_graphing):
         duration = self.duration_default if for_graphing else self.duration
 
-        self.time, self.eeg_output = simulate_eeg_jansen(fs=self.sampling_frequency, C1=self.c1,
+        self.eeg_output = simulate_eeg_jansen(fs=self.sampling_frequency, C1=self.c1,
                                                          noise_magnitude=self.noise, callback=self.current_progress, duration=duration)
 
     def current_progress(self, current_percentage):
@@ -113,8 +113,8 @@ class EEGSimulationWidget(TemplateBaseClass):
 
     def update_plot(self):
         self.generate_plot(True)
-        self.zoomed_plot.setData(self.time, self.eeg_output)
-        self.main_plot.setData(self.time, self.eeg_output)
+        self.zoomed_plot.setData(self.eeg_output)
+        self.main_plot.setData(self.eeg_output)
 
     def reset_to_default(self):
         self.ui.c1_spinbox.setValue(self.c1_default)
@@ -128,8 +128,8 @@ class EEGSimulationWidget(TemplateBaseClass):
             mousePoint = self.ui.zoomed_plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
 
-            index = min(range(len(self.time)), key=lambda i: abs(self.time[i] - mousePoint.x()))
-            self.hLine.setPos(self.eeg_output[index])
+            index = min(range(len(self.eeg_output[0])), key=lambda i: abs(self.eeg_output[0][i] - mousePoint.x()))
+            self.hLine.setPos(self.eeg_output[1][index])
 ###############################################################################################
 
     # Properties
