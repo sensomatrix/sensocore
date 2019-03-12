@@ -9,11 +9,11 @@ import numpy as np
 class Signal:
     def __init__(self, samples_array, fs, name, signal_type):
         self.summary = None
-        if signal_type == 'EEG':
+        if 'EEG' in signal_type:
             eeg = np.transpose(samples_array)[1]
             eeg = np.reshape(eeg, (eeg.size, 1))
             self.summary = signals.eeg.eeg(eeg, fs, show=False)
-        elif signal_type == 'ECG':
+        elif 'ECG' in signal_type:
             ecg = np.transpose(samples_array)[1]
             self.summary = signals.ecg.ecg(ecg, fs, show=False)
         self.raw = samples_array.T[1]
