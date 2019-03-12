@@ -20,7 +20,7 @@ def open_dataset_dialog(parent):
 
     if not os.path.exists(dir):
         os.makedirs(dir)
-    openfilepath = QFileDialog.getExistingDirectory(None, 'Select a folder:', dir, QFileDialog.ShowDirsOnly)
+    openfilepath = QFileDialog.getOpenFileName(None, 'Select a folder:', dir)
     if openfilepath != '':
         return load_from_file(openfilepath[0])
         # for signal in signals:
@@ -29,6 +29,9 @@ def open_dataset_dialog(parent):
 
 def load_from_file(path_to_file):
     signals = []
+    if re.search("\.json$", path_to_file):  # if json file
+        signals = load_from_json(path_to_file)
+        return signals
     with open(path_to_file, 'r') as fileObject:
         lines = readnextlines(fileObject, 5)
         while len(lines) == 5:
@@ -128,14 +131,17 @@ def load_from_json(filepath):
                 samplingrate = c.fs[s]
                 time_array = (np.asarray(c.time_array[s])).astype(np.float32)
                 samples_array = (np.asarray(c.samples_array[s])).astype(np.float32)
-                sig = Signal(samples_array, time_array=time_array, name=name, signal_type=typeofsignal, fs=samplingrate)
+                signal = np.hstack([time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
+                sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
                 signals.append(sig)
         else:  # if single signal in 1 channel
             name = c.name
             typeofsignal = c.sensor
             samplingrate = c.fs
-            time_array = (np.asarray(c.time_array)).astype(np.float32)
-            samples_array = (np.asarray(c.samples_array)).astype(np.float32)
-            sig = Signal(samples_array, time_array=time_array, name=name, signal_type=typeofsignal, fs=samplingrate)
+            samples = len(c.time_array)
+            time_array = (np.asarray(c.time_array)).astype(np.float32).reshape((samples, 1))
+            samples_array = (np.asarray(c.samples_array)).astype(np.float32).reshape((samples, 1))
+            signal = np.hstack([time_array, samples_array])
+            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
             signals.append(sig)
     return signals
