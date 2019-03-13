@@ -85,7 +85,7 @@ class MainWindow(TemplateBaseClass):
         if not self.ui.main_tab.isEnabled():
             self.ui.main_tab.setEnabled(True)
 
-        self.ui.oscilloscope_tab.display_graph(signal.time_array, signal.raw)
+        self.ui.oscilloscope_tab.display_graph(signal.time_array, signal.raw, signal.name)
 
     def plot_psd_secondary(self, signal):
         self.ui.secondary_area.plot_psd_slot(signal)

@@ -29,7 +29,7 @@ class Oscilloscope(TemplateBaseClass):
         self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
 
-        self.multiplot_widget.setMinimumPlotHeight(150)
+        self.multiplot_widget.setMinimumPlotHeight(250)
 
         self.lr = None
         self.save_lr = None
@@ -44,14 +44,14 @@ class Oscilloscope(TemplateBaseClass):
     def init_slider(self):
         self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
 
-    def display_graph(self, x, y):
+    def display_graph(self, x, y, name):
         self.multiplot_widget.resizeEvent(None)
 
         data_buffer = np.zeros((1, len(x)))
         for i in range(len(x)):
             data_buffer[0][i] = y[i]
 
-        ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Amplitude (mV)"}]},
+        ma = MetaArray(data_buffer, info=[{"cols": [{"name": name, 'units': 'V'}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
 
