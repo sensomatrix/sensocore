@@ -144,7 +144,9 @@ class SignalListModel(QtCore.QAbstractListModel):
     def is_list_empty(self):
         return len(self._signals) == 0
 
-
+    def does_signal_contain_filtered(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.filtered is not None
 
 
 

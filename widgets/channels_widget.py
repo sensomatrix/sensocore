@@ -29,12 +29,13 @@ class Channels(QListView):
         action = menu.addAction("Plot Time-Frequency")
         action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
 
-        is_raw = self.model().is_current_mode_raw(item_index)
+        if self.model().does_signal_contain_filtered(item_index):
+            is_raw = self.model().is_current_mode_raw(item_index)
 
-        action_title = "View Filtered Signal" if is_raw else "View Raw Signal"
+            action_title = "View Filtered Signal" if is_raw else "View Raw Signal"
 
-        action = menu.addAction(action_title)
-        action.triggered.connect(lambda: self.model().toggle_mode(item_index))
+            action = menu.addAction(action_title)
+            action.triggered.connect(lambda: self.model().toggle_mode(item_index))
 
         is_ecg = self.model().is_ecg_signal(item_index)
         is_eeg = self.model().is_eeg_signal(item_index)
