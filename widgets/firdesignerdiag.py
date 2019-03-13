@@ -71,7 +71,6 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.ui.stopband_edge_line_edit.setText(data[1])
             self.ui.estimate_taps_button.animateClick()
 
-
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
         if savefilepath[0]:
