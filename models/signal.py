@@ -27,9 +27,7 @@ class Signal:
             self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
 
     def remove_dc(self):
-        self.raw = self.raw - mean(self.raw)
-        if self.filtered:
-            self.filtered = self.filtered - mean(self.filtered)
+        self.current_mode = self.current_mode - mean(self.current_mode)
 
 
 class SignalListModel(QtCore.QAbstractListModel):
@@ -93,6 +91,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     def remove_dc(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         signal.remove_dc()
+        self.update_plot.emit(signal, QModelIndex.row())
 
     def plot_psd(self, QModelIndex):
         signal = self.get_signal(QModelIndex)

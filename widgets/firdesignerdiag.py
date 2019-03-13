@@ -29,6 +29,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.channel_combo_box.setModel(self.signals)
 
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
+        self.ui.signal_specific_filter_combo_box.currentIndexChanged.connect(self.update_filter_options)
 
         self.filter = None
 
@@ -55,6 +56,63 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
         self.ui.sampling_frequency_label.setText('fs: ' + str(self.current_signal.fs) + 'Hz')
         self.ui.sampling_frequency_line_edit.setText(str(int(self.current_signal.fs / 2)))
+
+        self.ui.signal_specific_filter_combo_box.clear()
+
+        self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
+
+        if 'EEG' in self.current_signal.type or 'ECG' in self.current_signal.type:
+            self.ui.signal_specific_filter_combo_box.addItem('Power Line Noise Filter', ['49', '51', 'notch'])
+
+        if 'EEG' in self.current_signal.type:
+            self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13', 'alpha'])
+            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7', 'beta'])
+
+        if 'ECG' in self.current_signal.type:
+            self.ui.signal_specific_filter_combo_box.addItem('Respiration Filter', ['0.4', '2', 'respiration'])
+            self.ui.signal_specific_filter_combo_box.addItem('Movement Filter', ['1', '3', 'movement'])
+            self.ui.signal_specific_filter_combo_box.addItem('Transport Filter', ['3', '15', 'transport'])
+            self.ui.signal_specific_filter_combo_box.addItem('Muscle Tension/Tremor Filter', ['20', '150', 'tension'])
+
+    def update_filter_options(self, index):
+        data = self.ui.signal_specific_filter_combo_box.itemData(index)
+        if data is not None:
+            self.ui.passband_edge_line_edit.setText(data[0])
+            self.ui.stopband_edge_line_edit.setText(data[1])
+
+            if data[2] == 'alpha':
+                self.ui.band_edges_line_edit.setText('0 7 8 13 14 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
+
+            elif data[2] == 'beta':
+                self.ui.band_edges_line_edit.setText('0 3 4 7 8 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
+
+            elif data[2] == 'notch':
+                self.ui.band_edges_line_edit.setText('0 48 49 50 51 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'respiration':
+                self.ui.band_edges_line_edit.setText('0 0.3 0.4 3 4 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'movement':
+                self.ui.band_edges_line_edit.setText('0 0.5 1 3 4 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'transport':
+                self.ui.band_edges_line_edit.setText('0 2 3 15 16 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'tension':
+                self.ui.band_edges_line_edit.setText('0 19 20 150 151 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            self.ui.estimate_taps_button.animateClick()
+            self.ui.design_filter_button.animateClick()
+        else:
+            self.ui.filter_graphics_view.clear()
+            self.ui.signal_filter_graphics_view.clear()
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
@@ -151,12 +209,12 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.showError("Select an input channel")
             return
         self.ui.preview_output_button.setEnabled(False)
-        filtered_samples = convolve(self.current_signal.raw, self.filter, mode='same')
+        filtered_samples = convolve(self.current_signal.current_mode, self.filter, mode='same')
 
         self.ui.signal_filter_graphics_view.clear()
         self.ui.signal_filter_graphics_view.addLegend()
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
-                                                                  self.current_signal.raw)), pen='r', name='Raw Signal')
+                                                                  self.current_signal.current_mode)), pen='r', name='Raw Signal')
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
                                                                   filtered_samples)), pen='g', name='Filtered Signal')
 
