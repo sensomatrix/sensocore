@@ -130,6 +130,7 @@ class FIRDesignerDialog(TemplateBaseClass):
                     desired_new.append(gain)
                 desired = np.asarray(desired_new, dtype=np.float32)
 
+            self.ui.filter_graphics_view.clear()
             self.ui.filter_graphics_view.addLegend()
             self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r', name='Ideal Filter')
             self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g', name='Actual Filter')
@@ -141,6 +142,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.preview_output_button.setEnabled(False)
         filtered_samples = convolve(self.current_signal.raw, self.filter, mode='same')
 
+        self.ui.signal_filter_graphics_view.clear()
         self.ui.signal_filter_graphics_view.addLegend()
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
                                                                   self.current_signal.raw)), pen='r', name='Raw Signal')
