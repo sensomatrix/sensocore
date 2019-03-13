@@ -29,6 +29,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.channel_combo_box.setModel(self.signals)
 
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
+        self.ui.signal_specific_filter_combo_box.currentIndexChanged.connect(self.update_filter_options)
 
         self.filter = None
 
@@ -55,6 +56,21 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
         self.ui.sampling_frequency_label.setText('fs: ' + str(self.current_signal.fs) + 'Hz')
         self.ui.sampling_frequency_line_edit.setText(str(int(self.current_signal.fs / 2)))
+
+        self.ui.signal_specific_filter_combo_box.clear()
+
+        if self.current_signal.type == 'EEG':
+            self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
+            self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13'])
+            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7'])
+
+    def update_filter_options(self, index):
+        data = self.ui.signal_specific_filter_combo_box.itemData(index)
+        if data is not None:
+            self.ui.passband_edge_line_edit.setText(data[0])
+            self.ui.stopband_edge_line_edit.setText(data[1])
+            self.ui.estimate_taps_button.animateClick()
+
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
