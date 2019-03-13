@@ -141,6 +141,9 @@ class SignalListModel(QtCore.QAbstractListModel):
         child_signal = Signal(output, parent.fs, parent.name, parent.type)
         self.add_signal(child_signal)
 
+    def is_list_empty(self):
+        return len(self._signals) == 0
+
 
 
 

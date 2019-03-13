@@ -1,5 +1,5 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
@@ -69,8 +69,16 @@ class MainWindow(TemplateBaseClass):
         physionet.exec_()
 
     def launch_fir_filter_widget(self):
-        fir_filter = FIRDesignerDialog(self.signals)
-        fir_filter.exec_()
+        if not self.signals.is_list_empty():
+            fir_filter = FIRDesignerDialog(self.signals)
+            fir_filter.exec_()
+        else:
+            no_signals_message_box = QMessageBox()
+            no_signals_message_box.setIcon(QMessageBox.Warning)
+            no_signals_message_box.setText("There is no signal to filter")
+            no_signals_message_box.setWindowTitle("FIR Filter Warning")
+            no_signals_message_box.setStandardButtons(QMessageBox.Ok)
+            no_signals_message_box.exec_()
 
     def launch_local_file(self):
         signals = file_read.open_dataset_dialog(self)
