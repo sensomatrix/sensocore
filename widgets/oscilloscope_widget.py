@@ -71,7 +71,9 @@ class Oscilloscope(TemplateBaseClass):
         plot = self.get_plot(index)
         plot.clear()
 
-        plot.plot(x, y)
+        signal_color = self.colorlist[int(index % len(self.colorlist))]
+
+        plot.plot(x, y, pen=signal_color)
 
     def create_linear_region(self, evt):
         if evt.double():
