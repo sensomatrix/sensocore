@@ -35,11 +35,20 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.ui.apply_filter_list_view.clicked[QModelIndex].connect(self.apply_list_selected_item_change)
 
+        self.ui.sampling_frequency_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+        self.ui.passband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+        self.ui.stopband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
         self.ui.design_filter_button.clicked.connect(self.design_filter)
         self.ui.preview_output_button.clicked.connect(self.apply_filter_to_test_signal)
         self.ui.apply_filter_button.clicked.connect(self.apply_filter)
+
+    def change_desired_band_edges_text(self):
+        self.ui.band_edges_line_edit.setText('{0} {1} {2} {3}'.format(0, self.ui.passband_edge_line_edit.text(),
+                                                                      self.ui.stopband_edge_line_edit.text(),
+                                                                      self.ui.sampling_frequency_line_edit.text()))
 
     def item_changed(self, index):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
