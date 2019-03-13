@@ -141,8 +141,9 @@ class ECGSimulationWidget(TemplateBaseClass):
             mousePoint = self.ui.plot.plotItem.vb.mapSceneToView(pos)
             self.vLine.setPos(mousePoint.x())
 
-            index = min(range(len(self.ecg_output[0])), key=lambda i: abs(self.ecg_output[0][i] - mousePoint.x()))
-            self.hLine.setPos(self.ecg_output[1][index])
+            time = self.ecg_output.transpose()[0]
+            index = min(range(len(time)), key=lambda i: abs(time[i] - mousePoint.x()))
+            self.hLine.setPos(self.ecg_output[index][1])
 ###############################################################################################
 
     # Properties
