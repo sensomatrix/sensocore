@@ -9,13 +9,6 @@ import numpy as np
 class Signal:
     def __init__(self, samples_array, fs, name, signal_type):
         self.summary = None
-        if 'EEG' in signal_type:
-            eeg = np.transpose(samples_array)[1]
-            eeg = np.reshape(eeg, (eeg.size, 1))
-            self.summary = signals.eeg.eeg(eeg, fs, show=False)
-        elif 'ECG' in signal_type:
-            ecg = np.transpose(samples_array)[1]
-            self.summary = signals.ecg.ecg(ecg, fs, show=False)
         self.raw = samples_array.T[1]
         self.filtered = None
         self.time_array = samples_array.T[0]
@@ -23,6 +16,15 @@ class Signal:
         self.name = name
         self.type = signal_type
         self.current_mode = self.raw
+        self.create_summary()
+
+    def create_summary(self):
+        if 'EEG' in self.type:
+            eeg = np.transpose(self.current_mode).reshape((self.current_mode.shape[0], 1))
+            self.summary = signals.eeg.eeg(eeg, self.fs, show=False)
+        elif 'ECG' in self.type:
+            ecg = np.transpose(self.current_mode)
+            self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
 
     def remove_dc(self):
         self.raw = self.raw - mean(self.raw)
@@ -103,6 +105,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     def plot_filtered_signal(self, signal):
         if signal.filtered is not None:
             signal.current_mode = signal.filtered
+            signal.create_summary()
             self.update_plot.emit(signal, self._signals.index(signal))
 
     def toggle_mode(self, QModelIndex):
@@ -114,11 +117,11 @@ class SignalListModel(QtCore.QAbstractListModel):
 
     def view_ecg_summary(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
-        self.plot_ecg_summary.emit(signal.summary, signal.raw)
+        self.plot_ecg_summary.emit(signal.summary, signal.current_mode)
 
     def view_eeg_summary(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
-        self.plot_eeg_summary.emit(signal.summary, signal.raw)
+        self.plot_eeg_summary.emit(signal.summary, signal.current_mode)
 
     def is_current_mode_raw(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
@@ -136,15 +139,17 @@ class SignalListModel(QtCore.QAbstractListModel):
         row = QModelIndex.row()
         return self._signals[row]
 
-    def create_child_signal(self, time, output, index):
-        child_signal = copy.deepcopy(self._signals[index])
-        child_signal.time_array = time
-        child_signal.raw = output
-        child_signal.filtered = None
-        child_signal.current_mode = child_signal.raw
+    def create_child_signal(self, output, index):
+        parent = self._signals[index]
+        child_signal = Signal(output, parent.fs, parent.name, parent.type)
         self.add_signal(child_signal)
 
+    def is_list_empty(self):
+        return len(self._signals) == 0
 
+    def does_signal_contain_filtered(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.filtered is not None
 
 
 

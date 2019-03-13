@@ -1,5 +1,5 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
@@ -69,8 +69,16 @@ class MainWindow(TemplateBaseClass):
         physionet.exec_()
 
     def launch_fir_filter_widget(self):
-        fir_filter = FIRDesignerDialog(self.signals)
-        fir_filter.exec_()
+        if not self.signals.is_list_empty():
+            fir_filter = FIRDesignerDialog(self.signals)
+            fir_filter.exec_()
+        else:
+            no_signals_message_box = QMessageBox()
+            no_signals_message_box.setIcon(QMessageBox.Warning)
+            no_signals_message_box.setText("There is no signal to filter")
+            no_signals_message_box.setWindowTitle("FIR Filter Warning")
+            no_signals_message_box.setStandardButtons(QMessageBox.Ok)
+            no_signals_message_box.exec_()
 
     def launch_local_file(self):
         signals = file_read.open_dataset_dialog(self)
@@ -85,7 +93,7 @@ class MainWindow(TemplateBaseClass):
         if not self.ui.main_tab.isEnabled():
             self.ui.main_tab.setEnabled(True)
 
-        self.ui.oscilloscope_tab.display_graph(signal.time_array, signal.raw)
+        self.ui.oscilloscope_tab.display_graph(signal.time_array, signal.raw, signal.name)
 
     def plot_psd_secondary(self, signal):
         self.ui.secondary_area.plot_psd_slot(signal)
@@ -108,8 +116,8 @@ class MainWindow(TemplateBaseClass):
     def update_plot(self, signal, index):
         self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
 
-    def create_signal(self, time, output, index):
-        self.signals.create_child_signal(time, output, index)
+    def create_signal(self, output, index):
+        self.signals.create_child_signal(output, index)
 
 
 if __name__ == "__main__":

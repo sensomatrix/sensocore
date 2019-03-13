@@ -29,11 +29,16 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.channel_combo_box.setModel(self.signals)
 
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
-        self.item_changed(0)
 
         self.filter = None
 
         self.ui.apply_filter_list_view.clicked[QModelIndex].connect(self.apply_list_selected_item_change)
+
+        self.ui.sampling_frequency_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+        self.ui.passband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+        self.ui.stopband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+
+        self.item_changed(0)
 
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
@@ -41,9 +46,15 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.preview_output_button.clicked.connect(self.apply_filter_to_test_signal)
         self.ui.apply_filter_button.clicked.connect(self.apply_filter)
 
+    def change_desired_band_edges_text(self):
+        self.ui.band_edges_line_edit.setText('{0} {1} {2} {3}'.format(0, self.ui.passband_edge_line_edit.text(),
+                                                                      self.ui.stopband_edge_line_edit.text(),
+                                                                      self.ui.sampling_frequency_line_edit.text()))
+
     def item_changed(self, index):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
         self.ui.sampling_frequency_label.setText('fs: ' + str(self.current_signal.fs) + 'Hz')
+        self.ui.sampling_frequency_line_edit.setText(str(int(self.current_signal.fs / 2)))
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
@@ -130,6 +141,7 @@ class FIRDesignerDialog(TemplateBaseClass):
                     desired_new.append(gain)
                 desired = np.asarray(desired_new, dtype=np.float32)
 
+            self.ui.filter_graphics_view.clear()
             self.ui.filter_graphics_view.addLegend()
             self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r', name='Ideal Filter')
             self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g', name='Actual Filter')
@@ -141,6 +153,7 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.preview_output_button.setEnabled(False)
         filtered_samples = convolve(self.current_signal.raw, self.filter, mode='same')
 
+        self.ui.signal_filter_graphics_view.clear()
         self.ui.signal_filter_graphics_view.addLegend()
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
                                                                   self.current_signal.raw)), pen='r', name='Raw Signal')

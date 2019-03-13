@@ -4,6 +4,9 @@ from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
 import os
+import numpy as np
+from scipy import random
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/oscilloscope.ui')
@@ -13,7 +16,7 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
     region_cleared = pyqtSignal()
-    create_signal = pyqtSignal(np.ndarray, np.ndarray, int)
+    create_signal = pyqtSignal(np.ndarray, int)
 
     def __init__(self):
         super().__init__()
@@ -26,6 +29,8 @@ class Oscilloscope(TemplateBaseClass):
 
         self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
+
+        self.multiplot_widget.setMinimumPlotHeight(250)
 
         self.lr = None
         self.save_lr = None
@@ -40,12 +45,14 @@ class Oscilloscope(TemplateBaseClass):
     def init_slider(self):
         self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
 
-    def display_graph(self, x, y):
+    def display_graph(self, x, y, name):
+        self.multiplot_widget.resizeEvent(None)
+
         data_buffer = np.zeros((1, len(x)))
         for i in range(len(x)):
             data_buffer[0][i] = y[i]
 
-        ma = MetaArray(data_buffer, info=[{"cols": [{"name": "Amplitude (mV)"}]},
+        ma = MetaArray(data_buffer, info=[{"cols": [{"name": name, 'units': 'V'}]},
                                           {"name": "Time", "units": "sec",
                                            "values": x}])
 
@@ -64,7 +71,9 @@ class Oscilloscope(TemplateBaseClass):
         plot = self.get_plot(index)
         plot.clear()
 
-        plot.plot(x, y)
+        signal_color = self.colorlist[int(index % len(self.colorlist))]
+
+        plot.plot(x, y, pen=signal_color)
 
     def create_linear_region(self, evt):
         if evt.double():
@@ -131,7 +140,14 @@ class Oscilloscope(TemplateBaseClass):
                 output = plotitem[0].dataItems[0].yData
                 min_index = min(range(len(time)), key=lambda i: abs(time[i] - minX))
                 max_index = min(range(len(time)), key=lambda i: abs(time[i] - maxX))
-                self.create_signal.emit(time[min_index:max_index], output[min_index:max_index], index)
+
+                time = time[min_index:max_index]
+                time = time.reshape((time.shape[0], 1))
+                output = output[min_index:max_index]
+                output = output.reshape((output.shape[0], 1))
+
+                signal = np.hstack([time, output])
+                self.create_signal.emit(signal, index)
 
     def get_plot(self, index):
         return self.plots[index][0]
