@@ -61,12 +61,18 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
 
-        if self.current_signal == 'EEG' or self.current_signal == 'ECG':
+        if 'EEG' in self.current_signal.type or 'ECG' in self.current_signal.type:
             self.ui.signal_specific_filter_combo_box.addItem('Power Line Noise Filter', ['49', '51', 'notch'])
 
-        if self.current_signal.type == 'EEG':
+        if 'EEG' in self.current_signal.type:
             self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13', 'alpha'])
             self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7', 'beta'])
+
+        if 'ECG' in self.current_signal.type:
+            self.ui.signal_specific_filter_combo_box.addItem('Respiration Filter', ['0.4', '2', 'respiration'])
+            self.ui.signal_specific_filter_combo_box.addItem('Movement Filter', ['1', '3', 'movement'])
+            self.ui.signal_specific_filter_combo_box.addItem('Transport Filter', ['3', '15', 'transport'])
+            self.ui.signal_specific_filter_combo_box.addItem('Muscle Tension/Tremor Filter', ['20', '150', 'tension'])
 
     def update_filter_options(self, index):
         data = self.ui.signal_specific_filter_combo_box.itemData(index)
@@ -84,6 +90,22 @@ class FIRDesignerDialog(TemplateBaseClass):
 
             elif data[2] == 'notch':
                 self.ui.band_edges_line_edit.setText('0 48 49 50 51 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'respiration':
+                self.ui.band_edges_line_edit.setText('0 0.3 0.4 3 4 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'movement':
+                self.ui.band_edges_line_edit.setText('0 0.5 1 3 4 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'transport':
+                self.ui.band_edges_line_edit.setText('0 2 3 15 16 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
+            elif data[2] == 'tension':
+                self.ui.band_edges_line_edit.setText('0 19 20 150 151 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
 
             self.ui.estimate_taps_button.animateClick()
