@@ -59,17 +59,38 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.ui.signal_specific_filter_combo_box.clear()
 
+        self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
+
+        if self.current_signal == 'EEG' or self.current_signal == 'ECG':
+            self.ui.signal_specific_filter_combo_box.addItem('Power Line Noise Filter', ['49', '51', 'notch'])
+
         if self.current_signal.type == 'EEG':
-            self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
-            self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13'])
-            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7'])
+            self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13', 'alpha'])
+            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7', 'beta'])
 
     def update_filter_options(self, index):
         data = self.ui.signal_specific_filter_combo_box.itemData(index)
         if data is not None:
             self.ui.passband_edge_line_edit.setText(data[0])
             self.ui.stopband_edge_line_edit.setText(data[1])
+
+            if data[2] == 'alpha':
+                self.ui.band_edges_line_edit.setText('0 7 8 13 14 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
+
+            elif data[2] == 'beta':
+                self.ui.band_edges_line_edit.setText('0 3 4 7 8 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
+
+            elif data[2] == 'notch':
+                self.ui.band_edges_line_edit.setText('0 48 49 50 51 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
+
             self.ui.estimate_taps_button.animateClick()
+            self.ui.design_filter_button.animateClick()
+        else:
+            self.ui.filter_graphics_view.clear()
+            self.ui.signal_filter_graphics_view.clear()
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
@@ -166,12 +187,12 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.showError("Select an input channel")
             return
         self.ui.preview_output_button.setEnabled(False)
-        filtered_samples = convolve(self.current_signal.raw, self.filter, mode='same')
+        filtered_samples = convolve(self.current_signal.current_mode, self.filter, mode='same')
 
         self.ui.signal_filter_graphics_view.clear()
         self.ui.signal_filter_graphics_view.addLegend()
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
-                                                                  self.current_signal.raw)), pen='r', name='Raw Signal')
+                                                                  self.current_signal.current_mode)), pen='r', name='Raw Signal')
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
                                                                   filtered_samples)), pen='g', name='Filtered Signal')
 
