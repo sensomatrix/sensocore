@@ -29,7 +29,6 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.channel_combo_box.setModel(self.signals)
 
         self.ui.channel_combo_box.currentIndexChanged.connect(self.item_changed)
-        self.item_changed(0)
 
         self.filter = None
 
@@ -38,6 +37,8 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.sampling_frequency_line_edit.textChanged.connect(self.change_desired_band_edges_text)
         self.ui.passband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
         self.ui.stopband_edge_line_edit.textChanged.connect(self.change_desired_band_edges_text)
+
+        self.item_changed(0)
 
         self.ui.save_to_file_button.clicked.connect(self.save_filter_to_file)
         self.ui.estimate_taps_button.clicked.connect(self.estimate_taps_button_pressed)
@@ -53,6 +54,7 @@ class FIRDesignerDialog(TemplateBaseClass):
     def item_changed(self, index):
         self.current_signal = self.ui.channel_combo_box.itemData(index)
         self.ui.sampling_frequency_label.setText('fs: ' + str(self.current_signal.fs) + 'Hz')
+        self.ui.sampling_frequency_line_edit.setText(str(int(self.current_signal.fs / 2)))
 
     def save_filter_to_file(self):
         savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
