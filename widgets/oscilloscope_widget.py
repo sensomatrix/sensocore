@@ -4,6 +4,7 @@ from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
 import os
+import numpy as np
 from scipy import random
 
 
@@ -15,7 +16,7 @@ OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
     region_cleared = pyqtSignal()
-    create_signal = pyqtSignal(np.ndarray, np.ndarray, int)
+    create_signal = pyqtSignal(np.ndarray, int)
 
     def __init__(self):
         super().__init__()
@@ -137,7 +138,14 @@ class Oscilloscope(TemplateBaseClass):
                 output = plotitem[0].dataItems[0].yData
                 min_index = min(range(len(time)), key=lambda i: abs(time[i] - minX))
                 max_index = min(range(len(time)), key=lambda i: abs(time[i] - maxX))
-                self.create_signal.emit(time[min_index:max_index], output[min_index:max_index], index)
+
+                time = time[min_index:max_index]
+                time = time.reshape((time.shape[0], 1))
+                output = output[min_index:max_index]
+                output = output.reshape((output.shape[0], 1))
+
+                signal = np.hstack([time, output])
+                self.create_signal.emit(signal, index)
 
     def get_plot(self, index):
         return self.plots[index][0]

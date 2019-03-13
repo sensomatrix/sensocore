@@ -108,8 +108,8 @@ class MainWindow(TemplateBaseClass):
     def update_plot(self, signal, index):
         self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
 
-    def create_signal(self, time, output, index):
-        self.signals.create_child_signal(time, output, index)
+    def create_signal(self, output, index):
+        self.signals.create_child_signal(output, index)
 
 
 if __name__ == "__main__":

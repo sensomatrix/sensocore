@@ -136,12 +136,9 @@ class SignalListModel(QtCore.QAbstractListModel):
         row = QModelIndex.row()
         return self._signals[row]
 
-    def create_child_signal(self, time, output, index):
-        child_signal = copy.deepcopy(self._signals[index])
-        child_signal.time_array = time
-        child_signal.raw = output
-        child_signal.filtered = None
-        child_signal.current_mode = child_signal.raw
+    def create_child_signal(self, output, index):
+        parent = self._signals[index]
+        child_signal = Signal(output, parent.fs, parent.name, parent.type)
         self.add_signal(child_signal)
 
 
