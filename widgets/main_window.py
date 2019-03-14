@@ -8,7 +8,6 @@ from widgets.ecg_summary_widget import ECGSummaryWidget
 from widgets.eeg_summary_widget import EEGSummaryWidget
 from models.signal import SignalListModel
 from utils import file_read
-from PyQt5.QtCore import QModelIndex
 from utils.frequtils import compute_psd
 import numpy as np
 import os
@@ -123,7 +122,7 @@ class MainWindow(TemplateBaseClass):
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow()
 
+    window = MainWindow()
     window.showMaximized()
     sys.exit(app.exec_())
