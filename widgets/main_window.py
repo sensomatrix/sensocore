@@ -122,7 +122,7 @@ class MainWindow(TemplateBaseClass):
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow()
 
+    window = MainWindow()
     window.showMaximized()
     sys.exit(app.exec_())
