@@ -22,7 +22,7 @@ trained_model._make_predict_function()  # Necessary
 
 
 class Signal:
-    def __init__(self, samples_array, fs, name, signal_type, annotations=None, epochs=None):
+    def __init__(self, samples_array, fs, name, signal_type, annotations=None, epochs=None, unit='V'):
         self.summary = None
         self.raw = samples_array.T[1]
         self.filtered = None
@@ -34,6 +34,7 @@ class Signal:
         self.time_array = samples_array.T[0]
         self.fs = fs
         self.name = name
+        self.unit = unit
         self.type = signal_type
         self.current_mode = self.raw
         self.create_summary()

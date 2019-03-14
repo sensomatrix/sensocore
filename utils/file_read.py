@@ -147,16 +147,18 @@ def load_from_json(filepath):
         if isinstance(c.fs, list):
             for s in range(len(c.fs)):
                 name = c.name
+                unit = c.unit[s]
                 typeofsignal = c.sensor
                 samplingrate = c.fs[s]
                 time_array = (np.asarray(c.time_array[s])).astype(np.float32)
                 samples_array = (np.asarray(c.samples_array[s])).astype(np.float32)
                 signal = np.hstack([time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
                 epochs = c.epochs
-                sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
+                sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs, unit=unit)
                 signals.append(sig)
         else:  # if single signal in 1 channel
             name = c.name
+            unit = c.unit
             typeofsignal = c.sensor
             samplingrate = c.fs
             samples = len(c.time_array)
@@ -164,10 +166,9 @@ def load_from_json(filepath):
             samples_array = (np.asarray(c.samples_array)).astype(np.float32).reshape((samples, 1))
             epochs = c.epochs
             signal = np.hstack([time_array, samples_array])
-            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
+            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs, unit=unit)
             signals.append(sig)
     return signals
-
 
 def load_from_fif(filename):
     signals = []

@@ -53,7 +53,7 @@ class Oscilloscope(TemplateBaseClass):
         for i in range(len(signal.time_array)):
             data_buffer[0][i] = signal.current_mode[i]
 
-        ma = MetaArray(data_buffer, info=[{"cols": [{"name": signal.name, 'units': 'V'}]},
+        ma = MetaArray(data_buffer, info=[{"cols": [{"name": signal.name, 'units': signal.unit}]},
                                           {"name": "Time", "units": "sec",
                                            "values": signal.time_array}])
 
