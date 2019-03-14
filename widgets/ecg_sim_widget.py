@@ -1,7 +1,7 @@
 import pyqtgraph as pg
 from PyQt5.QtCore import pyqtSignal
-from simulations.ecg.ecg import generate_ecg
-from models.signal import Signal
+from sensobox.simulations.ecg.ecg import generate_ecg
+from sensobox.models.signal import Signal
 import os
 
 

@@ -1,15 +1,15 @@
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication, QMessageBox
-from widgets.eeg_sim_widget import EEGSimulationWidget
-from widgets.ecg_sim_widget import ECGSimulationWidget
-from widgets.firdesignerdiag import FIRDesignerDialog
-from widgets.physionet_widget import PhysioNetWidget
-from widgets.ecg_summary_widget import ECGSummaryWidget
-from widgets.eeg_summary_widget import EEGSummaryWidget
-from models.signal import SignalListModel
-from utils import file_read
+from sensobox.widgets.eeg_sim_widget import EEGSimulationWidget
+from sensobox.widgets.ecg_sim_widget import ECGSimulationWidget
+from sensobox.widgets.firdesignerdiag import FIRDesignerDialog
+from sensobox.widgets.physionet_widget import PhysioNetWidget
+from sensobox.widgets.ecg_summary_widget import ECGSummaryWidget
+from sensobox.widgets.eeg_summary_widget import EEGSummaryWidget
+from sensobox.models.signal import SignalListModel
+from sensobox.utils import file_read
 from PyQt5.QtCore import QModelIndex
-from utils.frequtils import compute_psd
+from sensobox.utils.frequtils import compute_psd
 import numpy as np
 import os
 

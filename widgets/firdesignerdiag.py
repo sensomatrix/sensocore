@@ -2,7 +2,7 @@ import pyqtgraph as pg
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt, QModelIndex
 import numpy as np
-from utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
+from sensobox.utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
 from scipy.signal import freqz, convolve
 import pickle
 import os
@@ -66,7 +66,8 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         if 'EEG' in self.current_signal.type:
             self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13', 'alpha'])
-            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['4', '7', 'beta'])
+            self.ui.signal_specific_filter_combo_box.addItem('Theta Filter', ['4', '7', 'theta'])
+            self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['12.5', '30', 'beta'])
 
         if 'ECG' in self.current_signal.type:
             self.ui.signal_specific_filter_combo_box.addItem('Respiration Filter', ['0.4', '2', 'respiration'])
@@ -84,8 +85,12 @@ class FIRDesignerDialog(TemplateBaseClass):
                 self.ui.band_edges_line_edit.setText('0 7 8 13 14 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
 
-            elif data[2] == 'beta':
+            elif data[2] == 'theta':
                 self.ui.band_edges_line_edit.setText('0 3 4 7 8 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
+
+            elif data[2] == 'beta':
+                self.ui.band_edges_line_edit.setText('0 12 12.5 30 31 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
 
             elif data[2] == 'notch':

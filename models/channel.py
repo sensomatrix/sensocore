@@ -1,4 +1,4 @@
-from utils.timeutils import generateTimeArrayFromNumberOfSamples
+from sensobox.utils.timeutils import generateTimeArrayFromNumberOfSamples
 
 
 class Channel:
