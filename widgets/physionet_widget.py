@@ -1,6 +1,6 @@
 from wfdb import rdrecord
-from sensobox.models.signal import Signal
-from sensobox.utils.timeutils import generateTimeArrayFromNumberOfSamples
+from models.signal import Signal
+from utils.timeutils import generateTimeArrayFromNumberOfSamples
 import pyqtgraph as pg
 from PyQt5.QtCore import pyqtSignal
 import os

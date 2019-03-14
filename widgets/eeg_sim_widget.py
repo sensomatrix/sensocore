@@ -1,7 +1,7 @@
 import pyqtgraph as pg
 from PyQt5.QtCore import pyqtSignal
-from sensobox.simulations.eeg.jansen import simulate_eeg_jansen
-from sensobox.models.signal import Signal
+from simulations.eeg.jansen import simulate_eeg_jansen
+from models.signal import Signal
 import os
 import _thread
 import time

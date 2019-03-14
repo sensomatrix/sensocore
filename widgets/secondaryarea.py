@@ -1,5 +1,5 @@
 from pyqtgraph.dockarea import *
-from sensobox.widgets.graphdock import GraphDock
+from widgets.graphdock import GraphDock
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from PyQt5.QtCore import QSize
 

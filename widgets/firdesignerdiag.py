@@ -2,7 +2,7 @@ import pyqtgraph as pg
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt, QModelIndex
 import numpy as np
-from sensobox.utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
+from utils.filtersutils import design_FIR_ls, design_FIR_parks, estimate_order
 from scipy.signal import freqz, convolve
 import pickle
 import os

@@ -1,11 +1,11 @@
 import os
 from itertools import islice
-from sensobox.models.signal import Signal
+from models.signal import Signal
 import numpy as np
 from PyQt5.QtWidgets import QAction, QFileDialog
-from sensobox.models.channel import Channel
-from sensobox.models.epoch import Epoch
-from sensobox.models.patient import Patient
+from models.channel import Channel
+from models.epoch import Epoch
+from models.patient import Patient
 from PyQt5.QtCore import pyqtSignal, QObject
 from pathlib import Path
 import json
