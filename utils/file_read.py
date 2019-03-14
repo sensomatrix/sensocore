@@ -185,7 +185,6 @@ def load_from_json(filepath, parent):
     parent.patients.append_patient(patient)
     return signals
 
-
 def load_from_fif(filename):
     signals = []
     raw = mne.io.read_raw_fif(filename)
