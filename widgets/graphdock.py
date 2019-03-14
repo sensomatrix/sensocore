@@ -1,7 +1,7 @@
 import pyqtgraph as pg
 import numpy as np
 from pyqtgraph.dockarea import *
-from sensobox.utils.frequtils import compute_psd, compute_time_freq
+from utils.frequtils import compute_psd, compute_time_freq
 
 LINECOLORS = ['r', 'g', 'b', 'c', 'm', 'y', 'w']
 
