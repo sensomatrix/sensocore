@@ -2,8 +2,10 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from numpy import mean
 import copy
-from biosppy import signals
+from biosppy import signals, clustering
 import numpy as np
+#TODO: Remove this after being used
+import matplotlib.pyplot as plt
 
 
 class Signal:
@@ -11,11 +13,13 @@ class Signal:
         self.summary = None
         self.raw = samples_array.T[1]
         self.filtered = None
+        self.clusters = None
         self.time_array = samples_array.T[0]
         self.fs = fs
         self.name = name
         self.type = signal_type
         self.current_mode = self.raw
+        self.current_mode[1200:1400] = 0
         self.create_summary()
 
     def create_summary(self):
@@ -25,6 +29,22 @@ class Signal:
         elif 'ECG' in self.type:
             ecg = np.transpose(self.current_mode)
             self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
+            duration_between_r_peaks = np.zeros((self.summary[2].shape[0] - 1, 1))
+
+            current_index = 0
+
+            for index, r_peak_index in enumerate(self.summary[2]):
+                if current_index < duration_between_r_peaks.shape[0] and index < self.summary[2].shape[0]:
+                    duration_between_r_peaks[current_index] = (self.summary[2][index + 1] - r_peak_index) * (1.0 / self.fs)
+                    current_index += 1
+                else:
+                    break
+
+            x = duration_between_r_peaks[:-1]
+            y = np.delete(duration_between_r_peaks, 0)
+            y = y.reshape(x.shape[0], x.shape[1])
+
+            self.clusters = clustering.dbscan(np.hstack((x, y)))
 
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
