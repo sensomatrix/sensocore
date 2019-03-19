@@ -84,8 +84,24 @@ class ECGSimulationWidget(TemplateBaseClass):
 ###############################################################################################
         self.generate_plot()
 
-        self.plot = self.ui.plot.plot(self.ecg_output)
-        self.plot.getViewBox().setMouseEnabled(y=False)
+        self.zoomed_plot = self.ui.plot.plot(self.ecg_output, pen="g")
+        self.zoomed_plot.getViewBox().setMouseEnabled(y=False)
+
+        self.main_plot = self.ui.main_plot.plot(self.ecg_output)
+        self.main_plot.getViewBox().setMouseEnabled(x=False, y=False)
+
+        self.region = pg.LinearRegionItem()
+        self.region.setZValue(10)
+
+        self.region.sigRegionChanged.connect(self.update_graph)
+        self.ui.plot.sigRangeChanged.connect(self.update_region)
+
+        self.update_graph()
+
+        self.ui.main_plot.addItem(self.region, ignoreBounds=True)
+
+        # self.plot = self.ui.plot.plot(self.ecg_output)
+        # self.plot.getViewBox().setMouseEnabled(y=False)
 
         self.show()
 
@@ -93,11 +109,21 @@ class ECGSimulationWidget(TemplateBaseClass):
 ###############################################################################################
     def generate_plot(self, is_for_graphing=True):
         self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
-                                                  self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=is_for_graphing)
+                                       self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=False)
 
     def update_plot(self):
         self.generate_plot()
-        self.plot.setData(self.ecg_output)
+        self.zoomed_plot.setData(self.ecg_output)
+        self.main_plot.setData(self.ecg_output)
+
+    def update_graph(self):
+        self.region.setZValue(10)
+        minX, maxX = self.region.getRegion()
+        self.ui.plot.setXRange(minX, maxX, padding=0)
+
+    def update_region(self, window, viewRange):
+        rgn = viewRange[0]
+        self.region.setRegion(rgn)
 
     def generate_signal(self):
         self.generate_plot(is_for_graphing=False)
