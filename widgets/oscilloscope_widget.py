@@ -45,16 +45,16 @@ class Oscilloscope(TemplateBaseClass):
     def init_slider(self):
         self.ui.horizontal_slider.valueChanged.connect(self.sliderValueChanged)
 
-    def display_graph(self, x, y, name):
+    def display_graph(self, signal):
         self.multiplot_widget.resizeEvent(None)
 
-        data_buffer = np.zeros((1, len(x)))
-        for i in range(len(x)):
-            data_buffer[0][i] = y[i]
+        data_buffer = np.zeros((1, len(signal.time_array)))
+        for i in range(len(signal.time_array)):
+            data_buffer[0][i] = signal.current_mode[i]
 
-        ma = MetaArray(data_buffer, info=[{"cols": [{"name": name, 'units': 'V'}]},
+        ma = MetaArray(data_buffer, info=[{"cols": [{"name": signal.name, 'units': 'V'}]},
                                           {"name": "Time", "units": "sec",
-                                           "values": x}])
+                                           "values": signal.time_array}])
 
         random_color = next(self.colorpool)
 
@@ -65,6 +65,23 @@ class Oscilloscope(TemplateBaseClass):
         plot.listDataItems()[0].setPen(pg.mkPen(random_color))
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
+
+        if 'ECG' in signal.type:
+            if signal.clusters[0][-1] is not None:
+                for outlier in signal.clusters[0][-1]:
+                    r_peak_indices = signal.summary[2]
+
+                    min_value = signal.time_array[r_peak_indices[outlier]]
+                    max_value = signal.time_array[r_peak_indices[outlier + 1]]
+
+                    offset = (max_value - min_value) / 2
+
+                    min_value = min_value - offset
+                    max_value = max_value - offset
+                    lr = pg.LinearRegionItem(values=[min_value, max_value], movable=False)
+
+                    plot.vb.addItem(lr)
+
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 
     def update_plot(self, x, y, index):

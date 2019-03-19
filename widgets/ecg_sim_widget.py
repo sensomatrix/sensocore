@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSignal
 from simulations.ecg.ecg import generate_ecg
 from models.signal import Signal
 import os
+import numpy as np
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -40,6 +41,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.noise_default = self.noise
         self.period_default = self.period
         self.ecg_output = []
+        self.init = True
 ###############################################################################################
 
 # Connections
@@ -81,26 +83,93 @@ class ECGSimulationWidget(TemplateBaseClass):
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
         self.ui.create_signal_button.clicked.connect(self.generate_signal)
+
+        self.ui.scale_slider.sliderReleased.connect(self.scale_values)
 ###############################################################################################
         self.generate_plot()
 
-        self.plot = self.ui.plot.plot(self.ecg_output)
-        self.plot.getViewBox().setMouseEnabled(y=False)
+        self.zoomed_plot = self.ui.plot.plot(self.ecg_output, pen="g")
+        self.zoomed_plot.getViewBox().setMouseEnabled(y=False)
+
+        self.main_plot = self.ui.main_plot.plot(self.ecg_output)
+        self.main_plot.getViewBox().setMouseEnabled(x=False, y=False)
+
+        self.region = pg.LinearRegionItem()
+        self.region.setZValue(10)
+
+        self.region.sigRegionChanged.connect(self.update_graph)
+        self.ui.plot.sigRangeChanged.connect(self.update_region)
+
+        self.update_graph()
+
+        self.ui.main_plot.addItem(self.region, ignoreBounds=True)
+
+        # self.plot = self.ui.plot.plot(self.ecg_output)
+        # self.plot.getViewBox().setMouseEnabled(y=False)
+
+        self.init = False
 
         self.show()
 
 # Methods
 ###############################################################################################
     def generate_plot(self, is_for_graphing=True):
-        self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
-                                                  self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=is_for_graphing)
+        new_ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
+                                       self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=False)
+
+        if not self.init:
+            rgn = self.region.getRegion()
+            time = self.ecg_output.transpose()[0]
+            min_index = min(range(len(time)), key=lambda i: abs(time[i] - rgn[0]))
+            max_index = min(range(len(time)), key=lambda i: abs(time[i] - rgn[1]))
+            output = self.ecg_output.transpose()[1]
+            new_output = new_ecg_output.transpose()[1]
+            output[min_index:max_index] = new_output[min_index:max_index]
+
+            output = output.transpose()
+            self.ecg_output = self.ecg_output.transpose()
+            self.ecg_output[1] = output
+            self.ecg_output = self.ecg_output.transpose()
+        else:
+            self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
+            self.ecg_output = new_ecg_output
+
+    def scale_values(self):
+        scaled_value = self.ui.scale_slider.value() / 100.0
+        self.ui.scale_value.setText('Scale: {0}'.format(str(scaled_value)))
+
+        time = self.ecg_output.transpose()[0]
+
+        minX, maxX = self.region.getRegion()
+        min_idx = (np.abs(time - minX)).argmin()
+        max_idx = (np.abs(time - maxX)).argmin()
+
+        indices = range(min_idx, max_idx)
+
+        self.ecg_output = self.ecg_output.transpose()
+        for index in indices:
+            self.ecg_output[1][index] *= scaled_value
+        self.ecg_output = self.ecg_output.transpose()
+
+        self.zoomed_plot.setData(self.ecg_output)
+        self.main_plot.setData(self.ecg_output)
 
     def update_plot(self):
         self.generate_plot()
-        self.plot.setData(self.ecg_output)
+        self.zoomed_plot.setData(self.ecg_output)
+        self.main_plot.setData(self.ecg_output)
+
+    def update_graph(self):
+        self.region.setZValue(10)
+        minX, maxX = self.region.getRegion()
+        self.ui.plot.setXRange(minX, maxX, padding=0)
+
+    def update_region(self, window, viewRange):
+        rgn = viewRange[0]
+        self.region.setRegion(rgn)
 
     def generate_signal(self):
-        self.generate_plot(is_for_graphing=False)
+        # self.generate_plot(is_for_graphing=False)
         signal = Signal(self.ecg_output, self.sampling_frequency, self.name, 'ECG')
         self.signals.add_signal(signal)
         self.close()
