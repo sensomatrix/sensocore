@@ -79,6 +79,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.ui.noise_double_spinbox.valueChanged.connect(self.update_plot)
         self.ui.period_spinbox.valueChanged.connect(self.update_plot)
         self.ui.sampling_frequency_spinbox.valueChanged.connect(self.update_plot)
+        self.ui.duration_spinbox.valueChanged.connect(self.update_plot)
         self.ui.delay_spin_box.valueChanged.connect(self.update_plot)
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
@@ -131,6 +132,11 @@ class ECGSimulationWidget(TemplateBaseClass):
             self.ecg_output[1] = output
             self.ecg_output = self.ecg_output.transpose()
         else:
+            self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
+            self.ecg_output = new_ecg_output
+            return
+
+        if new_ecg_output.shape[0] != self.ecg_output.shape[0]:
             self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
             self.ecg_output = new_ecg_output
 
