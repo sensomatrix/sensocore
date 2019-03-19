@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSignal
 from simulations.ecg.ecg import generate_ecg
 from models.signal import Signal
 import os
+import numpy as np
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -117,6 +118,21 @@ class ECGSimulationWidget(TemplateBaseClass):
         scaled_value = self.ui.scale_slider.value() / 100.0
         self.ui.scale_value.setText('Scale: {0}'.format(str(scaled_value)))
 
+        time = self.ecg_output.transpose()[0]
+
+        minX, maxX = self.region.getRegion()
+        min_idx = (np.abs(time - minX)).argmin()
+        max_idx = (np.abs(time - maxX)).argmin()
+
+        indices = range(min_idx, max_idx)
+
+        self.ecg_output = self.ecg_output.transpose()
+        for index in indices:
+            self.ecg_output[1][index] *= scaled_value
+        self.ecg_output = self.ecg_output.transpose()
+
+        self.zoomed_plot.setData(self.ecg_output)
+        self.main_plot.setData(self.ecg_output)
 
     def update_plot(self):
         self.generate_plot()
@@ -133,7 +149,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.region.setRegion(rgn)
 
     def generate_signal(self):
-        self.generate_plot(is_for_graphing=False)
+        # self.generate_plot(is_for_graphing=False)
         signal = Signal(self.ecg_output, self.sampling_frequency, self.name, 'ECG')
         self.signals.add_signal(signal)
         self.close()
