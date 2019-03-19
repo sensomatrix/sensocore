@@ -53,7 +53,6 @@ class Signal:
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
 
-
 class SignalListModel(QtCore.QAbstractListModel):
     added_signal = pyqtSignal(Signal)
     added_signals = pyqtSignal(list)
