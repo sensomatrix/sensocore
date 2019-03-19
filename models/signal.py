@@ -27,28 +27,7 @@ class Signal:
         elif 'ECG' in self.type:
             ecg = np.transpose(self.current_mode)
             self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
-            duration_between_r_peaks = np.zeros((self.summary[2].shape[0] - 1, 1))
-            r_value = np.zeros((self.summary[2].shape[0] - 1, 1))
-
-            current_index = 0
-
-            for index, r_peak_index in enumerate(self.summary[2]):
-                if current_index < duration_between_r_peaks.shape[0] and index < self.summary[2].shape[0]:
-                    duration_between_r_peaks[current_index] = (self.summary[2][index + 1] - r_peak_index) * (1.0 / self.fs)
-                    r_value[current_index] = self.current_mode[r_peak_index]
-                    current_index += 1
-                else:
-                    break
-
-            x = duration_between_r_peaks[:-1]
-            y = np.delete(duration_between_r_peaks, 0)
-            y = y.reshape(x.shape[0], x.shape[1])
-
-            r_value = np.delete(r_value, r_value.shape[0] - 1)
-            r_value = r_value.reshape(r_value.shape[0], 1)
-
-            # self.clusters = clustering.dbscan(np.hstack((x, y, r_value)), eps=0.075)
-            self.clusters = clustering.dbscan(self.summary[4], eps=0.075)
+            self.clusters = clustering.dbscan(self.summary[4])
 
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
