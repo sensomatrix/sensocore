@@ -67,14 +67,19 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
         if 'ECG' in signal.type:
+            for outlier in signal.clusters[0][-1]:
+                r_peak_indices = signal.summary[2]
 
-            min_value = 0.5
-            max_value = 3
-            self.lr = pg.LinearRegionItem(values=[min_value, max_value], movable=False)
+                min_value = signal.time_array[r_peak_indices[outlier]]
+                max_value = signal.time_array[r_peak_indices[outlier + 1]]
 
-            self.lr.sigRegionChanged.connect(self.update_graph)
+                offset = (max_value - min_value) / 2
 
-            plot.vb.addItem(self.lr)
+                min_value = min_value - offset
+                max_value = max_value - offset
+                lr = pg.LinearRegionItem(values=[min_value, max_value], movable=False)
+
+                plot.vb.addItem(lr)
 
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 

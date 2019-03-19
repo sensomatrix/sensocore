@@ -5,7 +5,6 @@ import copy
 from biosppy import signals, clustering
 import numpy as np
 #TODO: Remove this after being used
-import matplotlib.pyplot as plt
 
 
 class Signal:
@@ -48,7 +47,7 @@ class Signal:
             r_value = np.delete(r_value, r_value.shape[0] - 1)
             r_value = r_value.reshape(r_value.shape[0], 1)
 
-            self.clusters = clustering.dbscan(np.hstack((x, y, r_value)), eps=0.05)
+            self.clusters = clustering.dbscan(np.hstack((x, y, r_value)), eps=0.1)
 
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
