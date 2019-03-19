@@ -81,6 +81,8 @@ class ECGSimulationWidget(TemplateBaseClass):
 
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
         self.ui.create_signal_button.clicked.connect(self.generate_signal)
+
+        self.ui.scale_slider.sliderReleased.connect(self.scale_values)
 ###############################################################################################
         self.generate_plot()
 
@@ -110,6 +112,11 @@ class ECGSimulationWidget(TemplateBaseClass):
     def generate_plot(self, is_for_graphing=True):
         self.ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
                                        self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=False)
+
+    def scale_values(self):
+        scaled_value = self.ui.scale_slider.value() / 100.0
+        self.ui.scale_value.setText('Scale: {0}'.format(str(scaled_value)))
+
 
     def update_plot(self):
         self.generate_plot()
