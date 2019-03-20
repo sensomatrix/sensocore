@@ -67,20 +67,37 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
         if 'ECG' in signal.type:
-            if signal.clusters[0][-1] is not None:
-                for outlier in signal.clusters[0][-1]:
-                    r_peak_indices = signal.summary[2]
+            if signal.clusters[0] is not None:
+                for cluster in signal.clusters[0]:
+                    for pair_index in cluster[1]:
+                        min_value = signal.time_array[pair_index[0]]
+                        max_value = signal.time_array[pair_index[1]]
 
-                    min_value = signal.time_array[r_peak_indices[outlier]]
-                    max_value = signal.time_array[r_peak_indices[outlier + 1]]
+                        offset = (max_value - min_value) / 2
 
-                    offset = (max_value - min_value) / 2
+                        min_value = min_value - offset
+                        max_value = max_value - offset
 
-                    min_value = min_value - offset
-                    max_value = max_value - offset
-                    lr = pg.LinearRegionItem(values=[min_value, max_value], movable=False)
+                        brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
 
-                    plot.vb.addItem(lr)
+                        if 'APC' in cluster[0]:
+                            brush = QtGui.QBrush(QtGui.QColor('r'))
+                        elif 'NORMAL' in cluster[0]:
+                            brush = QtGui.QBrush(QtGui.QColor('g'))
+                        elif 'LBB' in cluster[0]:
+                            brush = QtGui.QBrush(color=QtGui.QColor('c'))
+                        elif 'PAB' in cluster[0]:
+                            brush = QtGui.QBrush(color=QtGui.QColor('m'))
+                        elif 'PVC' in cluster[0]:
+                            brush = QtGui.QBrush(QtGui.QColor(240, 230, 140, 50))
+                        elif 'RBB' in cluster[0]:
+                            brush = QtGui.QBrush(color=QtGui.QColor('k'))
+                        elif 'VEB' in cluster[0]:
+                            brush = QtGui.QBrush(color=QtGui.QColor('w'))
+
+                        lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
+
+                        plot.vb.addItem(lr)
 
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 

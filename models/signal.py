@@ -138,9 +138,9 @@ class Signal:
 
         result = sorted(result.items(), key=lambda y: len(y[1]))[::-1]
         output.append(result)
-        data = {}
-        # data['filename' + str(flag)] = str(path)
-        data['result' + str(flag)] = str(result)
+        # data = {}
+        # # data['filename' + str(flag)] = str(path)
+        # data['result' + str(flag)] = str(result)
 
         # json_filename = 'data.txt'
         # with open(json_filename, 'a+') as outfile:
@@ -153,7 +153,7 @@ class Signal:
         # with open(json_filename, 'w') as file:
         #     file.write(filedata)
         # os.remove('fig.png')
-        return output
+        self.clusters = output
 
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
