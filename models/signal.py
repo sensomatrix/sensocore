@@ -58,15 +58,15 @@ class Signal:
         elif 'ECG' in self.type:
             ecg = np.transpose(self.current_mode)
             self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
-            self.clusters = clustering.dbscan(self.summary[4])
-            self.model_predict(self.generate_csv())
+            # self.clusters = clustering.dbscan(self.summary[4])
+            self.model_predict()
 
-    def generate_csv(self):
-        a = np.asarray(self.current_mode)
-        np.savetxt("{0}.csv".format(self.name), a, delimiter=",",  header=' Sample Value', comments='')
-        return os.getcwd() + '/' + self.name + '.csv'
+    # def generate_csv(self):
+    #     a = np.asarray(self.current_mode)
+    #     np.savetxt("{0}.csv".format(self.name), a, delimiter=",",  header=' Sample Value', comments='')
+    #     return os.getcwd() + '/' + self.name + '.csv'
 
-    def model_predict(self, path):
+    def model_predict(self):
         model = load_model('/home/niroigen/Downloads/ecgScratchEpoch2.hdf5')
         model._make_predict_function()  # Necessary
         output = []
@@ -78,28 +78,32 @@ class Signal:
         # index2 = -4
         # ts = int(str(path)[index1:index2])
         APC, NORMAL, LBB, PVC, PAB, RBB, VEB = [], [], [], [], [], [], []
-        output.append(str(path))
+        # output.append(str(path))
         result = {"APC": APC, "Normal": NORMAL, "LBB": LBB, "PAB": PAB, "PVC": PVC, "RBB": RBB, "VEB": VEB}
 
         indices = []
 
         kernel = np.ones((4, 4), np.uint8)
 
-        csv = pd.read_csv(path)
-        csv_data = csv[' Sample Value']
-        data = np.array(csv_data)
-        signals = []
-        count = 1
-        peaks = biosppy.signals.ecg.christov_segmenter(signal=data, sampling_rate=self.fs)[0]
-        for i in (peaks[1:-1]):
-            diff1 = abs(peaks[count - 1] - i)
-            diff2 = abs(peaks[count + 1] - i)
-            x = peaks[count - 1] + diff1 // 2
-            y = peaks[count + 1] - diff2 // 2
-            signal = data[x:y]
-            signals.append(signal)
-            count += 1
-            indices.append((x, y))
+        # csv = pd.read_csv(path)
+        # csv_data = csv[' Sample Value']
+        # data = np.array(csv_data)
+        signals = self.summary[4]
+        signals = signals[1:-1]
+
+        for i in range(1, len(signals) + 1):
+            indices.append((self.summary[2][i - 1], self.summary[2][i]))
+        # count = 1
+        # peaks = biosppy.signals.ecg.christov_segmenter(signal=data, sampling_rate=self.fs)[0]
+        # for i in (peaks[1:-1]):
+        #     diff1 = abs(peaks[count - 1] - i)
+        #     diff2 = abs(peaks[count + 1] - i)
+        #     x = peaks[count - 1] + diff1 // 2
+        #     y = peaks[count + 1] - diff2 // 2
+        #     signal = data[x:y]
+        #     signals.append(signal)
+        #     count += 1
+        #     indices.append((x, y))
 
         for count, i in enumerate(signals):
             fig = plt.figure(frameon=False)
@@ -135,7 +139,7 @@ class Signal:
         result = sorted(result.items(), key=lambda y: len(y[1]))[::-1]
         output.append(result)
         data = {}
-        data['filename' + str(flag)] = str(path)
+        # data['filename' + str(flag)] = str(path)
         data['result' + str(flag)] = str(result)
 
         # json_filename = 'data.txt'
