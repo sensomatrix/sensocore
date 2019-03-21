@@ -6,6 +6,7 @@ from biosppy import signals, clustering
 from utils.frequtils import compute_psd
 from keras.models import load_model
 import numpy as np
+import biosppy
 import cv2
 import matplotlib.pyplot as plt
 
@@ -70,25 +71,28 @@ class Signal:
         # csv = pd.read_csv(path)
         # csv_data = csv[' Sample Value']
         # data = np.array(csv_data)
-        signals = self.summary[4]
-        signals = signals[1:-1]
+        # signals = self.summary[4]
+        signals =[]
 
-        for i in range(1, len(signals) + 1):
-            indices.append((self.summary[2][i - 1], self.summary[2][i]))
-        # count = 1
-        # peaks = biosppy.signals.ecg.christov_segmenter(signal=data, sampling_rate=self.fs)[0]
-        # for i in (peaks[1:-1]):
-        #     diff1 = abs(peaks[count - 1] - i)
-        #     diff2 = abs(peaks[count + 1] - i)
-        #     x = peaks[count - 1] + diff1 // 2
-        #     y = peaks[count + 1] - diff2 // 2
-        #     signal = data[x:y]
-        #     signals.append(signal)
-        #     count += 1
-        #     indices.append((x, y))
+        data = self.raw
+
+        # for i in range(1, len(signals) + 1):
+        #     indices.append((self.summary[2][i - 1], self.summary[2][i]))
+        count = 1
+        peaks = biosppy.signals.ecg.christov_segmenter(signal=data, sampling_rate=self.fs)[0]
+        for i in (peaks[1:-1]):
+            diff1 = abs(peaks[count - 1] - i)
+            diff2 = abs(peaks[count + 1] - i)
+            x = peaks[count - 1] + diff1 // 2
+            y = peaks[count + 1] - diff2 // 2
+            signal = data[x:y]
+            signals.append(signal)
+            count += 1
+            indices.append((x, y))
 
         # TODO: Get a percentage of how much is left
         for count, i in enumerate(signals):
+            print(count / len(signals))
             fig = plt.figure(frameon=False)
             plt.plot(i)
             plt.xticks([]), plt.yticks([])
