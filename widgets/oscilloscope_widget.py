@@ -73,11 +73,6 @@ class Oscilloscope(TemplateBaseClass):
                         min_value = signal.time_array[pair_index[0]]
                         max_value = signal.time_array[pair_index[1]]
 
-                        offset = (max_value - min_value) / 2
-
-                        min_value = min_value - offset
-                        max_value = max_value - offset
-
                         brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
 
                         if 'APC' in cluster[0]:
