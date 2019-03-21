@@ -87,6 +87,7 @@ class Signal:
         #     count += 1
         #     indices.append((x, y))
 
+        # TODO: Get a percentage of how much is left
         for count, i in enumerate(signals):
             fig = plt.figure(frameon=False)
             plt.plot(i)
