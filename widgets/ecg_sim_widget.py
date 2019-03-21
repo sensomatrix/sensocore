@@ -118,6 +118,11 @@ class ECGSimulationWidget(TemplateBaseClass):
         new_ecg_output = generate_ecg(self.sampling_frequency, self.noise, self.duration, self.period,
                                        self.delay, self.p, self.q, self.r, self.s, self.t, is_for_graphing=False)
 
+        if self.ecg_output != [] and new_ecg_output.shape[0] != self.ecg_output.shape[0]:
+            self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
+            self.ecg_output = new_ecg_output
+            return
+
         if not self.init:
             rgn = self.region.getRegion()
             time = self.ecg_output.transpose()[0]
@@ -132,11 +137,6 @@ class ECGSimulationWidget(TemplateBaseClass):
             self.ecg_output[1] = output
             self.ecg_output = self.ecg_output.transpose()
         else:
-            self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
-            self.ecg_output = new_ecg_output
-            return
-
-        if new_ecg_output.shape[0] != self.ecg_output.shape[0]:
             self.ecg_output = np.zeros((new_ecg_output.shape[0], new_ecg_output.shape[1]))
             self.ecg_output = new_ecg_output
 
