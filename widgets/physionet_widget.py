@@ -28,7 +28,7 @@ class PhysioNetWidget(TemplateBaseClass):
         try:
             pb_dir = self.url_link.split("database/",1)[1]
 
-            record = rdrecord(self.record_name, pb_dir=pb_dir, sampto=10000)
+            record = rdrecord(self.record_name, pb_dir=pb_dir)
         except:
             raise
         fs = record.fs
