@@ -1,4 +1,4 @@
-from wfdb import rdrecord
+from wfdb import rdrecord, rdann
 from models.signal import Signal
 from utils.timeutils import generateTimeArrayFromNumberOfSamples
 import pyqtgraph as pg
@@ -26,9 +26,10 @@ class PhysioNetWidget(TemplateBaseClass):
 
     def import_from_physio(self):
         try:
-            pb_dir = self.url_link.split("database/",1)[1]
+            pb_dir = self.url_link.split("database/", 1)[1]
 
-            record = rdrecord(self.record_name, pb_dir=pb_dir)
+            record = rdrecord(self.record_name, pb_dir=pb_dir, sampto=10000)
+            annotations = rdann(self.record_name, 'atr', pb_dir=pb_dir, sampto=10000)
         except:
             raise
         fs = record.fs
@@ -51,7 +52,8 @@ class PhysioNetWidget(TemplateBaseClass):
 
             sig = Signal(output,
                          fs=fs,
-                         name='Physionet {0} Signal'.format(sig_name), signal_type=signal_type)
+                         name='Physionet {0} Signal'.format(sig_name), signal_type=signal_type,
+                         annotations=annotations)
             siglist.append(sig)
 
         self.signals.add_signals(siglist)

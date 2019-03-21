@@ -67,7 +67,7 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
         if 'ECG' in signal.type:
-            if signal.clusters[0] is not None:
+            if signal.clusters is not None and signal.clusters[0] is not None:
                 for cluster in signal.clusters[0]:
                     for pair_index in cluster[1]:
                         min_value = signal.time_array[pair_index[0]]
@@ -93,6 +93,71 @@ class Oscilloscope(TemplateBaseClass):
                         lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
 
                         plot.vb.addItem(lr)
+
+            elif signal.annotations is not None:
+                current_index = 0
+                for i in range(signal.annotations.ann_len):
+                    min_value = signal.time_array[current_index]
+                    max_value = signal.time_array[signal.annotations.sample[i]]
+
+                    current_index = signal.annotations.sample[i] + 1
+
+                    brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
+
+                    annotation = signal.annotations.symbol[i]
+
+                    if 'N' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(197, 214, 54, 50))
+                    elif 'R' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(193, 18, 54, 50))
+                    elif 'L' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(137, 29, 11, 50))
+                    elif 'B' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(119, 230, 81, 50))
+                    elif 'A' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(243, 248, 54, 50))
+                    elif 'a' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(47,41,54, 50))
+                    elif 'J' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(85,140,114, 50))
+                    elif 'S' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(207,99,44, 50))
+                    elif 'V' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(30,119,98, 50))
+                    elif 'r' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(248,164,146, 50))
+                    elif 'F' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(27,49,27, 50))
+                    elif 'e' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(179,71,53, 50))
+                    elif 'j' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(242,207,88, 50))
+                    elif 'n' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(73,0,30, 50))
+                    elif 'E' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(206,2,7, 50))
+                    elif '/' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(171,184,198, 50))
+                    elif 'f' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(22,211,105, 50))
+                    elif 'Q' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(245,125,15, 50))
+                    elif '?' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(164,142,131, 50))
+                    elif 'a' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(11,107,135, 50))
+                    elif 'J' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(206,236,119, 50))
+                    elif 'S' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(178,120,133, 50))
+                    elif 'V' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(228,244,144, 50))
+                    elif 'r' in annotation:
+                        brush = QtGui.QBrush(QtGui.QColor(66,30,104, 50))
+
+                    lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
+
+                    plot.vb.addItem(lr)
 
         self.proxy = pg.SignalProxy(self.get_plot(last_added_index).scene().sigMouseMoved, rateLimit=60, slot=self.mouseMoved)
 

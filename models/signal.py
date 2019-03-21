@@ -15,12 +15,13 @@ trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScrat
 trained_model._make_predict_function()  # Necessary
 
 class Signal:
-    def __init__(self, samples_array, fs, name, signal_type):
+    def __init__(self, samples_array, fs, name, signal_type, annotations=None):
         self.summary = None
         self.raw = samples_array.T[1]
         self.filtered = None
         self.clusters = None
         self.psd = None
+        self.annotations = annotations
         self.time_array = samples_array.T[0]
         self.fs = fs
         self.name = name
@@ -49,7 +50,8 @@ class Signal:
             ecg = np.transpose(self.current_mode)
             self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
             # self.clusters = clustering.dbscan(self.summary[4])
-            self.model_predict()
+            if self.annotations is None:
+                self.model_predict()
 
     def model_predict(self):
 
