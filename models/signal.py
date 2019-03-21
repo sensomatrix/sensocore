@@ -2,27 +2,16 @@ from __future__ import division, print_function
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from numpy import mean
-import copy
 from biosppy import signals, clustering
-import numpy as np
 from utils.frequtils import compute_psd
-from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from keras.models import load_model
-from keras.preprocessing import image
-import biosppy
-import json
-# coding=utf-8
-import sys
-import os
-import glob
-import re
 import numpy as np
 import cv2
-import pandas as pd
 import matplotlib.pyplot as plt
 
-
-
+# TODO: Make sure to use a proper route to this file
+trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScratchEpoch2.hdf5')
+trained_model._make_predict_function()  # Necessary
 
 class Signal:
     def __init__(self, samples_array, fs, name, signal_type):
@@ -61,19 +50,12 @@ class Signal:
             # self.clusters = clustering.dbscan(self.summary[4])
             self.model_predict()
 
-    # def generate_csv(self):
-    #     a = np.asarray(self.current_mode)
-    #     np.savetxt("{0}.csv".format(self.name), a, delimiter=",",  header=' Sample Value', comments='')
-    #     return os.getcwd() + '/' + self.name + '.csv'
-
     def model_predict(self):
-        model = load_model('/home/niroigen/Downloads/ecgScratchEpoch2.hdf5')
-        model._make_predict_function()  # Necessary
+
         output = []
 
         flag = 1
 
-        print('what is it')
         # index1 = str(path).find('sig-2') + 6
         # index2 = -4
         # ts = int(str(path)[index1:index2])
@@ -114,12 +96,13 @@ class Signal:
 
             filename = 'fig' + '.png'
             fig.savefig(filename)
+            plt.close()
             im_gray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
             im_gray = cv2.erode(im_gray, kernel, iterations=1)
             im_gray = cv2.resize(im_gray, (128, 128), interpolation=cv2.INTER_LANCZOS4)
             cv2.imwrite(filename, im_gray)
             im_gray = cv2.imread(filename)
-            pred = model.predict(im_gray.reshape((1, 128, 128, 3)))
+            pred = trained_model.predict(im_gray.reshape((1, 128, 128, 3)))
             pred_class = pred.argmax(axis=-1)
             if pred_class == 0:
                 APC.append(indices[count])
@@ -157,6 +140,7 @@ class Signal:
 
     def remove_dc(self):
         self.current_mode = self.current_mode - mean(self.current_mode)
+
 
 class SignalListModel(QtCore.QAbstractListModel):
     added_signal = pyqtSignal(Signal)
