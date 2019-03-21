@@ -35,7 +35,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-267</y>
+        <y>-160</y>
         <width>387</width>
         <height>900</height>
        </rect>
@@ -349,6 +349,9 @@
             </property>
             <property name="maximum">
              <double>0.500000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.000100000000000</double>
             </property>
             <property name="value">
              <double>0.029870000000000</double>
