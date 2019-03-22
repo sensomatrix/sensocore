@@ -47,6 +47,9 @@ class FIRDesignerDialog(TemplateBaseClass):
         self.ui.preview_output_button.clicked.connect(self.apply_filter_to_test_signal)
         self.ui.apply_filter_button.clicked.connect(self.apply_filter)
 
+        self.ui.signal_filter_graphics_view.getViewBox().setMouseEnabled(y=False)
+        self.ui.filter_graphics_view.getViewBox().setMouseEnabled(y=False)
+
     def change_desired_band_edges_text(self):
         self.ui.band_edges_line_edit.setText('{0} {1} {2} {3}'.format(0, self.ui.passband_edge_line_edit.text(),
                                                                       self.ui.stopband_edge_line_edit.text(),
