@@ -21,6 +21,7 @@ class Signal:
         self.filtered = None
         self.clusters = None
         self.psd = None
+        self.time_freq = None
         self.annotations = annotations
         self.time_array = samples_array.T[0]
         self.fs = fs
@@ -272,6 +273,10 @@ class SignalListModel(QtCore.QAbstractListModel):
     def is_psd_plotted(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         return signal.psd is not None
+
+    def is_time_freq_plotted(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.time_freq is not None
 
 
 

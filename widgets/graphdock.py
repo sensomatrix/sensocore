@@ -43,7 +43,8 @@ class GraphDock(Dock):
         p1.addItem(img)
         hist = pg.HistogramLUTItem()
         hist.setImageItem(img)
-        TFf, TFt, TFSxx = compute_time_freq(signal.samples_array, signal.fs)
+        TFf, TFt, TFSxx = compute_time_freq(signal.current_mode, signal.fs)
+        signal.time_freq = (TFf, TFt, TFSxx)
         hist.setLevels(np.min(TFSxx), np.max(TFSxx))
         hist.gradient.restoreState(
             {'mode': 'rgb',
