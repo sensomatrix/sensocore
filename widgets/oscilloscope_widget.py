@@ -5,21 +5,11 @@ from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
 import os
 import numpy as np
-from scipy import random
 
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/oscilloscope.ui')
 OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
-
-
-# class CustomLinearRegion(pg.LinearRegionItem):
-#     def __init__(self):
-#         super().__init__()
-#
-#     def hoverEvent(self, ev):
-#         super().hoverEvent(ev)
-#
 
 
 class Oscilloscope(TemplateBaseClass):
