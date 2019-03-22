@@ -6,6 +6,7 @@ from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
 from widgets.ecg_summary_widget import ECGSummaryWidget
 from widgets.eeg_summary_widget import EEGSummaryWidget
+from widgets.cross_correlation_widget import CrossCorrelationWidget
 from models.signal import SignalListModel
 from utils import file_read
 from utils.frequtils import compute_psd
@@ -32,6 +33,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.update_plot.connect(self.update_plot)
         self.signals.plot_ecg_summary.connect(self.launch_ecg_summary)
         self.signals.plot_eeg_summary.connect(self.launch_eeg_summary)
+        self.signals.cross_correlation_signal.connect(self.launch_cross_corr)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -62,6 +64,10 @@ class MainWindow(TemplateBaseClass):
     def launch_ecg_widget(self):
         ecg_sim_widget = ECGSimulationWidget(self.signals)
         ecg_sim_widget.exec_()
+
+    def launch_cross_corr(self, signal_1, signal_2):
+        self.ui.main_tab.setCurrentIndex(1)
+        self.ui.cross_correlation_tab.set_signals(signal_1, signal_2)
 
     def launch_physionet_widget(self):
         physionet = PhysioNetWidget(self.signals)

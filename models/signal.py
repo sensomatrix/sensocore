@@ -164,6 +164,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     update_plot = pyqtSignal(Signal, int)
     plot_ecg_summary = pyqtSignal(object, object)
     plot_eeg_summary = pyqtSignal(object, object)
+    cross_correlation_signal = pyqtSignal(object, object)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -287,5 +288,10 @@ class SignalListModel(QtCore.QAbstractListModel):
     def contains_summary(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         return signal.summary is not None
+
+    def cross_correlation(self, QModelIndex1, QModelIndex2):
+        signal_1 = self.get_signal(QModelIndex1)
+        signal_2 = self.get_signal(QModelIndex2)
+        self.cross_correlation_signal.emit(signal_1, signal_2)
 
 

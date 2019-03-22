@@ -40,7 +40,7 @@
         <string>Oscilloscope</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="cross_correlation_tab">
+      <widget class="CrossCorrelationWidget" name="cross_correlation_tab">
        <attribute name="title">
         <string>Cross Correlation</string>
        </attribute>
@@ -55,7 +55,7 @@
      <x>0</x>
      <y>0</y>
      <width>1078</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLoad_Data">
@@ -131,7 +131,7 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>999999</width>
+     <width>524287</width>
      <height>524287</height>
     </size>
    </property>
@@ -163,7 +163,7 @@
   <widget class="QDockWidget" name="dockWidget_3">
    <property name="minimumSize">
     <size>
-     <width>149</width>
+     <width>210</width>
      <height>188</height>
     </size>
    </property>
@@ -299,7 +299,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header location="global">pyqtgraph</header>
+   <header>pyqtgraph</header>
   </customwidget>
   <customwidget>
    <class>Oscilloscope</class>
@@ -323,6 +323,12 @@
    <class>SecondaryArea</class>
    <extends>QWidget</extends>
    <header>secondaryarea</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CrossCorrelationWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">cross_correlation_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
