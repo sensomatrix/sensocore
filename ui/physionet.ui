@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>504</width>
-    <height>196</height>
+    <height>205</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,6 +101,16 @@
     <widget class="QSpinBox" name="sample_to">
      <property name="maximum">
       <number>10000000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QCheckBox" name="annotate_checkbox">
+     <property name="text">
+      <string>Annotate signals</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
