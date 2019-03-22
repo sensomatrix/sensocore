@@ -98,6 +98,7 @@ class EEGSimulationWidget(TemplateBaseClass):
 
     def simulate_progress_bar(self):
         with pg.ProgressDialog("Simulating EEG Signal", maximum=100) as dlg:
+            dlg.setWindowTitle('EEG Sim')
             while self.current_percentage != 100:
                 time.sleep(0.02)
                 dlg.setValue(self.current_percentage)
