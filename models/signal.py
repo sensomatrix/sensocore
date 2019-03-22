@@ -33,20 +33,22 @@ class Signal:
     def create_summary(self):
         if 'EEG' in self.type:
             eeg = np.transpose(self.current_mode).reshape((self.current_mode.shape[0], 1))
-            self.summary = signals.eeg.eeg(eeg, self.fs, show=False)
-            diff = int(eeg.shape[0] % (self.fs / 2))
-            if diff != 0:
-                eeg = np.delete(eeg, eeg.shape[0] - 1)
-            rows = eeg.shape[0] // (self.fs // 2)
-            eeg = eeg.reshape((rows, self.fs // 2))
+            try:
+                self.summary = signals.eeg.eeg(eeg, self.fs, show=False)
+                diff = int(eeg.shape[0] % (self.fs / 2))
+                if diff != 0:
+                    eeg = np.delete(eeg, eeg.shape[0] - 1)
+                rows = eeg.shape[0] // (self.fs // 2)
+                eeg = eeg.reshape((rows, self.fs // 2))
 
-            eeg_psd = np.array([compute_psd(eeg[0][:], self.fs)[1]])
+                eeg_psd = np.array([compute_psd(eeg[0][:], self.fs)[1]])
 
-            for row in range(1, rows):
-                eeg_psd = np.vstack([eeg_psd, compute_psd(eeg[row][:], self.fs)[1]])
+                for row in range(1, rows):
+                    eeg_psd = np.vstack([eeg_psd, compute_psd(eeg[row][:], self.fs)[1]])
 
-            self.clusters = clustering.dbscan(eeg_psd)
-            print('hi')
+                self.clusters = clustering.dbscan(eeg_psd)
+            except Exception as e:
+                print(e.args)
         elif 'ECG' in self.type:
             ecg = np.transpose(self.current_mode)
             try:
