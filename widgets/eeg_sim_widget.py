@@ -122,6 +122,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.ui.sampling_frequency_spinbox.setValue(self.fs_default)
         self.ui.noise_double_spinbox.setValue(self.noise_default)
         self.ui.duration_spinbox.setValue(self.duration_default)
+        self.update_plot()
 
     def mouse_moved(self, evt):
         pos = evt[0]
