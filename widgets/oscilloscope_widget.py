@@ -3,6 +3,7 @@ from pyqtgraph.Qt import QtCore, QtGui
 from pyqtgraph.metaarray import *
 from PyQt5.QtCore import QPointF, pyqtSignal
 from itertools import cycle
+from PyQt5.QtCore import Qt
 import os
 import numpy as np
 
@@ -31,8 +32,9 @@ class Oscilloscope(TemplateBaseClass):
 
         self.multiplot_widget.setMinimumPlotHeight(250)
 
+        self.ui.epoch_creation_button.clicked.connect(self.create_lr)
+
         self.lr = None
-        self.save_lr = None
 
     def init_cursor(self):
         self.x_cursor = pg.InfiniteLine(pos=67, movable=True, angle=90,
@@ -242,6 +244,7 @@ class Oscilloscope(TemplateBaseClass):
                 if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
                     mousePoint = plotitem[0].vb.mapSceneToView(evt.scenePos())
                     self.showLinearRegion(plotitem[0], mousePoint.x())
+            self.ui.epoch_creation_button.setEnabled(True)
 
     def showLinearRegion(self, plotitem, mousepos_x):
         self.remove_all_linear_regions()
@@ -273,20 +276,15 @@ class Oscilloscope(TemplateBaseClass):
                 plotitem[0].vb.removeItem(self.lr)
                 self.lr = None
 
-                if self.save_lr is not None:
-                    plotitem[0].vb.menu.removeAction(self.save_lr)
-                    self.save_lr = None
-
                 self.region_cleared.emit()
+
+        self.ui.epoch_creation_button.setEnabled(False)
 
     def singlemouseclick(self, evt):
         if evt.button() == QtCore.Qt.RightButton and self.lr is not None:
             for plotitem in self.plots:
                 if type(plotitem[0]) is not int and plotitem[0].sceneBoundingRect().contains(evt.scenePos()):
                     view = plotitem[0].vb
-                    if self.save_lr is None:
-                        self.save_lr = view.menu.addAction('Save selected window')
-                        self.save_lr.triggered.connect(self.create_lr)
 
         elif not evt.double():
             evt.accept()
