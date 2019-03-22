@@ -20,9 +20,14 @@ def open_dataset_dialog(parent):
 
     if not os.path.exists(dir):
         os.makedirs(dir)
-    openfilepath = QFileDialog.getOpenFileName(None, 'Select a folder:', dir)
-    if openfilepath != '':
-        return load_from_file(openfilepath[0])
+
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    fileName, _ = QFileDialog.getOpenFileName(parent, 'Select a folder:', dir,
+                                              "All Files (*)", options=options)
+
+    if fileName != '':
+        return load_from_file(fileName)
         # for signal in signals:
         #     self.signal_loaded_signal.emit(sig)
         # self.parent.info.set_opened_filename(os.path.basename(openfilepath[0]))
@@ -40,7 +45,13 @@ def load_from_file(path_to_file):
             samplingrate = int(lines[2])
             time_array = (np.asarray(lines[3].split(", "))).astype(np.float32)
             samples_array = (np.asarray(lines[4].split(", "))).astype(np.float32)
-            sig = Signal(samples_array, time_array=time_array, name=name, signal_type=typeofsignal, fs=samplingrate)
+
+            time_array = np.reshape(time_array, (time_array.shape[0], 1))
+            samples_array = np.reshape(samples_array, (samples_array.shape[0], 1))
+
+            signal = np.hstack([time_array, samples_array])
+
+            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
             signals.append(sig)
             lines = readnextlines(fileObject, 5)
 
