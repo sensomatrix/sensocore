@@ -104,8 +104,11 @@
         </item>
         <item row="1" column="0">
          <widget class="QLineEdit" name="simulation_line_edit">
-          <property name="placeholderText">
+          <property name="text">
            <string>EEG Simualtion</string>
+          </property>
+          <property name="placeholderText">
+           <string/>
           </property>
          </widget>
         </item>
