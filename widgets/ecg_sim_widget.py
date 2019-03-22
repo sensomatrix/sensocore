@@ -198,9 +198,9 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.ui.q1_time_double_spinbox.setValue(self.q_default[1])
         self.ui.q1_wid_double_spinbox.setValue(self.q_default[2])
 
-        self.ui.q2_mag_double_spinbox.setValue(self.q_default[0])
-        self.ui.q2_time_double_spinbox.setValue(self.q_default[1])
-        self.ui.q2_wid_double_spinbox.setValue(self.q_default[2])
+        self.ui.q2_mag_double_spinbox.setValue(self.q_default[3])
+        self.ui.q2_time_double_spinbox.setValue(self.q_default[4])
+        self.ui.q2_wid_double_spinbox.setValue(self.q_default[5])
 
         self.ui.r_mag_double_spinbox.setValue(self.r_default[0])
         self.ui.r_time_double_spinbox.setValue(self.r_default[1])
