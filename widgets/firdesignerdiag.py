@@ -125,8 +125,9 @@ class FIRDesignerDialog(TemplateBaseClass):
                                                                                     text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
 
-            self.ui.estimate_taps_button.animateClick()
-            self.ui.design_filter_button.animateClick()
+            self.estimate_taps_button_pressed()
+            self.design_filter()
+            self.apply_filter_to_test_signal()
         else:
             self.ui.filter_graphics_view.clear()
             self.ui.signal_filter_graphics_view.clear()
