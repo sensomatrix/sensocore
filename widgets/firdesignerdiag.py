@@ -73,7 +73,12 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.ui.signal_specific_filter_combo_box.addItem('Respiration Filter', ['0.4', '2', 'respiration'])
             self.ui.signal_specific_filter_combo_box.addItem('Movement Filter', ['1', '3', 'movement'])
             self.ui.signal_specific_filter_combo_box.addItem('Transport Filter', ['3', '15', 'transport'])
-            self.ui.signal_specific_filter_combo_box.addItem('Muscle Tension/Tremor Filter', ['20', '150', 'tension'])
+
+            stopband_freq = '150'
+
+            if self.current_signal.fs // 2 < 150:
+                stopband_freq = '%d' % (self.current_signal.fs // 2 - 2)
+            self.ui.signal_specific_filter_combo_box.addItem('Muscle Tension/Tremor Filter', ['20', stopband_freq, 'tension'])
 
     def update_filter_options(self, index):
         data = self.ui.signal_specific_filter_combo_box.itemData(index)
@@ -110,7 +115,11 @@ class FIRDesignerDialog(TemplateBaseClass):
                 self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
 
             elif data[2] == 'tension':
-                self.ui.band_edges_line_edit.setText('0 19 20 150 151 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
+                self.ui.band_edges_line_edit.setText('0 {0} {1} {2} {3} {4}'.format(data[0], str(int(data[0]) + 1),
+                                                                                    data[1], str(int(data[1]) + 1),
+                                                                                    self.ui.
+                                                                                    sampling_frequency_line_edit.
+                                                                                    text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
 
             self.ui.estimate_taps_button.animateClick()
