@@ -49,7 +49,10 @@ class Signal:
             print('hi')
         elif 'ECG' in self.type:
             ecg = np.transpose(self.current_mode)
-            self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
+            try:
+                self.summary = signals.ecg.ecg(ecg, self.fs, show=False)
+            except Exception as e:
+                print(e.args)
             # self.clusters = clustering.dbscan(self.summary[4])
             if self.annotations is None:
                 self.model_predict()
@@ -278,5 +281,8 @@ class SignalListModel(QtCore.QAbstractListModel):
         signal = self.get_signal(QModelIndex)
         return signal.time_freq is not None
 
+    def contains_summary(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.summary is not None
 
 

@@ -39,16 +39,17 @@ class Channels(QListView):
             action = menu.addAction(action_title)
             action.triggered.connect(lambda: self.model().toggle_mode(item_index))
 
-        is_ecg = self.model().is_ecg_signal(item_index)
-        is_eeg = self.model().is_eeg_signal(item_index)
+        if self.model().contains_summary(item_index):
+            is_ecg = self.model().is_ecg_signal(item_index)
+            is_eeg = self.model().is_eeg_signal(item_index)
 
-        if is_ecg:
-            action = menu.addAction('View ECG Summary')
-            action.triggered.connect(lambda: self.model().view_ecg_summary(item_index))
+            if is_ecg:
+                action = menu.addAction('View ECG Summary')
+                action.triggered.connect(lambda: self.model().view_ecg_summary(item_index))
 
-        elif is_eeg:
-            action = menu.addAction('View EEG Summary')
-            action.triggered.connect(lambda: self.model().view_eeg_summary(item_index))
+            elif is_eeg:
+                action = menu.addAction('View EEG Summary')
+                action.triggered.connect(lambda: self.model().view_eeg_summary(item_index))
 
         menu.exec_(self.mapToGlobal(pos))
 
