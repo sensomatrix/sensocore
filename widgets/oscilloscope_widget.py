@@ -78,13 +78,15 @@ class Oscilloscope(TemplateBaseClass):
         if 'ECG' in signal.type:
             if signal.clusters is not None and signal.clusters[0] is not None:
                 for cluster in signal.clusters[0]:
-                    for pair_index in cluster[1]:
-                        min_value = signal.time_array[pair_index[0]]
-                        max_value = signal.time_array[pair_index[1]]
+                    for info in cluster[1]:
+                        min_value = signal.time_array[info[0][0]]
+                        max_value = signal.time_array[info[0][1]]
 
                         brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
 
                         tooltip_text = 'Normal beat'
+
+                        probability = info[1]
 
                         if 'APC' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(250, 128, 114, 50))
@@ -108,7 +110,7 @@ class Oscilloscope(TemplateBaseClass):
                             tooltip_text = 'Ventricular Contraction'
 
                         lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
-                        lr.setToolTip(tooltip_text)
+                        lr.setToolTip(tooltip_text + ' with probability ' + str(probability))
 
                         plot.vb.addItem(lr)
 
