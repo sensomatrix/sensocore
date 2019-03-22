@@ -13,6 +13,15 @@ uiFile = os.path.join(path, '../ui/oscilloscope.ui')
 OscilloscopeView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
+# class CustomLinearRegion(pg.LinearRegionItem):
+#     def __init__(self):
+#         super().__init__()
+#
+#     def hoverEvent(self, ev):
+#         super().hoverEvent(ev)
+#
+
+
 class Oscilloscope(TemplateBaseClass):
     region_updated = pyqtSignal(np.ndarray, int)
     region_cleared = pyqtSignal()
@@ -91,6 +100,7 @@ class Oscilloscope(TemplateBaseClass):
                             brush = QtGui.QBrush(QtGui.QColor(205, 133, 63, 50))
 
                         lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
+                        lr.setToolTip('This is a tooltip for the QPushButton widget')
 
                         plot.vb.addItem(lr)
 
@@ -106,56 +116,113 @@ class Oscilloscope(TemplateBaseClass):
 
                     annotation = signal.annotations.symbol[i]
 
+                    tooltip_text = 'Normal beat'
+
                     if 'N' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(197, 214, 54, 50))
                     elif 'R' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(193, 18, 54, 50))
+                        tooltip_text = 'Right bundle branch block beat'
                     elif 'L' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(137, 29, 11, 50))
+                        tooltip_text = 'Left bundle branch block beat'
                     elif 'B' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(119, 230, 81, 50))
+                        tooltip_text = 'Bundle branch block beat'
                     elif 'A' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(243, 248, 54, 50))
+                        tooltip_text = 'Atrial premature beat'
                     elif 'a' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(47,41,54, 50))
+                        tooltip_text = 'Aberrated atrial premature beat'
                     elif 'J' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(85,140,114, 50))
+                        tooltip_text = 'Nodal (junctional) premature beat'
                     elif 'S' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(207,99,44, 50))
+                        tooltip_text = 'Supraventricular premature or ectopic beat (atrial or nodal)'
                     elif 'V' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(30,119,98, 50))
+                        tooltip_text = 'Premature ventricular contraction'
                     elif 'r' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(248,164,146, 50))
+                        tooltip_text = 'R-on-T premature ventricular contraction'
                     elif 'F' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(27,49,27, 50))
+                        tooltip_text = 'Fusion of ventricular and normal beat'
                     elif 'e' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(179,71,53, 50))
+                        tooltip_text = 'Atrial escape beat'
                     elif 'j' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(242,207,88, 50))
+                        tooltip_text = 'Nodal (junctional) escape beat'
                     elif 'n' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(73,0,30, 50))
+                        tooltip_text = 'Supraventricular escape beat (atrial or nodal)'
                     elif 'E' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(206,2,7, 50))
+                        tooltip_text = 'Ventricular escape beat'
                     elif '/' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(171,184,198, 50))
+                        tooltip_text = 'Paced beat'
                     elif 'f' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(22,211,105, 50))
+                        tooltip_text = 'Fusion of paced and normal beat'
                     elif 'Q' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(245,125,15, 50))
+                        tooltip_text = 'Unclassifiable beat'
                     elif '?' in annotation:
                         brush = QtGui.QBrush(QtGui.QColor(164,142,131, 50))
-                    elif 'a' in annotation:
-                        brush = QtGui.QBrush(QtGui.QColor(11,107,135, 50))
-                    elif 'J' in annotation:
-                        brush = QtGui.QBrush(QtGui.QColor(206,236,119, 50))
-                    elif 'S' in annotation:
-                        brush = QtGui.QBrush(QtGui.QColor(178,120,133, 50))
-                    elif 'V' in annotation:
-                        brush = QtGui.QBrush(QtGui.QColor(228,244,144, 50))
-                    elif 'r' in annotation:
-                        brush = QtGui.QBrush(QtGui.QColor(66,30,104, 50))
+                        tooltip_text = 'Beat not classified during learning'
+                    elif '[' in annotation:
+                        tooltip_text = 'Start of ventricular flutter/fibrillation'
+                    elif '!' in annotation:
+                        tooltip_text = 'Ventricular flutter wave'
+                    elif ']' in annotation:
+                        tooltip_text = 'End of ventricular flutter/fibrillation'
+
+                    elif 'x' in annotation:
+                        tooltip_text = 'Non-conducted P-wave (blocked APC)'
+                    elif '(' in annotation:
+                        tooltip_text = 'Waveform onset'
+                    elif ')' in annotation:
+                        tooltip_text = 'Waveform end'
+                    elif 'p' in annotation:
+                        tooltip_text = 'Peak of P-wave'
+                    elif 't' in annotation:
+                        tooltip_text = 'Peak of T-wave'
+                    elif 'u' in annotation:
+                        tooltip_text = 'Peak of U-wave'
+                    elif '`' in annotation:
+                        tooltip_text = 'PQ junction'
+                    elif '\'' in annotation:
+                        tooltip_text = 'J-point'
+                    elif '^' in annotation:
+                        tooltip_text = '(Non-captured) pacemaker artifact'
+                    elif '|' in annotation:
+                        tooltip_text = 'Isolated QRS-like artifact'
+                    elif '~' in annotation:
+                        tooltip_text = 'Change in signal quality'
+                    elif '+' in annotation:
+                        tooltip_text = 'Rhythm change'
+                    elif 's' in annotation:
+                        tooltip_text = 'ST segment change'
+                    elif 'T' in annotation:
+                        tooltip_text = 'T-wave change'
+                    elif '*' in annotation:
+                        tooltip_text = 'Systole'
+                    elif 'D' in annotation:
+                        tooltip_text = 'Diastole'
+                    elif '=' in annotation:
+                        tooltip_text = 'Measurement annotation'
+                    elif '\"' in annotation:
+                        tooltip_text = 'Comment annotation'
+                    elif '@' in annotation:
+                        tooltip_text = 'Link to external data'
 
                     lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
+
+                    lr.setToolTip(tooltip_text)
 
                     plot.vb.addItem(lr)
 
