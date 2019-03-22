@@ -115,6 +115,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.generate_plot(True)
         self.zoomed_plot.setData(self.eeg_output)
         self.main_plot.setData(self.eeg_output)
+        self.ui.zoomed_plot.autoRange()
 
     def reset_to_default(self):
         self.ui.c1_spinbox.setValue(self.c1_default)
