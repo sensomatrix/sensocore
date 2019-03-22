@@ -52,7 +52,8 @@ class PhysioNetWidget(TemplateBaseClass):
             for index, channel in enumerate(record.sig_name):
                 sig_name = channel
                 sig_samples = record.p_signal[:, index].reshape(record.p_signal.shape[0], 1)
-                sig_timearray = generateTimeArrayFromNumberOfSamples(fs, sig_samples.shape[0]).reshape(sig_samples.shape)
+                sig_timearray = generateTimeArrayFromNumberOfSamples(fs, sig_samples.shape[0]).\
+                    reshape(sig_samples.shape)
 
                 output = np.hstack([sig_timearray, sig_samples])
 
@@ -66,7 +67,8 @@ class PhysioNetWidget(TemplateBaseClass):
 
                 sig = Signal(output,
                              fs=fs,
-                             name='Physionet {0} Signal'.format(sig_name), signal_type=signal_type,
+                             name='Physionet {0} Signal (Record {1})'.format(sig_name, self.record_name),
+                             signal_type=signal_type,
                              annotations=annotations)
                 siglist.append(sig)
 
