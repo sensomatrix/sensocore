@@ -179,7 +179,7 @@ class SignalListModel(QtCore.QAbstractListModel):
             return signal
 
     def flags(self, QModelIndex):
-        return QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
 
     def setData(self, QModelIndex, Any, role=None):
         if role == QtCore.Qt.EditRole:
