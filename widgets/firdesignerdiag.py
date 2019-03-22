@@ -223,6 +223,7 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.ui.filter_graphics_view.addLegend()
             self.ui.filter_graphics_view.plot(np.column_stack((bands, desired)), pen='r', name='Ideal Filter')
             self.ui.filter_graphics_view.plot(np.column_stack((0.5*fs*freq/np.pi, np.abs(response))), pen='g', name='Actual Filter')
+            self.ui.filter_graphics_view.autoRange()
 
     def apply_filter_to_test_signal(self):
         if self.current_signal is None:
@@ -237,6 +238,8 @@ class FIRDesignerDialog(TemplateBaseClass):
                                                                   self.current_signal.current_mode)), pen='r', name='Raw Signal')
         self.ui.signal_filter_graphics_view.plot(np.column_stack((self.current_signal.time_array,
                                                                   filtered_samples)), pen='g', name='Filtered Signal')
+
+        self.ui.signal_filter_graphics_view.autoRange()
 
     def apply_list_selected_item_change(self, index):
         self.apply_filter_to_signal = self.signals.get_signal(index)
