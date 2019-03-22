@@ -129,9 +129,12 @@ class FIRDesignerDialog(TemplateBaseClass):
             self.ui.signal_filter_graphics_view.clear()
 
     def save_filter_to_file(self):
-        savefilepath = QFileDialog.getSaveFileName(self.parent, "Save filter to file")
-        if savefilepath[0]:
-            self.save_object(self.filter, savefilepath[0])
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        savefilepath, _ = QFileDialog.getSaveFileName(self, 'Path for filter', os.getenv('HOME'), 'PICKLE(*.pkl)',
+                                                      options=options)
+        if savefilepath:
+            self.save_object(self.filter, savefilepath)
 
     def save_object(self, obj, filename):
         with open(filename, 'wb') as outputfile:
