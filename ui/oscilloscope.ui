@@ -27,12 +27,8 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="3">
-    <widget class="QLabel" name="label_y">
-     <property name="text">
-      <string>Y:</string>
-     </property>
-    </widget>
+   <item row="0" column="0" colspan="4">
+    <widget class="MultiPlotWidget" name="multiplot_widget"/>
    </item>
    <item row="2" column="2">
     <widget class="QLabel" name="label_x">
@@ -48,13 +44,27 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="4">
-    <widget class="MultiPlotWidget" name="multiplot_widget"/>
+   <item row="2" column="3">
+    <widget class="QLabel" name="label_y">
+     <property name="text">
+      <string>Y:</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0" colspan="4">
     <widget class="QSlider" name="horizontal_slider">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="4">
+    <widget class="QPushButton" name="epoch_creation_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Save as Epoch</string>
      </property>
     </widget>
    </item>
