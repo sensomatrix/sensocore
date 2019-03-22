@@ -22,8 +22,9 @@ class Channels(QListView):
         action.triggered.connect(lambda: self.model().remove_dc(item_index))
 
         # Plot PSD button
-        action = menu.addAction("Plot PSD")
-        action.triggered.connect(lambda: self.model().plot_psd(item_index))
+        if not self.model().is_psd_plotted(item_index):
+            action = menu.addAction("Plot PSD")
+            action.triggered.connect(lambda: self.model().plot_psd(item_index))
 
         # Plot Time-frequency button
         action = menu.addAction("Plot Time-Frequency")

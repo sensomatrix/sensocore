@@ -269,5 +269,9 @@ class SignalListModel(QtCore.QAbstractListModel):
         signal = self.get_signal(QModelIndex)
         return signal.filtered is not None
 
+    def is_psd_plotted(self, QModelIndex):
+        signal = self.get_signal(QModelIndex)
+        return signal.psd is not None
+
 
 

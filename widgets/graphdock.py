@@ -29,6 +29,7 @@ class GraphDock(Dock):
             'left': YAxis
         }
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
+        signal.psd = (PSDfbins, PSDxx)
         self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
         self.current_index = (self.current_index + 1) % len(LINECOLORS)
         self.p.vb.autoRange()
