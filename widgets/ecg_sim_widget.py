@@ -275,4 +275,4 @@ class ECGSimulationWidget(TemplateBaseClass):
 
     @property
     def name(self):
-        return self.ui.simulation_line_edit.placeholderText()
+        return self.ui.simulation_line_edit.text()

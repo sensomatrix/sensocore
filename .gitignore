@@ -3,3 +3,5 @@ __pycache__/
 widgets/__pycache__
 venv/
 .idea/
+*hdf5
+*.png
