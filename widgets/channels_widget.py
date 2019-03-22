@@ -27,8 +27,9 @@ class Channels(QListView):
             action.triggered.connect(lambda: self.model().plot_psd(item_index))
 
         # Plot Time-frequency button
-        action = menu.addAction("Plot Time-Frequency")
-        action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
+        if not self.model().is_time_freq_plotted(item_index):
+            action = menu.addAction("Plot Time-Frequency")
+            action.triggered.connect(lambda: self.model().plot_time_freq(item_index))
 
         if self.model().does_signal_contain_filtered(item_index):
             is_raw = self.model().is_current_mode_raw(item_index)
