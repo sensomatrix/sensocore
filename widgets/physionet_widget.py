@@ -36,13 +36,16 @@ class PhysioNetWidget(TemplateBaseClass):
                 record = rdrecord(self.record_name, pb_dir=pb_dir,
                                   sampfrom=self.ui.sample_from.value(),
                                   sampto=self.ui.sample_to.value())
-                annotations = rdann(self.record_name,
-                                    'atr', pb_dir=pb_dir,
-                                    sampfrom=self.ui.sample_from.value(),
-                                    sampto=self.ui.sample_to.value())
 
-                for i in range(annotations.ann_len):
-                    annotations.sample[i] -= self.ui.sample_from.value()
+                annotations = None
+                if self.ui.annotate_checkbox.isChecked():
+                    annotations = rdann(self.record_name,
+                                        'atr', pb_dir=pb_dir,
+                                        sampfrom=self.ui.sample_from.value(),
+                                        sampto=self.ui.sample_to.value())
+
+                    for i in range(annotations.ann_len):
+                        annotations.sample[i] -= self.ui.sample_from.value()
 
             except:
                 raise
@@ -63,7 +66,6 @@ class PhysioNetWidget(TemplateBaseClass):
                     signal_type = 'ECG'
                 elif self.ui.eeg.isChecked():
                     signal_type = 'EEG'
-
 
                 sig = Signal(output,
                              fs=fs,
