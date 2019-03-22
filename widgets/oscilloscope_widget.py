@@ -187,7 +187,7 @@ class Oscilloscope(TemplateBaseClass):
                             if isinstance(dataitem, pg.graphicsItems.PlotDataItem.PlotDataItem)]
         self.lr = pg.LinearRegionItem(values=[minValue, maxValue], bounds=[0, plotdataitemlist[0].xData[-1]])
 
-        self.lr.sigRegionChanged.connect(self.update_graph)
+        self.lr.sigRegionChangeFinished.connect(self.update_graph)
 
         plotitem.vb.addItem(self.lr)
 
