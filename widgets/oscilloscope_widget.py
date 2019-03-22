@@ -84,23 +84,31 @@ class Oscilloscope(TemplateBaseClass):
 
                         brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
 
+                        tooltip_text = 'Normal beat'
+
                         if 'APC' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(250, 128, 114, 50))
+                            tooltip_text = 'Premature Atrial Contraction'
                         elif 'Normal' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(173, 255, 47, 50))
                         elif 'LBB' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(175, 238, 238, 50))
+                            tooltip_text = 'Left Bundle Branch Block'
                         elif 'PAB' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(255, 0, 255, 50))
+                            tooltip_text = 'Paced Beat'
                         elif 'PVC' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(240, 230, 140, 50))
+                            tooltip_text = 'Premature Ventricular Contraction'
                         elif 'RBB' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(169, 169, 169, 50))
+                            tooltip_text = 'Right Bundle Branch Block'
                         elif 'VEB' in cluster[0]:
                             brush = QtGui.QBrush(QtGui.QColor(205, 133, 63, 50))
+                            tooltip_text = 'Ventricular Contraction'
 
                         lr = pg.LinearRegionItem(values=[min_value, max_value], brush=brush, movable=False)
-                        lr.setToolTip('This is a tooltip for the QPushButton widget')
+                        lr.setToolTip(tooltip_text)
 
                         plot.vb.addItem(lr)
 
@@ -180,7 +188,6 @@ class Oscilloscope(TemplateBaseClass):
                         tooltip_text = 'Ventricular flutter wave'
                     elif ']' in annotation:
                         tooltip_text = 'End of ventricular flutter/fibrillation'
-
                     elif 'x' in annotation:
                         tooltip_text = 'Non-conducted P-wave (blocked APC)'
                     elif '(' in annotation:
