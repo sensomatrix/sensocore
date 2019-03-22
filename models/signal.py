@@ -116,21 +116,22 @@ class Signal:
             cv2.imwrite(filename, im_gray)
             im_gray = cv2.imread(filename)
             pred = trained_model.predict(im_gray.reshape((1, 128, 128, 3)))
+            probability = pred.max()
             pred_class = pred.argmax(axis=-1)
             if pred_class == 0:
-                APC.append(indices[count])
+                APC.append((indices[count], probability))
             elif pred_class == 1:
-                NORMAL.append(indices[count])
+                NORMAL.append((indices[count], probability))
             elif pred_class == 2:
-                LBB.append(indices[count])
+                LBB.append((indices[count], probability))
             elif pred_class == 3:
-                PAB.append(indices[count])
+                PAB.append((indices[count], probability))
             elif pred_class == 4:
-                PVC.append(indices[count])
+                PVC.append((indices[count], probability))
             elif pred_class == 5:
-                RBB.append(indices[count])
+                RBB.append((indices[count], probability))
             elif pred_class == 6:
-                VEB.append(indices[count])
+                VEB.append((indices[count], probability))
 
         result = sorted(result.items(), key=lambda y: len(y[1]))[::-1]
         output.append(result)
