@@ -42,6 +42,8 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.period_default = self.period
         self.ecg_output = []
         self.init = True
+
+        self.original_signal = None
 ###############################################################################################
 
 # Connections
@@ -153,8 +155,15 @@ class ECGSimulationWidget(TemplateBaseClass):
         indices = range(min_idx, max_idx)
 
         self.ecg_output = self.ecg_output.transpose()
+
+        if self.original_signal is None:
+            self.original_signal = np.copy(self.ecg_output)
+
+        raw_sig = np.copy(self.original_signal)
+
         for index in indices:
-            self.ecg_output[1][index] *= scaled_value
+            raw_sig[1][index] *= scaled_value
+        self.ecg_output = np.copy(raw_sig)
         self.ecg_output = self.ecg_output.transpose()
 
         self.zoomed_plot.setData(self.ecg_output)
