@@ -67,7 +67,15 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
-        if 'ECG' in signal.type:
+        if signal.epochs is not None:
+            for epoch in signal.epochs.values():
+                tooltip_text = epoch.name
+
+                lr = pg.LinearRegionItem(values=[epoch.start_time, epoch.end_time], movable=False)
+                lr.setToolTip(tooltip_text)
+
+                plot.vb.addItem(lr)
+        elif 'ECG' in signal.type:
             if signal.clusters is not None and signal.clusters[0] is not None:
                 for cluster in signal.clusters[0]:
                     for info in cluster[1]:

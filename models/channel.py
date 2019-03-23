@@ -1,4 +1,4 @@
-from utils.timeutils import generateTimeArrayFromNumberOfSamples
+from utils.timeutils import generateTimeArrayFromNumberOfSamples, convert_start_and_end_time
 
 
 class Channel:
@@ -13,16 +13,19 @@ class Channel:
         self.sensor = sensor
         self.description = description
         self.unit = unit  # unit of the signal ex: nW, BPM
-        self.start_time = start_time
-        self.end_time = end_time
+        self.start_time, self.end_time = convert_start_and_end_time(start_time, end_time)
         self.epochs = epochs
+
         # time array based on fs for 1 dimension channel
         if not isinstance(fs, list) and fs != "_NaN_":
-            self.time_array = generateTimeArrayFromNumberOfSamples(fs, len(samples_array))
+            self.time_array = generateTimeArrayFromNumberOfSamples(self.start_time,
+                                                                   self.end_time,
+                                                                   len(samples_array))
+
         # don't create time array for IBI(interbeat interval or RR interval)
         elif not isinstance(fs, list) and fs == "_NaN_":
             pass
         # array of time array based on fs for each dimension
         else:
-            self.time_array = [generateTimeArrayFromNumberOfSamples(f, len(samples_array[i])) for f, i in zip(fs, range(len(fs)))
-                               if f != "_NaN_"]
+            self.time_array = [generateTimeArrayFromNumberOfSamples(s, e, len(samples_array[i]))
+                               for s, e, i in zip(self.start_time, self.end_time, range(len(fs)))]

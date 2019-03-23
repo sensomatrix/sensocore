@@ -15,13 +15,14 @@ trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScrat
 trained_model._make_predict_function()  # Necessary
 
 class Signal:
-    def __init__(self, samples_array, fs, name, signal_type, annotations=None):
+    def __init__(self, samples_array, fs, name, signal_type, annotations=None, epochs=None):
         self.summary = None
         self.raw = samples_array.T[1]
         self.filtered = None
         self.clusters = None
         self.psd = None
         self.time_freq = None
+        self.epochs = epochs
         self.annotations = annotations
         self.time_array = samples_array.T[0]
         self.fs = fs

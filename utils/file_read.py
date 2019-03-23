@@ -143,7 +143,8 @@ def load_from_json(filepath):
                 time_array = (np.asarray(c.time_array[s])).astype(np.float32)
                 samples_array = (np.asarray(c.samples_array[s])).astype(np.float32)
                 signal = np.hstack([time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
-                sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
+                epochs = c.epochs
+                sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
                 signals.append(sig)
         else:  # if single signal in 1 channel
             name = c.name
@@ -152,7 +153,8 @@ def load_from_json(filepath):
             samples = len(c.time_array)
             time_array = (np.asarray(c.time_array)).astype(np.float32).reshape((samples, 1))
             samples_array = (np.asarray(c.samples_array)).astype(np.float32).reshape((samples, 1))
+            epochs = c.epochs
             signal = np.hstack([time_array, samples_array])
-            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
+            sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
             signals.append(sig)
     return signals
