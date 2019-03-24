@@ -1,12 +1,11 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QMessageBox
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
 from widgets.physionet_widget import PhysioNetWidget
 from widgets.ecg_summary_widget import ECGSummaryWidget
 from widgets.eeg_summary_widget import EEGSummaryWidget
-from widgets.cross_correlation_widget import CrossCorrelationWidget
 from models.signal import SignalListModel
 from utils import file_read
 from utils.frequtils import compute_psd
