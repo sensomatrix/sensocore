@@ -11,6 +11,7 @@ import biosppy
 import cv2
 import matplotlib.pyplot as plt
 
+
 # TODO: Make sure to use a proper route to this file
 
 K.clear_session()
@@ -114,7 +115,7 @@ class Signal:
 
             filename = 'fig' + '.png'
             fig.savefig(filename)
-            plt.close()
+            plt.close(fig)
             im_gray = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
             im_gray = cv2.erode(im_gray, kernel, iterations=1)
             im_gray = cv2.resize(im_gray, (128, 128), interpolation=cv2.INTER_LANCZOS4)
