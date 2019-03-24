@@ -10,6 +10,8 @@ import numpy as np
 import biosppy
 import cv2
 import matplotlib.pyplot as plt
+from widgets.classifier_widget import ClassificationWidget
+from PyQt5.QtCore import QTimer
 
 
 # TODO: Make sure to use a proper route to this file
@@ -124,20 +126,45 @@ class Signal:
             pred = trained_model.predict(im_gray.reshape((1, 128, 128, 3)))
             probability = pred.max()
             pred_class = pred.argmax(axis=-1)
+            prediction = 'Normal'
+
             if pred_class == 0:
                 APC.append((indices[count], probability))
+                prediction = 'Premature Atrial Contraction'
             elif pred_class == 1:
                 NORMAL.append((indices[count], probability))
             elif pred_class == 2:
                 LBB.append((indices[count], probability))
+                prediction = 'Left Bundle Branch Block'
             elif pred_class == 3:
                 PAB.append((indices[count], probability))
+                prediction = 'Paced Beat'
             elif pred_class == 4:
                 PVC.append((indices[count], probability))
+                prediction = 'Premature Ventricular Contraction'
             elif pred_class == 5:
                 RBB.append((indices[count], probability))
+                prediction = 'Right Bundle Branch Block'
             elif pred_class == 6:
                 VEB.append((indices[count], probability))
+                prediction = 'Ventricular Contraction'
+
+            classifier = ClassificationWidget()
+            delay = 500
+
+            if pred_class != 1:
+                classifier.ui.signal.plot(i, pen='r')
+                classifier.ui.classification.setText('Classification: ' + prediction)
+                delay = 1000
+            else:
+                classifier.ui.signal.plot(i, pen='g')
+                classifier.ui.classification.setText('Classification: ' + prediction)
+
+            timer = QTimer()
+            timer.timeout.connect(classifier.close)
+            timer.start(delay)
+
+            classifier.exec_()
 
         result = sorted(result.items(), key=lambda y: len(y[1]))[::-1]
         output.append(result)
