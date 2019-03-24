@@ -9,6 +9,12 @@ def generateTimeArrayFromNumberOfSamples(start_time, end_time, numberOfSamples):
     return time_array
 
 
+def generate_time_array(start_time, samples, fs):
+    start = time_str_to_int(start_time)
+    time_array = np.linspace(start, start + (samples/ fs), samples, dtype=np.float32)
+    return time_array
+
+
 def convert_start_and_end_time(s, e):
     if s is None and e is None:
         return s, e

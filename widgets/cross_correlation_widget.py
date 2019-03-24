@@ -25,8 +25,12 @@ class CrossCorrelationWidget(TemplateBaseClass):
         self.compute_cross_correlation()
 
     def compute_cross_correlation(self):
-        self.ui.signal_1_plot.plotItem.plot(self.signal_1.time_array, self.signal_1.current_mode, title=self.signal_1.name)
-        self.ui.signal_2_plot.plotItem.plot(self.signal_2.time_array, self.signal_2.current_mode, title=self.signal_2.name)
+        self.ui.signal_1_plot.clear()
+        self.ui.signal_2_plot.clear()
+        self.ui.cross_correlatoion_plot.clear()
+
+        self.ui.signal_1_plot.plotItem.plot(self.signal_1.time_array, self.signal_1.current_mode, pen='g', title=self.signal_1.name)
+        self.ui.signal_2_plot.plotItem.plot(self.signal_2.time_array, self.signal_2.current_mode, pen='r', title=self.signal_2.name)
         signal1_normalized_samples = (self.signal_1.current_mode - np.mean(self.signal_1.current_mode)) / (
                     np.std(self.signal_1.current_mode) * self.signal_1.current_mode.size)
         signal2_normalized_samples = (self.signal_2.current_mode - np.mean(self.signal_2.current_mode)) / (
@@ -36,6 +40,7 @@ class CrossCorrelationWidget(TemplateBaseClass):
         offsets = -(np.arange(weakcorr.size) - signal1_normalized_samples.size + 1) / self.signal_1.fs
         self.ui.cross_correlatoion_plot.plotItem.plot(offsets, weakcorr,
                               title='Cross-correlation of ' + self.signal_1.name + " and " + self.signal_2.name)
+        self.ui.cross_correlatoion_plot.autoRange()
 
     # def cleanup(self):
     #     self.signal_1.destroyPlots()
