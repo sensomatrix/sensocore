@@ -163,7 +163,7 @@
   <widget class="QDockWidget" name="dockWidget_3">
    <property name="minimumSize">
     <size>
-     <width>210</width>
+     <width>291</width>
      <height>188</height>
     </size>
    </property>
@@ -181,60 +181,20 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="tabPosition">
-        <enum>QTabWidget::South</enum>
-       </property>
-       <property name="tabShape">
-        <enum>QTabWidget::Rounded</enum>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <property name="usesScrollButtons">
-        <bool>false</bool>
-       </property>
-       <property name="documentMode">
-        <bool>false</bool>
-       </property>
-       <property name="tabsClosable">
-        <bool>false</bool>
-       </property>
-       <property name="movable">
-        <bool>false</bool>
-       </property>
-       <property name="tabBarAutoHide">
-        <bool>false</bool>
-       </property>
-       <widget class="ConsoleWidget" name="console_widget_tab">
-        <attribute name="title">
-         <string>Console</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="spectrum_view_tab">
-        <attribute name="title">
-         <string>Spectrum View</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="PlotWidget" name="spectrum_view_plot"/>
-         </item>
-        </layout>
-       </widget>
-      </widget>
+      <widget class="PlotWidget" name="spectrum_view_plot"/>
      </item>
     </layout>
    </widget>
@@ -311,12 +271,6 @@
    <class>Channels</class>
    <extends>QWidget</extends>
    <header>widgets.channels_widget</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ConsoleWidget</class>
-   <extends>QWidget</extends>
-   <header>pyqtgraph.console</header>
    <container>1</container>
   </customwidget>
   <customwidget>
