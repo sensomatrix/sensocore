@@ -1,6 +1,6 @@
 from wfdb import rdrecord, rdann
 from models.signal import Signal
-from utils.timeutils import generateTimeArrayFromNumberOfSamples
+from utils.timeutils import generate_time_array
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
@@ -55,10 +55,18 @@ class PhysioNetWidget(TemplateBaseClass):
             for index, channel in enumerate(record.sig_name):
                 sig_name = channel
                 sig_samples = record.p_signal[:, index].reshape(record.p_signal.shape[0], 1)
-                sig_timearray = generateTimeArrayFromNumberOfSamples(fs, sig_samples.shape[0]).\
-                    reshape(sig_samples.shape)
+
+                if record.base_time is None:
+                    record.base_time = '00:00:00'
+
+                sig_timearray = generate_time_array(record.base_time,
+                                                    self.ui.sample_to.value() - self.ui.sample_from.value(),
+                                                    record.fs)
+
+                sig_timearray = sig_timearray.reshape((sig_timearray.shape[0], 1))
 
                 output = np.hstack([sig_timearray, sig_samples])
+
 
                 signal_type = ''
 
