@@ -304,13 +304,13 @@
   <customwidget>
    <class>Oscilloscope</class>
    <extends>QWidget</extends>
-   <header>oscilloscope_widget</header>
+   <header>widgets.oscilloscope_widget</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Channels</class>
    <extends>QWidget</extends>
-   <header>channels_widget</header>
+   <header>widgets.channels_widget</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -322,13 +322,13 @@
   <customwidget>
    <class>SecondaryArea</class>
    <extends>QWidget</extends>
-   <header>secondaryarea</header>
+   <header>widgets.secondaryarea</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>CrossCorrelationWidget</class>
    <extends>QWidget</extends>
-   <header location="global">cross_correlation_widget</header>
+   <header location="global">widgets.cross_correlation_widget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

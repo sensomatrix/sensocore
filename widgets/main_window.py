@@ -123,12 +123,3 @@ class MainWindow(TemplateBaseClass):
 
     def create_signal(self, output, index):
         self.signals.create_child_signal(output, index)
-
-
-if __name__ == "__main__":
-    import sys
-    app = QApplication(sys.argv)
-
-    window = MainWindow()
-    window.showMaximized()
-    sys.exit(app.exec_())

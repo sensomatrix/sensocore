@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal
 from numpy import mean
 from biosppy import signals, clustering
 from utils.frequtils import compute_psd
+from keras import backend as K
 from keras.models import load_model
 import numpy as np
 import biosppy
@@ -11,8 +12,11 @@ import cv2
 import matplotlib.pyplot as plt
 
 # TODO: Make sure to use a proper route to this file
+
+K.clear_session()
 trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScratchEpoch2.hdf5')
 trained_model._make_predict_function()  # Necessary
+
 
 class Signal:
     def __init__(self, samples_array, fs, name, signal_type, annotations=None, epochs=None):
