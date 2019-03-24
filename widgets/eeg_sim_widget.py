@@ -1,16 +1,33 @@
 import pyqtgraph as pg
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import QThread
 from simulations.eeg.jansen import simulate_eeg_jansen
 from models.signal import Signal
 import os
-import _thread
 import time
-import sys
 
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/eeg_sim.ui')
 EEGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
+
+
+class SimulateEEGThread(QThread):
+    def __init__(self, fs=None, c1=None, noise=None, callback=None, duration=None, output=None):
+        QThread.__init__(self)
+        self.output = None
+        self.fs = fs
+        self.c1 = c1
+        self.noise = noise
+        self.callback = callback
+        self.duration = duration
+        self.output = output
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        self.output = simulate_eeg_jansen(fs=self.fs, C1=self.c1,
+                            noise_magnitude=self.noise, callback=self.callback, duration=self.duration)
 
 
 class EEGSimulationWidget(TemplateBaseClass):
@@ -48,6 +65,11 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
         self.ui.create_signal_button.clicked.connect(self.generate_signal)
 ###############################################################################################
+        self.eeg_sim_thread = SimulateEEGThread(self.sampling_frequency, self.c1, self.noise, self.current_progress,
+                                                duration=self.duration)
+
+        self.eeg_sim_thread.finished.connect(self.update_output)
+
         self.generate_plot(True)
 
         self.zoomed_plot = self.ui.zoomed_plot.plot(self.eeg_output, pen="g")
@@ -70,6 +92,9 @@ class EEGSimulationWidget(TemplateBaseClass):
 
 # Methods
 ###############################################################################################
+    def update_output(self):
+        self.eeg_output = self.eeg_sim_thread.output
+
     def update_graph(self):
         self.region.setZValue(10)
         minX, maxX = self.region.getRegion()
@@ -89,25 +114,26 @@ class EEGSimulationWidget(TemplateBaseClass):
     def generate_plot(self, for_graphing):
         self.current_percentage = 0
 
-        _thread.start_new_thread(self.simulate_eeg, (for_graphing,))
+        self.simulate_eeg(for_graphing)
 
         self.simulate_progress_bar()
-
-        while (_thread._count() > 1 and sys.gettrace() is None) and _thread._count() > 0:
-            pass
 
     def simulate_progress_bar(self):
         with pg.ProgressDialog("Simulating EEG Signal", maximum=100) as dlg:
             dlg.setWindowTitle('EEG Sim')
-            while self.current_percentage != 100:
+            while self.eeg_sim_thread.isRunning():
                 time.sleep(0.02)
                 dlg.setValue(self.current_percentage)
 
     def simulate_eeg(self, for_graphing):
         duration = self.duration_default if for_graphing else self.duration
 
-        self.eeg_output = simulate_eeg_jansen(fs=self.sampling_frequency, C1=self.c1,
-                                                         noise_magnitude=self.noise, callback=self.current_progress, duration=duration)
+        self.eeg_sim_thread.fs = self.sampling_frequency
+        self.eeg_sim_thread.c1 = self.c1
+        self.eeg_sim_thread.noise = self.noise
+        self.eeg_sim_thread.duration = duration
+
+        self.eeg_sim_thread.start()
 
     def current_progress(self, current_percentage):
         self.current_percentage = current_percentage

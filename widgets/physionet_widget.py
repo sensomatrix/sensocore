@@ -67,6 +67,7 @@ class PhysioNetWidget(TemplateBaseClass):
 
                 output = np.hstack([sig_timearray, sig_samples])
 
+                self.close()
 
                 signal_type = ''
 
@@ -84,7 +85,6 @@ class PhysioNetWidget(TemplateBaseClass):
 
             self.signals.add_signals(siglist)
 
-            self.close()
 
     def showError(self, message):
         error_dialog = QMessageBox(self)
