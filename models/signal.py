@@ -17,7 +17,7 @@ from PyQt5.QtCore import QTimer
 # TODO: Make sure to use a proper route to this file
 
 K.clear_session()
-trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScratchEpoch2.hdf5')
+trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScratchEpoch2.hdf5', compile=False)
 trained_model._make_predict_function()  # Necessary
 
 
