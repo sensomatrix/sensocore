@@ -12,7 +12,7 @@ ECGSimulationView, TemplateBaseClass = pg.Qt.loadUiType(uiFile)
 
 
 class ECGSimulationWidget(TemplateBaseClass):
-    def __init__(self, signals):
+    def __init__(self, signals, sim_count=0):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
 
@@ -111,6 +111,13 @@ class ECGSimulationWidget(TemplateBaseClass):
         # self.plot.getViewBox().setMouseEnabled(y=False)
 
         self.init = False
+
+        name = 'ECG Simulation'
+
+        if sim_count > 0:
+            name += ' ' + str(sim_count)
+
+        self.ui.simulation_line_edit.setText(name)
 
         self.show()
 

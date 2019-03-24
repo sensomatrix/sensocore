@@ -24,6 +24,9 @@ class MainWindow(TemplateBaseClass):
         self.ui = MainWindowView()
         self.ui.setupUi(self)
 
+        self.ecg_sim_count = 0
+        self.eeg_sim_count = 0
+
         self.signals = SignalListModel(self)
         self.signals.added_signal.connect(self.plot_signal)
         self.signals.added_signals.connect(self.plot_signals)
@@ -53,15 +56,21 @@ class MainWindow(TemplateBaseClass):
         ecg_summary_widget.exec_()
 
     def launch_eeg_summary(self, eeg, raw):
-        eeg_summary_widget = EEGSummaryWidget(eeg, raw)
+        if self.eeg_sim_count > 0:
+            eeg_summary_widget = EEGSummaryWidget(eeg, raw)
+        else:
+            eeg_summary_widget = EEGSummaryWidget(eeg, raw)
+
         eeg_summary_widget.exec_()
 
     def launch_eeg_widget(self):
-        eeg_sim_widget = EEGSimulationWidget(self.signals)
+        eeg_sim_widget = EEGSimulationWidget(self.signals, self.eeg_sim_count)
+        self.eeg_sim_count += 1
         eeg_sim_widget.exec_()
 
     def launch_ecg_widget(self):
-        ecg_sim_widget = ECGSimulationWidget(self.signals)
+        ecg_sim_widget = ECGSimulationWidget(self.signals, self.ecg_sim_count)
+        self.ecg_sim_count += 1
         ecg_sim_widget.exec_()
 
     def launch_cross_corr(self, signal_1, signal_2):

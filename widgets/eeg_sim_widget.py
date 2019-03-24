@@ -31,7 +31,7 @@ class SimulateEEGThread(QThread):
 
 
 class EEGSimulationWidget(TemplateBaseClass):
-    def __init__(self, signals):
+    def __init__(self, signals, sim_count=0):
         TemplateBaseClass.__init__(self)
         self.setWindowTitle('ECG Simulation')
 
@@ -87,6 +87,13 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.update_graph()
 
         self.ui.main_plot.addItem(self.region, ignoreBounds=True)
+
+        name = 'EEG Simulation'
+
+        if sim_count > 0:
+            name += ' ' + str(sim_count)
+
+        self.ui.simulation_line_edit.setText(name)
 
         self.show()
 
