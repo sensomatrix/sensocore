@@ -88,17 +88,20 @@ class PhysioNetWidget(TemplateBaseClass):
                     siglist.append(sig)
 
                 self.signals.add_signals(siglist)
+                self.close()
             except:
-                home = str(Path.home())
-                bio_signals_path = os.path.join(home, 'Bio Signals')
-                path = os.path.join(bio_signals_path, '{0}.edf'.format(self.record_name))
-                if not os.path.exists(path):
-                    wget.download(self.url_link + self.record_name + '.edf', os.path.join(home, 'Bio Signals'))
-                signals = load_from_edf(path, self.ui.sample_from.value(), self.ui.sample_to.value())
+                try:
+                    home = str(Path.home())
+                    bio_signals_path = os.path.join(home, 'Bio Signals')
+                    path = os.path.join(bio_signals_path, '{0}.edf'.format(self.record_name))
+                    if not os.path.exists(path):
+                        wget.download(self.url_link + self.record_name + '.edf', os.path.join(home, 'Bio Signals'))
+                    signals = load_from_edf(path, self.ui.sample_from.value(), self.ui.sample_to.value())
 
-                self.signals.add_signals(signals)
-
-            self.close()
+                    self.signals.add_signals(signals)
+                    self.close()
+                except:
+                    self.showError('Unable to open record {0} at url {1}'.format(self.record_name, self.url_link))
 
     def showError(self, message):
         error_dialog = QMessageBox(self)
