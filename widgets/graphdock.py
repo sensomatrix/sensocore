@@ -7,14 +7,15 @@ LINECOLORS = ['r', 'g', 'b', 'c', 'm', 'y', 'w']
 
 class GraphDock(Dock):
 
-    def __init__(self, parent, name):
+    def __init__(self, parent, name, add_legend=True):
         super().__init__(name, size=(1, 1), closable=True)
         self.parent = parent
         self.pgview = pg.GraphicsView()
         self.graphLayout = pg.GraphicsLayout()
         self.pgview.setCentralItem(self.graphLayout)
         self.p = pg.PlotItem()
-        self.p.addLegend()
+        if add_legend:
+            self.p.addLegend()
         self.graphLayout.addItem(self.p)
         self.addWidget(self.pgview)
         self.current_index = 0
@@ -37,13 +38,9 @@ class GraphDock(Dock):
 
     # Following code is from: https://stackoverflow.com/questions/51312923/plotting-the-spectrum
     def plot_TF(self, signal):
+        p1 = self.p
 
-        if self.graphLayout.currentRow == 0:
-            p1 = self.p
-        else:
-            p1 = self.graphLayout.addPlot(title="Time-Frequency - " + signal.name)
-
-        # self.graphLayout.nextRow()
+        p1.clear()
 
         img = pg.ImageItem()
         p1.addItem(img)
@@ -62,5 +59,6 @@ class GraphDock(Dock):
                   TFt[-1] / np.size(TFSxx, axis=1))
         # Limit panning/zooming to the spectrogram
         p1.setLimits(xMin=0, xMax=TFf[-1], yMin=0, yMax=TFt[-1])
+        p1.setTitle(signal.name)
         p1.setLabel('bottom', "Frequency", units='Hz')
         p1.setLabel('left', "Time", units='s')
