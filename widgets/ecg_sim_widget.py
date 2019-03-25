@@ -29,6 +29,8 @@ class ECGSimulationWidget(TemplateBaseClass):
         self.ui.plot.addItem(self.hLine, ignoreBounds=True)
         self.proxy = pg.SignalProxy(self.ui.plot.scene().sigMouseMoved, rateLimit=60, slot=self.mouse_moved)
 
+        self.signal_added = False
+
 # Saving default values
 ###############################################################################################
         self.p_default = self.p
@@ -194,6 +196,7 @@ class ECGSimulationWidget(TemplateBaseClass):
         # self.generate_plot(is_for_graphing=False)
         signal = Signal(self.ecg_output, self.sampling_frequency, self.name, 'ECG')
         self.signals.add_signal(signal)
+        self.signal_added = True
         self.close()
 
     def reset_to_default(self):

@@ -95,6 +95,8 @@ class EEGSimulationWidget(TemplateBaseClass):
 
         self.ui.simulation_line_edit.setText(name)
 
+        self.signal_added = False
+
         self.show()
 
 # Methods
@@ -116,6 +118,7 @@ class EEGSimulationWidget(TemplateBaseClass):
             self.generate_plot(False)
         signal = Signal(self.eeg_output, self.sampling_frequency, self.name, 'EEG')
         self.signals.add_signal(signal)
+        self.signal_added = True
         self.close()
 
     def generate_plot(self, for_graphing):

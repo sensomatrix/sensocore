@@ -56,22 +56,22 @@ class MainWindow(TemplateBaseClass):
         ecg_summary_widget.exec_()
 
     def launch_eeg_summary(self, eeg, raw):
-        if self.eeg_sim_count > 0:
-            eeg_summary_widget = EEGSummaryWidget(eeg, raw)
-        else:
-            eeg_summary_widget = EEGSummaryWidget(eeg, raw)
-
+        eeg_summary_widget = EEGSummaryWidget(eeg, raw)
         eeg_summary_widget.exec_()
 
     def launch_eeg_widget(self):
         eeg_sim_widget = EEGSimulationWidget(self.signals, self.eeg_sim_count)
-        self.eeg_sim_count += 1
         eeg_sim_widget.exec_()
+
+        if eeg_sim_widget.signal_added:
+            self.eeg_sim_count += 1
 
     def launch_ecg_widget(self):
         ecg_sim_widget = ECGSimulationWidget(self.signals, self.ecg_sim_count)
-        self.ecg_sim_count += 1
         ecg_sim_widget.exec_()
+
+        if ecg_sim_widget.signal_added:
+            self.ecg_sim_count += 1
 
     def launch_cross_corr(self, signal_1, signal_2):
         self.ui.main_tab.setCurrentIndex(1)
