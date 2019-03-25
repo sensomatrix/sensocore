@@ -258,6 +258,9 @@ class SignalListModel(QtCore.QAbstractListModel):
         self.plot_psd_signal.emit(signal)
 
     def plot_time_freq(self, QModelIndex):
+        for signal in self._signals:
+            signal.time_freq = None
+
         signal = self.get_signal(QModelIndex)
         self.plot_time_freq_signal.emit(signal)
 
