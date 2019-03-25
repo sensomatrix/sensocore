@@ -63,6 +63,8 @@ def generate_ecg(sampling_frequency, noise_magnitude, end_time, period, delay,
 
 	y = p_wave + q_wave + r_wave + s_wave + t_wave
 
+	y -= 0.2
+
 	# Need to find out how much to shift the values by
 	if not is_for_graphing:
 		delay_shift = int(delay * sampling_frequency)
