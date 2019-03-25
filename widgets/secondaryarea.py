@@ -19,7 +19,7 @@ class SecondaryArea(QWidget):
         self.resize(self.sizeHint())
 
         # TF Dock
-        self.tf_dock = GraphDock(self, "Time-Frequency view")
+        self.tf_dock = GraphDock(self, "Time-Frequency view", add_legend=False)
         self.area.addDock(self.tf_dock)
         self.resize(self.sizeHint())
 
