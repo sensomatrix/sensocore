@@ -135,11 +135,13 @@ class MainWindow(TemplateBaseClass):
         self.signals.create_child_signal(output, index)
 
     def fill_item(self, item, value):
-        #item.setExpanded(True)
+        # part of this code was taken from
+        # https://stackoverflow.com/questions/21805047/qtreewidget-to-mirror-python-dictionary
         if isinstance(value, dict):
             for key, val in sorted(value.items()):
                 child = QTreeWidgetItem()
                 child.setText(0, str(key))
+                child.setToolTip(0, str(key))
                 item.addChild(child)
                 self.fill_item(child, val)
         elif isinstance(value, list):
@@ -148,29 +150,25 @@ class MainWindow(TemplateBaseClass):
                 item.addChild(child)
                 if type(val) is dict:
                     child.setText(0, list(val.keys())[0])
+                    child.setToolTip(0, list(val.keys())[0])
                     self.fill_item(child, list(val.values())[0])
                 elif type(val) is list:
                     child.setText(0, '[list]')
+                    child.setToolTip(0, '[list]')
                     self.fill_item(child, val)
                 else:
                     child.setText(0, str(val))
-                #child.setExpanded(True)
+                    child.setToolTip(0, str(val))
         else:
             child = QTreeWidgetItem()
             child.setText(0, str(value))
+            child.setToolTip(0, str(value))
             item.addChild(child)
 
     def fill_widget(self, patient):
-       # d = {'key1': 'value1',
-        #     'key2': 'value2',
-         #    'key3': [1, 2, 3, {1: 3, 7: 9}],
-          #   'key4': object(),
-           #  'key5': {'another key1': 'another value1',
-            #          'another key2': 'another value2'}}
         d = patient.patient_info
-        self.tree_widget.clear()
-        self.fill_item(self.tree_widget.invisibleRootItem(), d)
+        self.fill_item(self.patient_tree_widget.invisibleRootItem(), d)
 
     @property
-    def tree_widget(self):
-        return self.ui.treeWidget
+    def patient_tree_widget(self):
+        return self.ui.treeWidgetPatient
