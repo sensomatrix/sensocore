@@ -37,8 +37,11 @@ def load_from_file(path_to_file):
     if re.search("\.json$", path_to_file):  # if json file
         signals = load_from_json(path_to_file)
         return signals
-    if re.search("\.fif$", path_to_file):
+    elif re.search("\.fif$", path_to_file):
         signals = load_from_fif(path_to_file)
+        return signals
+    elif re.search("\.edf$", path_to_file):
+        signals = load_from_edf(path_to_file)
         return signals
     # if re.search("\.edf", path_to_file):
     #     signals = load_from_edf(path_to_file)
@@ -195,7 +198,7 @@ def load_from_edf(filename, sample_from=-1, sample_to=-1):
     if sample_from != -1 and sample_to != -1:
         start_time = sample_from / raw.info['sfreq']
         end_time = sample_to / raw.info['sfreq']
-        
+
         t_idx = raw.time_as_index([start_time, end_time])
 
         data, times = raw[:, t_idx[0]:t_idx[1]]
