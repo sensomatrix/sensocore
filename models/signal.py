@@ -39,7 +39,7 @@ class Signal:
         self.create_summary()
 
     def create_summary(self):
-        if 'EEG' in self.type:
+        if 'EEG' in self.type or 'EEG' in self.name:
             eeg = np.transpose(self.current_mode).reshape((self.current_mode.shape[0], 1))
             try:
                 self.summary = signals.eeg.eeg(eeg, self.fs, show=False)
@@ -57,7 +57,7 @@ class Signal:
                 self.clusters = clustering.dbscan(eeg_psd)
             except Exception as e:
                 print(e.args)
-        elif 'ECG' in self.type:
+        elif 'ECG' in self.type or 'ECG' in self.name:
             ecg = np.transpose(self.current_mode)
             try:
                 self.summary = signals.ecg.ecg(ecg, self.fs, show=False)

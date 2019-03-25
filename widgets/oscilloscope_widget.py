@@ -75,7 +75,7 @@ class Oscilloscope(TemplateBaseClass):
                 lr.setToolTip(tooltip_text)
 
                 plot.vb.addItem(lr)
-        elif 'ECG' in signal.type:
+        elif 'ECG' in signal.type or 'ECG' in signal.name:
             if signal.clusters is not None and signal.clusters[0] is not None:
                 for cluster in signal.clusters[0]:
                     for info in cluster[1]:

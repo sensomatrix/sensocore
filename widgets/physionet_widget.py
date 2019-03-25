@@ -4,9 +4,11 @@ from utils.timeutils import generate_time_array
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtCore import pyqtSignal
-import os
+from pathlib import Path
 import numpy as np
+import wget
+import os
+from utils.file_read import load_from_edf
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -25,6 +27,10 @@ class PhysioNetWidget(TemplateBaseClass):
         self.signals = signals
 
         self.ui.import_button.clicked.connect(self.import_from_physio)
+        self.ui.ecg.toggled.connect(self.toggle_annotate)
+
+    def toggle_annotate(self, checked):
+        self.ui.annotate_checkbox.setEnabled(checked)
 
     def import_from_physio(self):
         if self.ui.sample_from.value() >= self.ui.sample_to.value():
@@ -47,44 +53,52 @@ class PhysioNetWidget(TemplateBaseClass):
                     for i in range(annotations.ann_len):
                         annotations.sample[i] -= self.ui.sample_from.value()
 
+                fs = record.fs
+                # comments = record.comments TODO: Get comments and store them
+                siglist = []
+                for index, channel in enumerate(record.sig_name):
+                    sig_name = channel
+                    sig_samples = record.p_signal[:, index].reshape(record.p_signal.shape[0], 1)
+
+                    if record.base_time is None:
+                        record.base_time = '00:00:00'
+
+                    sig_timearray = generate_time_array(record.base_time,
+                                                        self.ui.sample_to.value() - self.ui.sample_from.value(),
+                                                        record.fs)
+
+                    sig_timearray = sig_timearray.reshape((sig_timearray.shape[0], 1))
+
+                    output = np.hstack([sig_timearray, sig_samples])
+
+                    self.close()
+
+                    signal_type = ''
+
+                    if self.ui.ecg.isChecked():
+                        signal_type = 'ECG'
+                    elif self.ui.eeg.isChecked():
+                        signal_type = 'EEG'
+
+                    sig = Signal(output,
+                                 fs=fs,
+                                 name='Physionet {0} Signal (Record {1})'.format(sig_name, self.record_name),
+                                 signal_type=signal_type,
+                                 annotations=annotations)
+                    siglist.append(sig)
+
+                self.signals.add_signals(siglist)
             except:
-                raise
-            fs = record.fs
-            # comments = record.comments TODO: Get comments and store them
-            siglist = []
-            for index, channel in enumerate(record.sig_name):
-                sig_name = channel
-                sig_samples = record.p_signal[:, index].reshape(record.p_signal.shape[0], 1)
+                home = str(Path.home())
+                bio_signals_path = os.path.join(home, 'Bio Signals')
+                path = os.path.join(bio_signals_path, '{0}.edf'.format(self.record_name))
+                if not os.path.exists(path):
+                    wget.download(self.url_link + self.record_name + '.edf', os.path.join(home, 'Bio Signals'))
+                signals = load_from_edf(path, self.ui.sample_from.value(), self.ui.sample_to.value())
 
-                if record.base_time is None:
-                    record.base_time = '00:00:00'
+                self.signals.add_signals(signals)
 
-                sig_timearray = generate_time_array(record.base_time,
-                                                    self.ui.sample_to.value() - self.ui.sample_from.value(),
-                                                    record.fs)
-
-                sig_timearray = sig_timearray.reshape((sig_timearray.shape[0], 1))
-
-                output = np.hstack([sig_timearray, sig_samples])
-
-                self.close()
-
-                signal_type = ''
-
-                if self.ui.ecg.isChecked():
-                    signal_type = 'ECG'
-                elif self.ui.eeg.isChecked():
-                    signal_type = 'EEG'
-
-                sig = Signal(output,
-                             fs=fs,
-                             name='Physionet {0} Signal (Record {1})'.format(sig_name, self.record_name),
-                             signal_type=signal_type,
-                             annotations=annotations)
-                siglist.append(sig)
-
-            self.signals.add_signals(siglist)
-
+            self.close()
 
     def showError(self, message):
         error_dialog = QMessageBox(self)

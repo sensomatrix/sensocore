@@ -8,9 +8,9 @@ from models.epoch import Epoch
 from models.patient import Patient
 from PyQt5.QtCore import pyqtSignal, QObject
 from pathlib import Path
+import mne
 import json
 import re
-
 
 
 # dialog used to load a complete dataset. to do: deal with the case user clicks on "cancel"
@@ -37,6 +37,15 @@ def load_from_file(path_to_file):
     if re.search("\.json$", path_to_file):  # if json file
         signals = load_from_json(path_to_file)
         return signals
+    elif re.search("\.fif$", path_to_file):
+        signals = load_from_fif(path_to_file)
+        return signals
+    elif re.search("\.edf$", path_to_file):
+        signals = load_from_edf(path_to_file)
+        return signals
+    # if re.search("\.edf", path_to_file):
+    #     signals = load_from_edf(path_to_file)
+    #     return signals
     with open(path_to_file, 'r') as fileObject:
         lines = readnextlines(fileObject, 5)
         while len(lines) == 5:
@@ -157,4 +166,58 @@ def load_from_json(filepath):
             signal = np.hstack([time_array, samples_array])
             sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
             signals.append(sig)
+    return signals
+
+
+def load_from_fif(filename):
+    signals = []
+    raw = mne.io.read_raw_fif(filename)
+
+    picks = mne.pick_types(raw.info, meg=False, eeg=True)
+    t_idx = raw.time_as_index([0., 30.])
+
+    data, times = raw[picks, t_idx[0]:t_idx[1]]
+
+    for idx, pick in enumerate(picks):
+        name = raw.ch_names[pick]
+        typeofsignal = 'EEG'
+        samplingrate = raw.info['sfreq']
+        time_array = times
+        samples_array = data[idx]
+        signal = np.hstack(
+            [time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
+        sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate)
+        signals.append(sig)
+
+    return signals
+
+
+def load_from_edf(filename, sample_from=-1, sample_to=-1):
+    raw = mne.io.read_raw_edf(filename, preload=True)
+
+    if sample_from != -1 and sample_to != -1:
+        start_time = sample_from / raw.info['sfreq']
+        end_time = sample_to / raw.info['sfreq']
+
+        t_idx = raw.time_as_index([start_time, end_time])
+
+        data, times = raw[:, t_idx[0]:t_idx[1]]
+
+    else:
+        data, times = raw[:]
+
+    signals = []
+
+    for i, samples in enumerate(data):
+        name = raw.ch_names[i]
+        typeofsignal = ''
+        samplingrate = raw.info['sfreq']
+        time_array = times
+        samples_array = samples
+        signal = np.hstack(
+            [time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
+        epochs = None
+        sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
+        signals.append(sig)
+
     return signals
