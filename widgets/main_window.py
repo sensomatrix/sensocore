@@ -1,5 +1,6 @@
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem
+from models.patient import PatientListModel
 from widgets.eeg_sim_widget import EEGSimulationWidget
 from widgets.ecg_sim_widget import ECGSimulationWidget
 from widgets.firdesignerdiag import FIRDesignerDialog
@@ -26,7 +27,7 @@ class MainWindow(TemplateBaseClass):
 
         self.ecg_sim_count = 0
         self.eeg_sim_count = 0
-
+        self.patients = PatientListModel()
         self.signals = SignalListModel(self)
         self.signals.added_signal.connect(self.plot_signal)
         self.signals.added_signals.connect(self.plot_signals)
@@ -36,6 +37,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.plot_ecg_summary.connect(self.launch_ecg_summary)
         self.signals.plot_eeg_summary.connect(self.launch_eeg_summary)
         self.signals.cross_correlation_signal.connect(self.launch_cross_corr)
+        self.patients.patientCreated.connect(self.fill_widget)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
         self.ui.oscilloscope_tab.region_cleared.connect(self.clear_psd)
@@ -131,3 +133,44 @@ class MainWindow(TemplateBaseClass):
 
     def create_signal(self, output, index):
         self.signals.create_child_signal(output, index)
+
+    def fill_item(self, item, value):
+        #item.setExpanded(True)
+        if isinstance(value, dict):
+            for key, val in sorted(value.items()):
+                child = QTreeWidgetItem()
+                child.setText(0, str(key))
+                item.addChild(child)
+                self.fill_item(child, val)
+        elif isinstance(value, list):
+            for val in value:
+                child = QTreeWidgetItem()
+                item.addChild(child)
+                if type(val) is dict:
+                    child.setText(0, list(val.keys())[0])
+                    self.fill_item(child, list(val.values())[0])
+                elif type(val) is list:
+                    child.setText(0, '[list]')
+                    self.fill_item(child, val)
+                else:
+                    child.setText(0, str(val))
+                #child.setExpanded(True)
+        else:
+            child = QTreeWidgetItem()
+            child.setText(0, str(value))
+            item.addChild(child)
+
+    def fill_widget(self, patient):
+       # d = {'key1': 'value1',
+        #     'key2': 'value2',
+         #    'key3': [1, 2, 3, {1: 3, 7: 9}],
+          #   'key4': object(),
+           #  'key5': {'another key1': 'another value1',
+            #          'another key2': 'another value2'}}
+        d = patient.patient_info
+        self.tree_widget.clear()
+        self.fill_item(self.tree_widget.invisibleRootItem(), d)
+
+    @property
+    def tree_widget(self):
+        return self.ui.treeWidget

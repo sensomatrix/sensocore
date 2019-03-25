@@ -26,15 +26,15 @@ def open_dataset_dialog(parent):
                                               "All Files (*)", options=options)
 
     if fileName != '':
-        return load_from_file(fileName)
+        return load_from_file(fileName, parent)
         # for signal in signals:
         #     self.signal_loaded_signal.emit(sig)
         # self.parent.info.set_opened_filename(os.path.basename(openfilepath[0]))
 
-def load_from_file(path_to_file):
+def load_from_file(path_to_file, parent):
     signals = []
     if re.search("\.json$", path_to_file):  # if json file
-        signals = load_from_json(path_to_file)
+        signals = load_from_json(path_to_file, parent)
         return signals
     elif re.search("\.fif$", path_to_file):
         signals = load_from_fif(path_to_file)
@@ -93,6 +93,7 @@ def json_parser(filepath):
     with open(filepath) as file:
         data = json.loads(file.read())
     head = list(data.keys())[0]  # the first key in json
+    patient_info = {}
 
     patient_id = data[head]['header']['patient_information']['id']
     age = data[head]['header']['patient_information']['age']
@@ -104,10 +105,16 @@ def json_parser(filepath):
     visit_num = data[head]['header']['recording_info']['visit_num']
     device_name = data[head]['header']['device_information']['name']
 
+    patient_info.update({'Patient Information': ['ID: '+str(patient_id), 'Age: '+str(age), 'Address: '+str(address),
+                                                 'Birth date: '+bday, 'Sex: '+sex]})
+    patient_info.update({'Recording Information': ['Institution: '+instituition, 'Date: '+date,
+                                                   'Visit Number: '+str(visit_num)]})
+
     channel_keys = [x for x in list(data[head]['header']['device_information'].keys())
                          if re.search("^channel\d+", x)]  # ex: channel1, channel2
 
     channels = {}  # dictionary of channels ex: "channel1" = Channel object
+    channel_info_dict = {}
     for c in channel_keys:
         # device info
         name = data[head]['header']['device_information'][c]['name']
@@ -119,6 +126,11 @@ def json_parser(filepath):
         unit = data[head]['header']['device_information'][c]['data']['unit']
         start_time = data[head]['header']['device_information'][c]['data']['start_time']
         end_time = data[head]['header']['device_information'][c]['data']['end_time']
+
+        if name != "IBI":
+            channel_info_dict.update({c: ['Name: '+name, {'fs': convert_to_string(fs)},
+                                           'Channel dimensions: '+convert_to_string(channel_dimens),
+                                           {'Sensor': sensor}, {'Description': description}]})
 
         # epoch info
         epoch_keys = [x for x in list(data[head]['header']['epoch_information'][c].keys())
@@ -132,10 +144,13 @@ def json_parser(filepath):
             epochs[e] = Epoch(epoch_name, epoch_start_time, epoch_end_time)
         channels[c] = Channel(name, fs, samples_array, channel_dimens, sensor, description, unit, start_time,
                               end_time, epochs)
-    return Patient(patient_id, age, address, bday, sex, instituition, date, visit_num, device_name, channels)
+
+    patient_info.update({'Device Information': ['Name: '+device_name, {'Channels': channel_info_dict}]})
+    return Patient(patient_id, age, address, bday, sex, instituition, date, visit_num, device_name,
+                   channels, patient_info)
 
 
-def load_from_json(filepath):
+def load_from_json(filepath, parent):
     signals = []
     patient = json_parser(filepath)
     for c in patient.channels.values():
@@ -167,7 +182,9 @@ def load_from_json(filepath):
             signal = np.hstack([time_array, samples_array])
             sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs, unit=unit)
             signals.append(sig)
+    parent.patients.append_patient(patient)
     return signals
+
 
 def load_from_fif(filename):
     signals = []
@@ -221,3 +238,11 @@ def load_from_edf(filename, sample_from=-1, sample_to=-1):
         signals.append(sig)
 
     return signals
+
+
+def convert_to_string(numstring):
+    if isinstance(numstring, list):
+       numstring = [str(e) for e in numstring]
+    else:
+        numstring = str(numstring)
+    return numstring
