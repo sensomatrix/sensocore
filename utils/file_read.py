@@ -149,7 +149,6 @@ def json_parser(filepath):
     return Patient(patient_id, age, address, bday, sex, instituition, date, visit_num, device_name,
                    channels, patient_info)
 
-
 def load_from_json(filepath, parent):
     signals = []
     patient = json_parser(filepath)
