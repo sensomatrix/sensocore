@@ -146,6 +146,7 @@ def json_parser(filepath):
                               end_time, epochs)
 
     patient_info.update({'Device Information': ['Name: '+device_name, {'Channels': channel_info_dict}]})
+    patient_info = {'File path: '+filepath: patient_info}
     return Patient(patient_id, age, address, bday, sex, instituition, date, visit_num, device_name,
                    channels, patient_info)
 
