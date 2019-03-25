@@ -37,8 +37,14 @@ class GraphDock(Dock):
 
     # Following code is from: https://stackoverflow.com/questions/51312923/plotting-the-spectrum
     def plot_TF(self, signal):
-        self.graphLayout.nextRow()
-        p1 = self.graphLayout.addPlot(title="Time-Frequency - " + signal.name)
+
+        if self.graphLayout.currentRow == 0:
+            p1 = self.p
+        else:
+            p1 = self.graphLayout.addPlot(title="Time-Frequency - " + signal.name)
+
+        # self.graphLayout.nextRow()
+
         img = pg.ImageItem()
         p1.addItem(img)
         hist = pg.HistogramLUTItem()
@@ -52,9 +58,9 @@ class GraphDock(Dock):
                        (1.0, (246, 111, 0, 255)),
                        (0.0, (75, 0, 113, 255))]})
         img.setImage(TFSxx)
-        img.scale(TFt[-1] / np.size(TFSxx, axis=1),
-                  TFf[-1] / np.size(TFSxx, axis=0))
+        img.scale(TFf[-1] / np.size(TFSxx, axis=0),
+                  TFt[-1] / np.size(TFSxx, axis=1))
         # Limit panning/zooming to the spectrogram
-        p1.setLimits(xMin=0, xMax=TFt[-1], yMin=0, yMax=TFf[-1])
-        p1.setLabel('bottom', "Time", units='s')
-        p1.setLabel('left', "Frequency", units='Hz')
+        p1.setLimits(xMin=0, xMax=TFf[-1], yMin=0, yMax=TFt[-1])
+        p1.setLabel('bottom', "Frequency", units='Hz')
+        p1.setLabel('left', "Time", units='s')
