@@ -60,6 +60,11 @@ class EEGSimulationWidget(TemplateBaseClass):
 
 # Connections
 ###############################################################################################
+        self.ui.c1_spinbox.valueChanged.connect(self.set_should_generate)
+        self.ui.noise_double_spinbox.valueChanged.connect(self.set_should_generate)
+        self.ui.sampling_frequency_spinbox.valueChanged.connect(self.set_should_generate)
+        self.ui.duration_spinbox.valueChanged.connect(self.set_should_generate)
+
         # C1 values being updated
         self.ui.preview_button.clicked.connect(self.update_plot)
         self.ui.reset_signal_button.clicked.connect(self.reset_to_default)
@@ -69,6 +74,8 @@ class EEGSimulationWidget(TemplateBaseClass):
                                                 duration=self.duration)
 
         self.eeg_sim_thread.finished.connect(self.update_output)
+
+        self.should_regenerate_signal = False
 
         self.generate_plot(True)
 
@@ -104,6 +111,9 @@ class EEGSimulationWidget(TemplateBaseClass):
     def update_output(self):
         self.eeg_output = self.eeg_sim_thread.output
 
+    def set_should_generate(self):
+        self.should_regenerate_signal = True
+
     def update_graph(self):
         self.region.setZValue(10)
         minX, maxX = self.region.getRegion()
@@ -114,7 +124,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.region.setRegion(rgn)
 
     def generate_signal(self):
-        if self.duration != self.duration_default:
+        if self.should_regenerate_signal:
             self.generate_plot(False)
         signal = Signal(self.eeg_output, self.sampling_frequency, self.name, 'EEG')
         self.signals.add_signal(signal)
@@ -134,6 +144,7 @@ class EEGSimulationWidget(TemplateBaseClass):
             while self.eeg_sim_thread.isRunning():
                 time.sleep(0.02)
                 dlg.setValue(self.current_percentage)
+        self.should_regenerate_signal = False
 
     def simulate_eeg(self, for_graphing):
         duration = self.duration_default if for_graphing else self.duration
