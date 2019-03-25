@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>FIR Filter Designer</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0" columnstretch="0,0,0,0,1,0,0,0,0">
    <item row="4" column="0">
     <widget class="QGroupBox" name="groupBox_4">
@@ -283,7 +286,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header location="global">pyqtgraph</header>
+   <header>pyqtgraph</header>
   </customwidget>
  </customwidgets>
  <resources/>
