@@ -90,7 +90,8 @@ class PhysioNetWidget(TemplateBaseClass):
                 self.signals.add_signals(siglist)
             except:
                 home = str(Path.home())
-                path = os.path.join(home, 'Bio Signals/{0}.edf'.format(self.record_name))
+                bio_signals_path = os.path.join(home, 'Bio Signals')
+                path = os.path.join(bio_signals_path, '{0}.edf'.format(self.record_name))
                 if not os.path.exists(path):
                     wget.download(self.url_link + self.record_name + '.edf', os.path.join(home, 'Bio Signals'))
                 signals = load_from_edf(path, self.ui.sample_from.value(), self.ui.sample_to.value())
