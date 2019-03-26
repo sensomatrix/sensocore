@@ -11,7 +11,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     # Create and display the splash screen
-    splash_pix = QPixmap('splash_loading.png')
+    splash_pix = QPixmap('sens2.PNG')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
