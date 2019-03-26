@@ -64,15 +64,16 @@ class FIRDesignerDialog(TemplateBaseClass):
 
         self.ui.signal_specific_filter_combo_box.addItem('Custom Filter')
 
-        if 'EEG' in self.current_signal.type or 'ECG' in self.current_signal.type:
+        if 'EEG' in self.current_signal.type or 'ECG' in self.current_signal.type\
+                or 'EEG' in self.current_signal.name or 'ECG' in self.current_signal.name:
             self.ui.signal_specific_filter_combo_box.addItem('Power Line Noise Filter', ['49', '51', 'notch'])
 
-        if 'EEG' in self.current_signal.type:
+        if 'EEG' in self.current_signal.type or 'EEG' in self.current_signal.name:
             self.ui.signal_specific_filter_combo_box.addItem('Alpha Filter', ['8', '13', 'alpha'])
             self.ui.signal_specific_filter_combo_box.addItem('Theta Filter', ['4', '7', 'theta'])
             self.ui.signal_specific_filter_combo_box.addItem('Beta Filter', ['12.5', '30', 'beta'])
 
-        if 'ECG' in self.current_signal.type:
+        if 'ECG' in self.current_signal.type or 'ECG' in self.current_signal.name:
             self.ui.signal_specific_filter_combo_box.addItem('Respiration Filter', ['0.4', '2', 'respiration'])
             self.ui.signal_specific_filter_combo_box.addItem('Movement Filter', ['1', '3', 'movement'])
             self.ui.signal_specific_filter_combo_box.addItem('Transport Filter', ['3', '15', 'transport'])

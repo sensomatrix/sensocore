@@ -63,6 +63,7 @@ class Oscilloscope(TemplateBaseClass):
         last_added_index = len(self.plots) - 1
         plot = self.get_plot(last_added_index)
         plot.getViewBox().setMouseEnabled(y=False)
+        plot.setClipToView(True)
         plot.listDataItems()[0].setPen(pg.mkPen(random_color))
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
