@@ -12,11 +12,12 @@ import cv2
 import matplotlib.pyplot as plt
 from widgets.classifier_widget import ClassificationWidget
 from PyQt5.QtCore import QTimer
+import os
 
-
-# TODO: Make sure to use a proper route to this file
 K.clear_session()
-trained_model = load_model('/home/niroigen/Dev/sensomatrix/src/sensobox/ecgScratchEpoch2.hdf5', compile=False)
+dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(dir, '..', 'ecgScratchEpoch2.hdf5')
+trained_model = load_model(model_path, compile=False)
 trained_model._make_predict_function()  # Necessary
 
 

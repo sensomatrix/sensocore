@@ -70,8 +70,8 @@ class Oscilloscope(TemplateBaseClass):
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
 
-        if last_added_index is not 0 and 'Simulation' not in signal.name:
-            self.plots[last_added_index][0].setXLink(self.plots[0][0].vb)
+        # if last_added_index is not 0 and 'Simulation' not in signal.name:
+        #     self.plots[last_added_index][0].setXLink(self.plots[0][0].vb)
 
         if signal.epochs is not None:
             for epoch in signal.epochs.values():
