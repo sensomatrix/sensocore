@@ -55,7 +55,7 @@
      <x>0</x>
      <y>0</y>
      <width>1078</width>
-     <height>18</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLoad_Data">
@@ -124,6 +124,11 @@
           <property name="headerHidden">
            <bool>true</bool>
           </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>
@@ -173,7 +178,7 @@
   <widget class="QDockWidget" name="dockWidget_3">
    <property name="minimumSize">
     <size>
-     <width>149</width>
+     <width>291</width>
      <height>188</height>
     </size>
    </property>
@@ -191,60 +196,20 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="tabPosition">
-        <enum>QTabWidget::South</enum>
-       </property>
-       <property name="tabShape">
-        <enum>QTabWidget::Rounded</enum>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <property name="usesScrollButtons">
-        <bool>false</bool>
-       </property>
-       <property name="documentMode">
-        <bool>false</bool>
-       </property>
-       <property name="tabsClosable">
-        <bool>false</bool>
-       </property>
-       <property name="movable">
-        <bool>false</bool>
-       </property>
-       <property name="tabBarAutoHide">
-        <bool>false</bool>
-       </property>
-       <widget class="ConsoleWidget" name="console_widget_tab">
-        <attribute name="title">
-         <string>Console</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="spectrum_view_tab">
-        <attribute name="title">
-         <string>Spectrum View</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="PlotWidget" name="spectrum_view_plot"/>
-         </item>
-        </layout>
-       </widget>
-      </widget>
+      <widget class="PlotWidget" name="spectrum_view_plot"/>
      </item>
     </layout>
    </widget>
@@ -309,7 +274,7 @@
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header location="global">pyqtgraph</header>
+   <header>pyqtgraph</header>
   </customwidget>
   <customwidget>
    <class>Oscilloscope</class>
@@ -321,12 +286,6 @@
    <class>Channels</class>
    <extends>QWidget</extends>
    <header location="global">widgets.channels_widget</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ConsoleWidget</class>
-   <extends>QWidget</extends>
-   <header>pyqtgraph.console</header>
    <container>1</container>
   </customwidget>
   <customwidget>

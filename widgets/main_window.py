@@ -53,6 +53,8 @@ class MainWindow(TemplateBaseClass):
         self.ui.actionPhysioNet.triggered.connect(self.launch_physionet_widget)
         self.ui.actionLocally.triggered.connect(self.launch_local_file)
 
+        self.ui.spectrum_view_plot.setTitle('Spectrum View')
+
     def launch_ecg_summary(self, ecg, raw):
         ecg_summary_widget = ECGSummaryWidget(ecg, raw)
         ecg_summary_widget.exec_()
@@ -120,6 +122,7 @@ class MainWindow(TemplateBaseClass):
         fbins, pxx = compute_psd(output, fs)
 
         self.ui.spectrum_view_plot.clear()
+        self.ui.spectrum_view_plot.setTitle('Spectrum View')
         self.ui.spectrum_view_plot.plot(fbins, pxx)
 
     def plot_time_freq_secondary(self, signal):
@@ -127,6 +130,7 @@ class MainWindow(TemplateBaseClass):
 
     def clear_psd(self):
         self.ui.spectrum_view_plot.clear()
+        self.ui.spectrum_view_plot.setTitle('Spectrum View')
 
     def update_plot(self, signal, index):
         self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
