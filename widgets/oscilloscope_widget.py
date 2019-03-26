@@ -64,9 +64,14 @@ class Oscilloscope(TemplateBaseClass):
         plot = self.get_plot(last_added_index)
         plot.getViewBox().setMouseEnabled(y=False)
         plot.setClipToView(True)
+        plot.setLimits(xMin=0)
+        plot.setDownsampling(auto=True)
         plot.listDataItems()[0].setPen(pg.mkPen(random_color))
         plot.scene().sigMouseClicked.connect(self.create_linear_region)
         plot.scene().sigMouseClicked.connect(self.singlemouseclick)
+
+        if last_added_index is not 0:
+            self.plots[last_added_index][0].setXLink(self.plots[0][0].vb)
 
         if signal.epochs is not None:
             for epoch in signal.epochs.values():
