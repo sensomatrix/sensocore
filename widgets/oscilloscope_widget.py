@@ -30,7 +30,7 @@ class Oscilloscope(TemplateBaseClass):
         self.colorlist = ['r', 'g', 'b', 'c', 'm', 'w']
         self.colorpool = cycle(self.colorlist)
 
-        self.multiplot_widget.setMinimumPlotHeight(250)
+        self.multiplot_widget.setMinimumPlotHeight(300)
 
         self.ui.epoch_creation_button.clicked.connect(self.create_lr)
 
