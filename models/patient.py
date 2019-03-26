@@ -1,5 +1,6 @@
 from PyQt5.QtCore import pyqtSignal, QObject
 
+
 class Patient:
     """object that holds patient info"""
 
@@ -19,6 +20,7 @@ class Patient:
 
 
 class PatientListModel(QObject):
+    """object that holds the list of Patient objects and notifies the QTreeWidget used in the UI when changes occur"""
     patientCreated = pyqtSignal(Patient)
 
     def __init__(self, parent=None):
