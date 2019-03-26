@@ -22,6 +22,7 @@ def open_dataset_dialog(parent):
         os.makedirs(dir)
 
     options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
     fileName, _ = QFileDialog.getOpenFileName(parent, 'Select a folder:', dir,
                                               "All Files (*)", options=options)
 
