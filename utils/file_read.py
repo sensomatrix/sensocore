@@ -22,7 +22,6 @@ def open_dataset_dialog(parent):
         os.makedirs(dir)
 
     options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
     fileName, _ = QFileDialog.getOpenFileName(parent, 'Select a folder:', dir,
                                               "All Files (*)", options=options)
 
@@ -211,6 +210,9 @@ def load_from_fif(filename):
 
 def load_from_edf(filename, sample_from=-1, sample_to=-1):
     raw = mne.io.read_raw_edf(filename, preload=True)
+    picks = mne.pick_channels(raw.ch_names, [], exclude=['COUNTER', 'INTERPOLATED', 'MARKER', 'MARKER_HARDWARE', 'SYNC',
+                                                     'TIME_STAMP_s', 'TIME_STAMP_ms', 'CQ_AF3', 'CQ_T7', 'CQ_Pz',
+                                                     'CQ_T8', 'RAW_CQ', 'GYROX', 'GYROY', 'STI 014']) 
 
     if sample_from != -1 and sample_to != -1:
         start_time = sample_from / raw.info['sfreq']
@@ -218,15 +220,15 @@ def load_from_edf(filename, sample_from=-1, sample_to=-1):
 
         t_idx = raw.time_as_index([start_time, end_time])
 
-        data, times = raw[:, t_idx[0]:t_idx[1]]
+        data, times = raw[picks, t_idx[0]:t_idx[1]]
 
     else:
-        data, times = raw[:]
+        data, times = raw[picks, :]
 
     signals = []
 
-    for i, samples in enumerate(data):
-        name = raw.ch_names[i]
+    for samples, channel_index in zip(data, picks):
+        name = raw.ch_names[channel_index]
         typeofsignal = ''
         samplingrate = raw.info['sfreq']
         time_array = times
