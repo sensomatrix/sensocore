@@ -35,7 +35,7 @@ the *Secondary plotting* tab.
 The slider at the bottom of the Oscilloscope can be used to take a closer look at the signal.
 In order to see the complete signal again, hover your mouse over the bottom left corner
 of the axis (shown in blue in the image below) and when a small ```A``` appears, click on it.
-![](https://github.com/abuebola/sensobox/blob/loadfile/docs/images/visualizingData.PNG) 
+![](images/visualizingData.PNG) 
 
 ## Multichannel
 When for example, one file has more than one signal, then each of the following
