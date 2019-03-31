@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>File Import - SensoMatrix</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "File Import";
+    var mkdocs_page_input_path = "loadFile.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> SensoMatrix</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../simulatedata/">Simulation</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">File Import</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#how-to-load-data">How To Load Data</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#how-to-load-data-from-hard-disk">How to load data from hard disk</a></li>
+        
+            <li><a class="toctree-l3" href="#how-to-load-data-from-physionet">How to load data from Physionet</a></li>
+        
+            <li><a class="toctree-l3" href="#how-to-simulate-your-own-data">How to simulate your own data</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../tagging/">Tagging</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../visualization/">Visualization</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../testing/">Testing</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">SensoMatrix</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>File Import</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="how-to-load-data">How To Load Data</h1>
+<h2 id="how-to-load-data-from-hard-disk">How to load data from hard disk</h2>
+<p>Note: Currently you can load the following file types assuming that each follow their respective formats:
+<em> .txt 
+</em> .json (<a href="../jsonExample/">JSON Template</a>)
+<em> .edf (from <a href="https://physionet.org/physiobank/database/">Physionet</a>)
+</em> .fif (from <a href="https://physionet.org/physiobank/database/">Physionet</a>)</p>
+<p>The .txt file should follow the following format:</p>
+<p>%name of signal%</p>
+<p>%type of signal%</p>
+<p>%sampling rate of signal%</p>
+<p>%list of time separated by commas%</p>
+<p>%list of samples separated by commas%</p>
+<p><em>For Example:</em></p>
+<pre><code class="text">EEG Jansen
+eeg
+200
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+4, 6, 2, 9, 11, 1, 0, 4, 3, 12, 5
+</code></pre>
+
+<h3 id="step-1">Step 1</h3>
+<p>From the main screen, click on <strong>Load data</strong> at the top left corner and click on <strong>Locally</strong>.
+<img alt="" src="../images/mainScreenLoadPointer.PNG" /></p>
+<h3 id="step-2">Step 2</h3>
+<p>This will open the dialog to browse for the file on your computer. Browse through your computer, select your input file, and click <strong>Open</strong>.
+<img alt="" src="../images/loadFileDialog.PNG" /></p>
+<h3 id="step-3">Step 3</h3>
+<p>Once the file is loaded onto the application, you should be able to see the signal on the Oscilloscope, similar to the figure below.
+If the file is a JSON file, then you would also see a few key patient information on the left hand side.
+<img alt="" src="../images/loadedSignal.PNG" /></p>
+<h2 id="how-to-load-data-from-physionet">How to load data from Physionet</h2>
+<p>Physionet is an online database with several recorded biosignals available to the public.
+<em>Note</em>: Internet connection is required.</p>
+<h3 id="step-1_1">Step 1</h3>
+<p>From the main screen, click on <strong>Load data</strong> at the top left corner and click on <strong>PhysioNet</strong>.
+<img alt="" src="../images/mainScreenLoadPhysionet.PNG" /></p>
+<h3 id="step-2_1">Step 2</h3>
+<p>This will open the dialog similar to the figure below. You can click on <a href="https://physionet.org/physiobank/database/">DB URL</a> here or on the 
+dialog to go to Physionet. 
+<img alt="" src="../images/physionetDialog.PNG" /></p>
+<p>Navigate the site, and once you find a dataset of interest, <em>for example</em> like that in the figure below.
+<img alt="" src="../images/physionetsite.PNG" /></p>
+<p><em>Copy</em> &amp; <em>paste</em> the <em>URL</em> and dataset name into the dialog. Also, choose from what sample to what sample you want to see.
+Choose the type of the signal and check the box if you would like to see the annotations. Then click on <strong>Import dataset</strong>. Once the dataset has been loaded, it
+will be displayed on the Oscilloscope.
+<img alt="" src="../images/physionetDialogFilled.PNG" /></p>
+<h2 id="how-to-simulate-your-own-data">How to simulate your own data</h2>
+<h3 id="eeg-simulation">EEG Simulation</h3>
+<h4 id="step-1_2">Step 1</h4>
+<p>Click on <strong>EEG Simulation</strong> at the top left hand side.
+<img alt="" src="../images/eegSimulationButton.PNG" /></p>
+<h4 id="step-2_2">Step 2</h4>
+<p>In the EEG Simulation dialog, you can set the various signal parameters,
+such as <em>C1</em> (Jansen Model), signal name, noise, sampling frequency (Note: Max 1KHz), and duration (Note: Min: 1 sec).
+You can click on <strong>Preview Signal</strong> in order to see what the signal you have created looks like. 
+Once you are satisfied with your signal, click on <strong>Create Signal</strong> to output the signal on the Oscilloscope.
+<img alt="" src="../images/eegSimulationDialog.PNG" /></p>
+<h3 id="ecg-simulation">ECG Simulation</h3>
+<h4 id="step-1_3">Step 1</h4>
+<p>Click on <strong>ECG Simulation</strong> at the top left hand side.
+<img alt="" src="../images/ecgSimulationButton.PNG" /></p>
+<h4 id="step-2_3">Step 2</h4>
+<p>In the ECG Simulation dialog, you can set various ECG parameters, such as
+the P Wave, Q Wave, R Wave, S Wave, and T Wave parameters. You can also set the 
+signal name, noise, sampling frequency, duration, period, and delay.
+Once you are satisfied with your signal, click on <strong>Create Signal</strong> to output the signal on the Oscilloscope.
+<img alt="" src="../images/ecgSimulationDialog.PNG" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tagging/" class="btn btn-neutral float-right" title="Tagging">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../simulatedata/" class="btn btn-neutral" title="Simulation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../simulatedata/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../tagging/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
