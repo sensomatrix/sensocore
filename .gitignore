@@ -6,3 +6,4 @@ venv/
 *hdf5
 *.png
 *.DS_Store
+site/
