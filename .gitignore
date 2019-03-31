@@ -5,3 +5,4 @@ venv/
 .idea/
 *hdf5
 *.png
+*.DS_Store
