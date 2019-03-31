@@ -44,3 +44,6 @@ pipenv shell
 
 python main.py
 ```
+
+## Documentation
+More information about documentation can be [found](https://sensomatrix.github.io/sensocore/)
