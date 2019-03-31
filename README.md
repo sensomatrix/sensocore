@@ -46,4 +46,4 @@ python main.py
 ```
 
 ## Documentation
-More information about documentation can be [found](https://sensomatrix.github.io/sensocore/)
+More information about documentation can be found [here](https://sensomatrix.github.io/sensocore/)
