@@ -2,7 +2,8 @@ Accessing SensoMatrix on Mac
 ============================
 
 Prerequisites
-=============
+-------------
+
 
 1. You have to ensure that your system has git.
 
@@ -17,7 +18,7 @@ Prerequisites
    ``git config --global user.email "youremail@example.com"``
 
 Using Terminal to access SensoMatrix on Mac
-===========================================
+-------------------------------------------
 
 1. Go to `SensoMatrix <https://github.com/sensomatrix/sensocore>`__
    application on GitHub.
@@ -36,7 +37,7 @@ Using Terminal to access SensoMatrix on Mac
    computer.
 
 Using PyCharm to access SensoMatrix on Mac
-==========================================
+------------------------------------------
 
 1. Go to `SensoMatrix <https://github.com/sensomatrix/sensocore>`__
    application on GitHub.
