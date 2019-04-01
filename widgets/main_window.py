@@ -37,6 +37,7 @@ class MainWindow(TemplateBaseClass):
         self.signals.plot_ecg_summary.connect(self.launch_ecg_summary)
         self.signals.plot_eeg_summary.connect(self.launch_eeg_summary)
         self.signals.cross_correlation_signal.connect(self.launch_cross_corr)
+        self.signals.removed_signal.connect(self.delete_plot)
         self.patients.patientCreated.connect(self.fill_widget)
 
         self.ui.oscilloscope_tab.region_updated.connect(self.display_psd)
@@ -134,6 +135,9 @@ class MainWindow(TemplateBaseClass):
 
     def update_plot(self, signal, index):
         self.ui.oscilloscope_tab.update_plot(signal.time_array, np.transpose(signal.current_mode), index)
+
+    def delete_plot(self, index):
+        self.ui.oscilloscope_tab.delete_plot(index)
 
     def create_signal(self, output, index):
         self.signals.create_child_signal(output, index)

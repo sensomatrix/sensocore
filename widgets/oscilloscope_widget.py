@@ -251,6 +251,13 @@ class Oscilloscope(TemplateBaseClass):
 
         plot.plot(x, y, pen=signal_color)
 
+    def delete_plot(self, index):
+        plot = self.get_plot(index)
+        plot.clear()
+        self.multiplot_widget.mPlotItem.removeItem(plot)
+        del self.plots[index]
+        self.multiplot_widget.resizeEvent(None)
+    
     def create_linear_region(self, evt):
         if evt.double():
             evt.accept()
@@ -379,7 +386,7 @@ class Oscilloscope(TemplateBaseClass):
 
     @property
     def plots(self):
-        return self.ui.multiplot_widget.mPlotItem.plots
+        return self.multiplot_widget.mPlotItem.plots
 
     @property
     def multiplot_widget(self):
