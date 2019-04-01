@@ -103,6 +103,11 @@ class FIRDesignerDialog(TemplateBaseClass):
                 self.ui.ideal_gain_coefficients_line_edit.setText('0 0 1 1 0 0')
 
             elif data[2] == 'notch':
+                if self.current_signal.fs // 2 <= 50:
+                    self.showError("Sampling Frequency for Signal must be greater than 50 Hz")
+                    self.item_changed(0)
+                    return
+
                 self.ui.band_edges_line_edit.setText('0 48 49 50 51 {0}'.format(self.ui.sampling_frequency_line_edit.text()))
                 self.ui.ideal_gain_coefficients_line_edit.setText('1 1 0 0 1 1')
 
