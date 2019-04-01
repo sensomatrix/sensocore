@@ -55,6 +55,8 @@ class MainWindow(TemplateBaseClass):
         self.ui.actionLocally.triggered.connect(self.launch_local_file)
 
         self.ui.spectrum_view_plot.setTitle('Spectrum View')
+        self.ui.spectrum_view_plot.setLabel('left', text='PSD', units='V^2/Hz')
+        self.ui.spectrum_view_plot.setLabel('bottom', text='Frequency', units='Hz') 
 
     def launch_ecg_summary(self, ecg, raw):
         ecg_summary_widget = ECGSummaryWidget(ecg, raw)
