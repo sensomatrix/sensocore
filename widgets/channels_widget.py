@@ -30,6 +30,9 @@ class Channels(QListView):
             action = menu.addAction("Remove DC")
             action.triggered.connect(lambda: self.model().remove_dc(item_index))
 
+            delete_action = menu.addAction("Delete Signal")
+            delete_action.triggered.connect(lambda: self.model().delete_signal(item_index))
+
             # Plot PSD button
             if not self.model().is_psd_plotted(item_index):
                 action = menu.addAction("Plot PSD")
