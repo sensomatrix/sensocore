@@ -199,7 +199,7 @@ class SignalListModel(QtCore.QAbstractListModel):
     plot_ecg_summary = pyqtSignal(object, object)
     plot_eeg_summary = pyqtSignal(object, object)
     cross_correlation_signal = pyqtSignal(object, object)
-    removed_signal = pyqtSignal(int)
+    removed_signal = pyqtSignal(Signal, int)
 
     def __init__(self, parent=None):
         QtCore.QAbstractListModel.__init__(self, parent=parent)
@@ -303,11 +303,13 @@ class SignalListModel(QtCore.QAbstractListModel):
         return self._signals[row]
 
     def delete_signal(self, QModelIndex):
-        self.beginRemoveRows(QModelIndex.parent(), QModelIndex.row(), QModelIndex.row())
-        del self._signals[QModelIndex.row()]
-        self.endRemoveRows()
+        signal = self.get_signal(QModelIndex)
+        row = QModelIndex.row()
+        self.removed_signal.emit(signal, row)
 
-        self.removed_signal.emit(QModelIndex.row())
+        self.beginRemoveRows(QModelIndex.parent(), row, row)
+        self._signals.remove(signal)
+        self.endRemoveRows()
 
     def create_child_signal(self, output, index):
         parent = self._signals[index]

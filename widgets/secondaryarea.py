@@ -31,3 +31,11 @@ class SecondaryArea(QWidget):
 
     def plot_tf_slot(self, signal):
         self.tf_dock.plot_TF(signal)
+
+    def delete_signal(self, signal):
+        self.psd_dock.delete_signal(signal.psd)
+        self.tf_dock.clear()
+        self.psd_dock.remove_legend_item(signal.name)
+
+        signal.psd = None
+        signal.time_freq = None

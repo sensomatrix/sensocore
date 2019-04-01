@@ -19,24 +19,37 @@ class GraphDock(Dock):
         self.graphLayout.addItem(self.p)
         self.addWidget(self.pgview)
         self.current_index = 0
+        self.title = name
 
-        self.p.setTitle(name)
+        self.p.setTitle(self.title)
 
-        left_text = 'PSD' if 'Power Spectral Density' in name else 'Time'
-        left_unit = 'V^2/Hz' if 'Power Spectral Density' in name else 's'
+        left_text = 'PSD' if 'Power Spectral Density' in self.title else 'Time'
+        left_unit = 'V^2/Hz' if 'Power Spectral Density' in self.title else 's'
         self.p.setLabel('left', text=left_text, units=left_unit)
         self.p.setLabel('bottom', text='Frequency', units='Hz')
         self.p.setLimits(xMin=0)
         self.p.showGrid(x=True, y=True)
  
+    def remove_legend_item(self, name):
+        self.p.legend.removeItem(name)
 
     def plot(self, signal):
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
-        signal.psd = (PSDfbins, PSDxx)
-        self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
+        psd_plot = self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
+        signal.psd = psd_plot
         self.current_index = (self.current_index + 1) % len(LINECOLORS)
         self.p.vb.autoRange()
         self.p.replot()
+
+    def delete_signal(self, plot):
+        if plot is not None:
+            self.p.removeItem(plot)
+
+    def clear(self):
+        self.p.clear()
+
+        if not self.p.dataItems:
+            self.p.setTitle(self.title)
 
     # Following code is from: https://stackoverflow.com/questions/51312923/plotting-the-spectrum
     def plot_TF(self, signal):
