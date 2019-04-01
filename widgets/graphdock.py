@@ -27,6 +27,7 @@ class GraphDock(Dock):
         self.p.setLabel('left', text=left_text, units=left_unit)
         self.p.setLabel('bottom', text='Frequency', units='Hz')
         self.p.setLimits(xMin=0)
+        self.p.showGrid(x=True, y=True)
  
 
     def plot(self, signal):
