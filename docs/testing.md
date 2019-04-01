@@ -18,10 +18,10 @@
 1. Go to [SensoMatrix](https://github.com/sensomatrix/sensocore) application on GitHub.
 
 2. Once you followed the link above, you are required to click on the "clone or download" button which can be found in the top right. Screenshot provided below: 
- ![](images/Screen%20Shot%202019-02-12%20at%202.31.29%20PM.png)
+ ![](images/cloneDownload.png)
 
 3. Once clicked, you will have to clone the HTTPS by copying the HTTPS link provided. Screenshot provided below:
- ![](images/Screen%20Shot%202019-02-12%20at%203.18.45%20PM.png)
+ ![](images/https.png)
 
 4. You will have to type in `cd` and click enter. Then type `git clone` followed by the URL that has been copied.
 
@@ -33,20 +33,20 @@
 1. Go to [SensoMatrix](https://github.com/sensomatrix/sensocore) application on GitHub.
 
 2. Once you followed the link above, you are required to click on the "clone or download" button which can be found in the top right. Screenshot provided below: 
- ![](images/Screen%20Shot%202019-02-12%20at%202.31.29%20PM.png)
+ ![](images/cloneDownload.png)
 
 3. Once clicked, you will have to clone the HTTPS by copying the HTTPS link provided. Screenshot provided below:
- ![](images/Screen%20Shot%202019-02-12%20at%203.18.45%20PM.png)
+ ![](images/https.png)
 
 4. Now you will have to open [PyCharm](https://www.jetbrains.com/pycharm/download/#section=mac).
 
 5. In PyCharm, you will have to go New Project.
 
 6. Once you have opened a new project, you will have to go to "VCS" then go to "Checkout from Version Control" and then click on "Git". Screenshot provided below:
- ![](images/Screen%20Shot%202019-02-12%20at%204.44.28%20PM.png)
+ ![](images/pycharmVCS.png)
 
 7. Once the above directions have been followed, there will be a new window that appears that is titled "Clone Repository", where you may paste the copied URL from GitHub. Screenshot provided below:
- ![](images/Screen%20Shot%202019-02-12%20at%204.47.37%20PM.png)
+ ![](images/pycharmClone.png)
 
 8. Afterwards, you can click on "Clone" to access the SensoMatrix's code.
 
