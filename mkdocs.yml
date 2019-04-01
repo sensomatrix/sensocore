@@ -1,8 +1,0 @@
-site_name: SensoMatrix
-nav:
-    - Simulation: simulatedata.md
-    - File Import: loadFile.md
-    - Tagging: tagging.md
-    - Visualization: visualization.md
-    - Testing: testing.md
-theme: readthedocs
