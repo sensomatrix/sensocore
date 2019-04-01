@@ -62,5 +62,3 @@ class GraphDock(Dock):
         # Limit panning/zooming to the spectrogram
         p1.setLimits(xMin=0, xMax=TFf[-1], yMin=0, yMax=TFt[-1])
         p1.setTitle(signal.name)
-        # p1.setLabel('bottom', "Frequency", units='Hz')
-        # p1.setLabel('left', "Time", units='s')
