@@ -25,7 +25,9 @@ class GraphDock(Dock):
         left_text = 'PSD' if 'Power Spectral Density' in name else 'Time'
         left_unit = 'V^2/Hz' if 'Power Spectral Density' in name else 's'
         self.p.setLabel('left', text=left_text, units=left_unit)
-        self.p.setLabel('bottom', text='Frequency', units='Hz') 
+        self.p.setLabel('bottom', text='Frequency', units='Hz')
+        self.p.setLimits(xMin=0)
+ 
 
     def plot(self, signal):
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
