@@ -20,15 +20,17 @@ class GraphDock(Dock):
         self.addWidget(self.pgview)
         self.current_index = 0
 
-    def plot(self, signal, title="", XAxisLabel="", YAxisLabel="", XAxisUnits="", YAxisUnits=""):
-        XAxis = pg.AxisItem(orientation='bottom')
-        XAxis.setLabel(text=XAxisLabel, units=XAxisUnits)
-        YAxis = pg.AxisItem(orientation='left')
-        YAxis.setLabel(text=YAxisLabel, units=YAxisUnits)
-        axisdict = {
-            'bottom': XAxis,
-            'left': YAxis
-        }
+        self.p.setTitle(name)
+
+        left_text = 'PSD' if 'Power Spectral Density' in name else 'Time'
+        left_unit = 'V^2/Hz' if 'Power Spectral Density' in name else 's'
+        self.p.setLabel('left', text=left_text, units=left_unit)
+        self.p.setLabel('bottom', text='Frequency', units='Hz')
+        self.p.setLimits(xMin=0)
+        self.p.showGrid(x=True, y=True)
+ 
+
+    def plot(self, signal):
         PSDfbins, PSDxx = compute_psd(signal.current_mode, signal.fs)
         signal.psd = (PSDfbins, PSDxx)
         self.p.plot(PSDfbins, PSDxx, pen=pg.mkPen(LINECOLORS[self.current_index]), name=signal.name)
@@ -60,5 +62,3 @@ class GraphDock(Dock):
         # Limit panning/zooming to the spectrogram
         p1.setLimits(xMin=0, xMax=TFf[-1], yMin=0, yMax=TFt[-1])
         p1.setTitle(signal.name)
-        p1.setLabel('bottom', "Frequency", units='Hz')
-        p1.setLabel('left', "Time", units='s')
