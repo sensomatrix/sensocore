@@ -5,9 +5,10 @@ Welcome to SensoMatrix's documentation!
 .. toctree::
    :maxdepth: 2
 
+   testing
+   loadFile
    simulatedata
    tagging
-   testing
    visualization
 
 Indices and tables
