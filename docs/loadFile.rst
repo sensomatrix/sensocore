@@ -117,7 +117,7 @@ Step 1
 
 Click on **ECG Simulation** at the top left hand side. [](images/ecgSi
 
-.. _JSON Template: jsonExample.md
+.. _JSON Template: jsonExample.rst
 .. _Physionet: https://physionet.org/physiobank/database/
 .. _DB URL: https://physionet.org/physiobank/database/
 
