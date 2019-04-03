@@ -305,11 +305,12 @@ class SignalListModel(QtCore.QAbstractListModel):
     def delete_signal(self, QModelIndex):
         signal = self.get_signal(QModelIndex)
         row = QModelIndex.row()
-        self.removed_signal.emit(signal, row)
 
         self.beginRemoveRows(QModelIndex.parent(), row, row)
         self._signals.remove(signal)
         self.endRemoveRows()
+
+        self.removed_signal.emit(signal, row)
 
     def create_child_signal(self, output, index):
         parent = self._signals[index]

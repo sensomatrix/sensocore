@@ -143,6 +143,9 @@ class MainWindow(TemplateBaseClass):
         self.ui.oscilloscope_tab.delete_plot(index)
         self.ui.secondary_area.delete_signal(signal)
 
+        if self.signals.rowCount() == 0:
+            self.ui.main_tab.setEnabled(False)
+
     def create_signal(self, output, index):
         self.signals.create_child_signal(output, index)
 
