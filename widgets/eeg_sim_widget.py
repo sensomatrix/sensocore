@@ -33,7 +33,7 @@ class SimulateEEGThread(QThread):
 class EEGSimulationWidget(TemplateBaseClass):
     def __init__(self, signals, sim_count=0):
         TemplateBaseClass.__init__(self)
-        self.setWindowTitle('ECG Simulation')
+        self.setWindowTitle('EEG Simulation')
 
         # Create the main window
         self.ui = EEGSimulationView()
@@ -77,6 +77,8 @@ class EEGSimulationWidget(TemplateBaseClass):
 
         self.should_regenerate_signal = False
 
+        self.show()
+
         self.generate_plot(True)
 
         self.zoomed_plot = self.ui.zoomed_plot.plot(self.eeg_output, pen="g")
@@ -103,8 +105,6 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.ui.simulation_line_edit.setText(name)
 
         self.signal_added = False
-
-        self.show()
 
 # Methods
 ###############################################################################################
@@ -139,7 +139,7 @@ class EEGSimulationWidget(TemplateBaseClass):
         self.simulate_progress_bar()
 
     def simulate_progress_bar(self):
-        with pg.ProgressDialog("Simulating EEG Signal", maximum=100) as dlg:
+        with pg.ProgressDialog("Simulating EEG Signal", parent=self) as dlg:
             dlg.setWindowTitle('EEG Sim')
             while self.eeg_sim_thread.isRunning():
                 time.sleep(0.02)
