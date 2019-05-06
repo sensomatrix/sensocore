@@ -5,11 +5,11 @@ SensoMatrix, is a software platform which will take the data from different port
 ## Documentation
 More information about documentation can be found in the links below
 
--  [Accessing SensoMatrix on Mac](https://sensomatrix.readthedocs.io/en/latest/testing.html)
--  [How To Load Data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
--  [Simulate ECG and EEG data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
--  [Tagging a Window](https://sensomatrix.readthedocs.io/en/latest/tagging.html)
--  [Visualizing Data](https://sensomatrix.readthedocs.io/en/latest/visualization.html)
+  - [Accessing SensoMatrix on Mac](https://sensomatrix.readthedocs.io/en/latest/testing.html)
+  - [How To Load Data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
+  - [Simulate ECG and EEG data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
+  - [Tagging a Window](https://sensomatrix.readthedocs.io/en/latest/tagging.html)
+  - [Visualizing Data](https://sensomatrix.readthedocs.io/en/latest/visualization.html)
 
 ## Prerequisites
 
@@ -53,3 +53,11 @@ pipenv shell
 
 python main.py
 ```
+
+## Developers
+Niroigen Suntharam
+Andre Al-Khoury
+
+## Contact Us
+niroigen@gmail.com
+naj.mahani@gmail.com
