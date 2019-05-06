@@ -2,6 +2,15 @@
 
 SensoMatrix, is a software platform which will take the data from different portable biosensors as input, automate the pre-processing, plot the data, display basic metrics and give the user the ability to run the signal processing operations commonly used in the analysis of electrophysiological signals. A combination of digital signal processing (DSP) techniques and statistical methods will be used to implement features such as signal classification, correlation between different signals and outlier detection. Methods pertaining to specific types of electro-physiological signals such as electroencephalography (EEG) and electrocardiogram (ECG) will also be implemented to facilitate their analysis.
 
+## Documentation
+More information about documentation can be found in the links below
+
+-   [Accessing SensoMatrix on Mac](https://sensomatrix.readthedocs.io/en/latest/testing.html)
+-   [How To Load Data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
+-   [Simulate ECG and EEG data](https://sensomatrix.readthedocs.io/en/latest/loadFile.html)
+-   [Tagging a Window](https://sensomatrix.readthedocs.io/en/latest/tagging.html)
+-   [Visualizing Data](https://sensomatrix.readthedocs.io/en/latest/visualization.html)
+
 ## Prerequisites
 
 ### Python 3.5.4
@@ -45,5 +54,10 @@ pipenv shell
 python main.py
 ```
 
-## Documentation
-More information about documentation can be found [here](https://sensomatrix.readthedocs.io/en/latest/index.html)
+## Developers
+Niroigen Suntharam
+Andre Al-Khoury
+
+## Contact Us
+niroigen@gmail.com
+naj.mahani@gmail.com
