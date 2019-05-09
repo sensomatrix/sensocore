@@ -7,3 +7,4 @@ venv/
 *.png
 *.DS_Store
 site/
+.vscode/
