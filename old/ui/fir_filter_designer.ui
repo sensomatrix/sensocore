@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1182</width>
+    <height>767</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>FIR Filter Designer</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0" columnstretch="0,0,0,0,1,0,0,0,0">
+   <item row="4" column="0">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>4. Design Parameters</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <item row="2" column="0">
+       <widget class="QLabel" name="band_edges_label">
+        <property name="text">
+         <string>Band Edges:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="taps_label">
+        <property name="text">
+         <string>Taps:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="ideal_gain_coefficients_label">
+        <property name="text">
+         <string>Ideal Gain Coefficients:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="band_edges_line_edit">
+        <property name="text">
+         <string>0 16 18 100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="ideal_gain_coefficients_line_edit">
+        <property name="text">
+         <string>1 1 0 0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="taps_line_edit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
+      <string>5. Apply Filter</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QListView" name="apply_filter_list_view">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>1. Input Channel</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0" columnstretch="0,0">
+      <item row="0" column="0">
+       <widget class="QLabel" name="channel_label">
+        <property name="text">
+         <string>Channel:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="channel_combo_box"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="sampling_frequency_label">
+        <property name="text">
+         <string>fs:200 Hz</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>3. Filter Realization</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QRadioButton" name="least_squares_radio">
+        <property name="text">
+         <string>Least-Squares</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="parks_mcclellan_radio">
+        <property name="text">
+         <string>Parks-McClellan</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>2. Design Specifications</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="sampling_frequency_line_edit">
+        <property name="text">
+         <string>200</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="passband_ripple_line_edit">
+        <property name="text">
+         <string>0.2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QLineEdit" name="stopband_edge_line_edit">
+        <property name="text">
+         <string>18</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="stopband_rejection_label">
+        <property name="text">
+         <string>Stopband Rejection (dB): -</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" rowspan="2">
+       <widget class="QLabel" name="sampling_frequency_label_2">
+        <property name="text">
+         <string>Sampling Frequency (Hz):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="stopband_rejection_line_edit">
+        <property name="text">
+         <string>60</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLineEdit" name="passband_edge_line_edit">
+        <property name="text">
+         <string>16</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="passband_edge_label">
+        <property name="text">
+         <string>Passband Edge (Hz):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="passband_ripple_label">
+        <property name="text">
+         <string>Passband Ripple (dB): ± </string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="stopband_edge_label">
+        <property name="text">
+         <string>Stopband Edge (Hz):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="signal_specific_label">
+        <property name="text">
+         <string>Filter Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="signal_specific_filter_combo_box"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="6" column="6">
+    <widget class="QPushButton" name="preview_output_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Preview Output</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="3" colspan="8">
+    <widget class="PlotWidget" name="filter_graphics_view"/>
+   </item>
+   <item row="3" column="1" rowspan="3" colspan="8">
+    <widget class="PlotWidget" name="signal_filter_graphics_view"/>
+   </item>
+   <item row="6" column="8">
+    <widget class="QPushButton" name="apply_filter_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Apply Filter</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="7">
+    <widget class="QPushButton" name="save_to_file_button">
+     <property name="text">
+      <string>Save filter to file</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="estimate_taps_button">
+     <property name="text">
+      <string>Estimate Taps</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="5">
+    <widget class="QPushButton" name="design_filter_button">
+     <property name="text">
+      <string>Design Filter</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

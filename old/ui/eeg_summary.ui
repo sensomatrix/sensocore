@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1106</width>
+    <height>752</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>EEG Summary</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Raw EEG Signal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="raw"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Filtered EEG Signal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="filtered"/>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Theta Band Average Power</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="theta"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Alpha Low (8-10Hz) Average Power</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="alpha_low"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Alpha High (10-13 Hz) Average Power</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="alpha_high"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Beta Average Power</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="beta"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Gamma Average Power</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlotWidget" name="gamma"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
