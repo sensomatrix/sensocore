@@ -1,10 +1,1 @@
-*.pyc
-__pycache__/
-widgets/__pycache__
-venv/
-.idea/
-*hdf5
-*.png
-*.DS_Store
-site/
 .vscode/
