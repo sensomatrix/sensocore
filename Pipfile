@@ -54,6 +54,7 @@ PyQt5 = "==5.12.1"
 PyQt5-sip = "==4.19.15"
 PyYAML = "==5.1"
 Werkzeug = "==0.15.1"
+bioread = "*"
 
 [requires]
 python_version = "3.5"

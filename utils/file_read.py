@@ -11,6 +11,7 @@ from pathlib import Path
 import mne
 import json
 import re
+import bioread
 
 
 # dialog used to load a complete dataset. to do: deal with the case user clicks on "cancel"
@@ -42,6 +43,9 @@ def load_from_file(path_to_file, parent):
         return signals
     elif re.search("\.edf$", path_to_file):
         signals = load_from_edf(path_to_file)
+        return signals
+    elif re.search("\.acq$", path_to_file):
+        signals = load_from_acq(path_to_file)
         return signals
     # if re.search("\.edf", path_to_file):
     #     signals = load_from_edf(path_to_file)
@@ -238,6 +242,35 @@ def load_from_edf(filename, sample_from=-1, sample_to=-1):
             [time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
         epochs = None
         sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, epochs=epochs)
+        signals.append(sig)
+
+    return signals
+
+def load_from_acq(filename):
+    data = bioread.read_file(filename)
+
+    signals = []
+
+    for channel in data.channels:
+        name = channel.name
+        typeofsignal = ''
+        samplingrate = channel.samples_per_second
+        time_array = channel.time_index
+        samples_array = channel.data
+
+        min = -10000
+        max = 10000
+
+        for index, data in enumerate(samples_array):
+            if data > max:
+                samples_array[index] = max
+            if data < min:
+                samples_array[index] = min            
+
+        signal = np.hstack(
+            [time_array.reshape((time_array.shape[0], 1)), samples_array.reshape((samples_array.shape[0], 1))])
+        units = channel.units
+        sig = Signal(signal, name=name, signal_type=typeofsignal, fs=samplingrate, unit=units)
         signals.append(sig)
 
     return signals
