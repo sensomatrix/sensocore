@@ -12,6 +12,7 @@ import mne
 import json
 import re
 import bioread
+from utils.file_write import write_edf
 
 
 # dialog used to load a complete dataset. to do: deal with the case user clicks on "cancel"
