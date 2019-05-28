@@ -10,10 +10,11 @@ from widgets.eeg_summary_widget import EEGSummaryWidget
 from models.signal import SignalListModel
 from utils import file_read
 from utils.frequtils import compute_psd
+from utils.file_write import write_edf
 import numpy as np
 import os
 import sys
-
+from datetime import datetime as dt
 
 path = os.path.dirname(os.path.abspath(__file__))
 uiFile = os.path.join(path, '../ui/main.ui')
@@ -198,6 +199,9 @@ class MainWindow(TemplateBaseClass):
             QMessageBox.Save)
 
         if reply == QMessageBox.Close:
+            sys.exit()
+        elif reply == QMessageBox.Save and len(self.signals._signals) != 0:
+            write_edf(self.signals._signals, str(dt.now()) + '.edf')
             sys.exit()
         else:
             event.ignore()
