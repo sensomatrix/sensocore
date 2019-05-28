@@ -12,6 +12,7 @@ from utils import file_read
 from utils.frequtils import compute_psd
 import numpy as np
 import os
+import sys
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -183,6 +184,23 @@ class MainWindow(TemplateBaseClass):
     def fill_widget(self, patient):
         d = patient.patient_info
         self.fill_item(self.patient_tree_widget.invisibleRootItem(), d)
+
+    def closeEvent(self, event):
+        """Generate 'question' dialog on clicking 'X' button in title bar.
+
+        Reimplement the closeEvent() event handler to include a 'Question'
+        dialog with options on how to proceed - Save, Close, Cancel buttons
+        """
+        reply = QMessageBox.question(
+            self, "Message",
+            "Are you sure you want to quit? Any unsaved work will be lost.",
+            QMessageBox.Save | QMessageBox.Close | QMessageBox.Cancel,
+            QMessageBox.Save)
+
+        if reply == QMessageBox.Close:
+            sys.exit()
+        else:
+            event.ignore()
 
     @property
     def patient_tree_widget(self):
