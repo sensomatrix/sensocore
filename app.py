@@ -3,6 +3,19 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+from flask_httpauth import HTTPBasicAuth
+auth = HTTPBasicAuth()
+
+@auth.get_password
+def get_password(username):
+    if username == 'niroigen':
+        return 'python'
+    return None
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access'}), 403)
+
 signals = [
     {
         'id': 1,
@@ -25,12 +38,14 @@ signals = [
 ]
 
 @app.route('/sensocore/api/v1.0/signals', methods=['GET'])
+@auth.login_required
 def get_signals():
     return jsonify({'signals': [make_public_signal(signal) for signal in signals]})
 
 from flask import abort
 
 @app.route('/sensocore/api/v1.0/signals/<int:signal_id>', methods=['GET'])
+@auth.login_required
 def get_signal(signal_id):
     signal = [signal for signal in signals if signal['id'] == signal_id]
     if len(signal) == 0:
@@ -46,6 +61,7 @@ def not_found(error):
 from flask import request
 
 @app.route('/sensocore/api/v1.0/signals', methods=['POST'])
+@auth.login_required
 def create_signal():
     if not request.json or not 'name' in request.json:
         abort(400)
@@ -62,6 +78,7 @@ def create_signal():
     return jsonify({'signal': signal}), 201
 
 @app.route('/sensocore/api/v1.0/signals/<int:signal_id>', methods=['PUT'])
+@auth.login_required
 def update_signal(signal_id):
     signal = [signal for signal in signals if signal['id'] == signal_id]
     if len(signal) == 0:
@@ -81,6 +98,7 @@ def update_signal(signal_id):
     return jsonify({'signal': signal[0]})
 
 @app.route('/sensocore/api/v1.0/signals/<int:signal_id>', methods=['DELETE'])
+@auth.login_required
 def delete_signal(signal_id):
     signal = [signal for signal in signals if signal['id'] == signal_id]
     if len(signal) == 0:
