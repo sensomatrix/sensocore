@@ -1,42 +1,24 @@
-import os
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+#src/app.py
 
+from flask import Flask
 
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+from .config import app_config
 
-from models import Signal
+def create_app(env_name):
+  """
+  Create app
+  """
+  
+  # app initiliazation
+  app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    errors = []
-    results = {}
-    if request.method == "POST":
-        try:
-            name = request.form['name']
-            unit = request.form['unit']
-            fs = request.form['fs']
-            try:
-                signal = Signal(
-                    name=name,
-                    unit=unit,
-                    fs=fs
-                )
-                db.session.add(signal)
-                db.session.commit()
-            except:
-                errors.append("Unable to add item to database.")
-        except:
-            errors.append(
-                "Unable to create signal"
-            )
-    return render_template('index.html', errors=errors)
+  app.config.from_object(app_config[env_name])
 
+  @app.route('/', methods=['GET'])
+  def index():
+    """
+    example endpoint
+    """
+    return 'Congratulations! Your first endpoint is workin'
 
-if __name__ == '__main__':
-    app.run()
+  return app
