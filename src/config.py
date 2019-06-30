@@ -1,28 +1,26 @@
+# /src/config.py
+
 import os
-basedir = os.path.abspath(os.path.dirname(__file__))
 
+class Development(object):
+    """
+    Development environment configuration
+    """
+    DEBUG = True
+    TESTING = False
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
-class Config(object):
+class Production(object):
+    """
+    Production environment configurations
+    """
     DEBUG = False
     TESTING = False
-    CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
-
-class ProductionConfig(Config):
-    DEBUG = False
-
-
-class StagingConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-
-
-class DevelopmentConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-
-
-class TestingConfig(Config):
-    TESTING = True
+app_config = {
+    'development': Development,
+    'production': Production,
+}
