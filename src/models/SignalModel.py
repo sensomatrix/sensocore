@@ -55,5 +55,10 @@ class SignalModel(db.Model):
     return '<id {}>'.format(self.id)
 
 class SignalSchema(Schema):
-  class Meta:
-    model = SignalModel
+  """
+  User Schema
+  """
+  id = fields.Int(dump_only=True)
+  data = fields.Str(dump_only=True)
+  created_at = fields.DateTime(dump_only=True)
+  modified_at = fields.DateTime(dump_only=True)

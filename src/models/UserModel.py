@@ -1,7 +1,7 @@
 # src/models/UserModel.py
 from marshmallow import fields, Schema
 import datetime
-from . import db
+from . import db, bcrypt
 from .SignalModel import SignalSchema
 
 
@@ -56,6 +56,10 @@ class UserModel(db.Model):
   def get_one_user(id):
     return UserModel.query.get(id)
 
+  @staticmethod
+  def get_user_by_email(email):
+    return UserModel.query.filter_by(email=email).first()
+
   def __generate_hash(self, password):
     return bcrypt.generate_password_hash(password, rounds=10).decode("utf-8")
 
@@ -66,5 +70,13 @@ class UserModel(db.Model):
     return '<id {}>'.format(self.id)
 
 class UserSchema(Schema):
-    class Meta:
-        model = UserModel
+  """
+  User Schema
+  """
+  id = fields.Int(dump_only=True)
+  name = fields.Str(required=True)
+  email = fields.Email(required=True)
+  password = fields.Str(required=True)
+  created_at = fields.DateTime(dump_only=True)
+  modified_at = fields.DateTime(dump_only=True)
+  signals = fields.Nested(SignalSchema, many=True)
