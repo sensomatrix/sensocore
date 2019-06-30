@@ -1,6 +1,8 @@
 # src/models/SignalModel.py
 from . import db
 import datetime
+from marshmallow import fields, Schema
+
 
 class SignalModel(db.Model):
   """
@@ -14,6 +16,7 @@ class SignalModel(db.Model):
   data = db.Column(db.JSON, nullable=False)
   created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
+  owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
   # class constructor
   def __init__(self, data):
@@ -22,6 +25,7 @@ class SignalModel(db.Model):
     """
     self.name = data.get('name')
     self.data = data.get('data')
+    self.owner_id = data.get('owner_id')
     self.created_at = datetime.datetime.utcnow()
     self.modified_at = datetime.datetime.utcnow()
 
@@ -49,3 +53,7 @@ class SignalModel(db.Model):
   
   def __repr__(self):
     return '<id {}>'.format(self.id)
+
+class SignalSchema(Schema):
+  class Meta:
+    model = SignalModel

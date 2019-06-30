@@ -2,6 +2,8 @@
 from marshmallow import fields, Schema
 import datetime
 from . import db
+from .SignalModel import SignalSchema
+
 
 class UserModel(db.Model):
   """
@@ -17,6 +19,7 @@ class UserModel(db.Model):
   password = db.Column(db.String(128), nullable=True)
   created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
+  blogposts = db.relationship('SignalModel', backref='users', lazy=True)
 
   # class constructor
   def __init__(self, data):
@@ -61,3 +64,7 @@ class UserModel(db.Model):
   
   def __repr__(self):
     return '<id {}>'.format(self.id)
+
+class UserSchema(Schema):
+    class Meta:
+        model = UserModel
