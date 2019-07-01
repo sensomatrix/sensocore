@@ -20,7 +20,7 @@ def create():
     return custom_response(error, 400)
   signal = SignalModel(data)
   signal.save()
-  data = signal_schema.dump(post).data
+  data = signal_schema.dump(signal).data
   return custom_response(data, 201)
 
 @signal_api.route('/', methods=['GET'])
@@ -64,6 +64,22 @@ def update(signal_id):
 
   data = signal_schema.dump(signal).data
   return custom_response(data, 200)
+
+@signal_api.route('/<int:signal_id>', methods=['DELETE'])
+@Auth.auth_required
+def delete(signal_id):
+  """
+  Delete A Signal
+  """
+  signal = SignalModel.get_one_signal(signal_id)
+  if not signal:
+    return custom_response({'error': 'signal not found'}, 404)
+  data = signal_schema.dump(signal).data
+  if data.get('owner_id') != g.user.get('id'):
+    return custom_response({'error': 'permission denied'}, 400)
+
+  signal.delete()
+  return custom_response({'message': 'deleted'}, 204)
 
 def custom_response(res, status_code):
   """
