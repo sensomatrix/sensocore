@@ -13,7 +13,7 @@ class SignalModel(db.Model):
   __tablename__ = 'signals'
 
   id = db.Column(db.Integer, primary_key=True)
-  data = db.Column(db.JSON, nullable=False)
+  data = db.Column(db.Text, nullable=False)
   created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
   owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -50,15 +50,16 @@ class SignalModel(db.Model):
   @staticmethod
   def get_one_signal(id):
     return SignalModel.query.get(id)
-  
+
   def __repr__(self):
     return '<id {}>'.format(self.id)
 
 class SignalSchema(Schema):
   """
-  User Schema
+  Signal Schema
   """
   id = fields.Int(dump_only=True)
-  data = fields.Str(dump_only=True)
+  data = fields.String(required=True)
+  owner_id = fields.Int(required=True)
   created_at = fields.DateTime(dump_only=True)
   modified_at = fields.DateTime(dump_only=True)
