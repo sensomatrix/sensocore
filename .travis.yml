@@ -6,6 +6,7 @@ python:
 install:
   - 'pip install pipenv'
   - 'pipenv install'
+  - 'pipenv install codecov'
 
 before_script:
   - psql -c "CREATE DATABASE sensocore_api_db;" -U postgres
