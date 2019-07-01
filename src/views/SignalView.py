@@ -1,4 +1,4 @@
-#/src/views/BlogpostView.py
+#/src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.SignalModel import SignalModel, SignalSchema
@@ -40,6 +40,28 @@ def get_one(signal_id):
   signal = SignalModel.get_one_signal(signal_id)
   if not signal:
     return custom_response({'error': 'signal not found'}, 404)
+  data = signal_schema.dump(signal).data
+  return custom_response(data, 200)
+
+@signal_api.route('/<int:signal_id>', methods=['PUT'])
+@Auth.auth_required
+def update(signal_id):
+  """
+  Update A Signal
+  """
+  req_data = request.get_json()
+  signal = SignalModel.get_one_signal(signal_id)
+  if not signal:
+    return custom_response({'error': 'signal not found'}, 404)
+  data = signal_schema.dump(signal).data
+  if data.get('owner_id') != g.user.get('id'):
+    return custom_response({'error': 'permission denied'}, 400)
+
+  data, error = signal_schema.load(req_data, partial=True)
+  if error:
+    return custom_response(error, 400)
+  signal.update(data)
+
   data = signal_schema.dump(signal).data
   return custom_response(data, 200)
 
