@@ -18,11 +18,19 @@ def create():
   data, error = signal_schema.load(req_data)
   if error:
     return custom_response(error, 400)
-  post = SignalModel(data)
-  post.save()
+  signal = SignalModel(data)
+  signal.save()
   data = signal_schema.dump(post).data
   return custom_response(data, 201)
 
+@signal_api.route('/', methods=['GET'])
+def get_all():
+  """
+  Get All Signals
+  """
+  signals = SignalModel.get_all_signals()
+  data = signal_schema.dump(signals, many=True).data
+  return custom_response(data, 200)
 
 def custom_response(res, status_code):
   """
