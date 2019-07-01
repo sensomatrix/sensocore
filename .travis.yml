@@ -6,16 +6,12 @@ python:
 install:
   - 'pip install pipenv'
   - 'pipenv install'
-  - 'pipenv install codecov'
 
 before_script:
   - psql -c "CREATE DATABASE sensocore_api_db;" -U postgres
 
 script:
-  - python -m unittest discover
-  - behave
-  - coverage erase
-  - coverage run src/tests/test_user.py && coverage html
+  - py.test --cov=src --cov-config .coveragerc
 
 after_success:
   - codecov
