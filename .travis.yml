@@ -1,8 +1,6 @@
 language: python
 
 python:
-    - 2.7
-    - 3.5
     - 3.6
 
 install:
@@ -17,7 +15,7 @@ script:
   - python -m unittest discover
   - behave
   - coverage erase
-  - coverage run test_webapp.py && coverage html
+  - coverage run src/tests/test_user.py && coverage html
 
 after_success:
   - codecov
