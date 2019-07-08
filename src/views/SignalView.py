@@ -2,6 +2,8 @@
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
 from ..models.SignalModel import SignalModel, SignalSchema
+from numpy import mean, fromstring
+import json
 
 signal_api = Blueprint('signal_api', __name__)
 signal_schema = SignalSchema()
@@ -40,6 +42,26 @@ def get_one(signal_id):
   signal = SignalModel.get_one_signal(signal_id)
   if not signal:
     return custom_response({'error': 'signal not found'}, 404)
+  data = signal_schema.dump(signal).data
+  return custom_response(data, 200)
+
+@signal_api.route('/remove-dc/<int:signal_id>', methods=['PUT'])
+def remove_dc(signal_id):
+  """
+  Removes the DC of a signal
+  """
+  req_data = request.get_json()
+  
+  signal = SignalModel.get_one_signal(signal_id)
+  signal_json = json.loads(signal_schema.dump(signal).data['data'])
+  data = signal_json[req_data['mode']][req_data['channel']]['data']
+  mean_value = data - mean(data)
+  data = str(mean_value.tolist())
+  signal_json[req_data['mode']][req_data['channel']]['data'] = data
+
+  signal.data = json.dumps(signal_json)
+  signal.save()
+  
   data = signal_schema.dump(signal).data
   return custom_response(data, 200)
 

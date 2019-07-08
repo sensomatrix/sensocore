@@ -28,6 +28,7 @@ flask-bcrypt = "*"
 pyjwt = "*"
 pytest-cov = "*"
 pytest = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.6"
