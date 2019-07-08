@@ -59,7 +59,6 @@ class SignalSchema(Schema):
   Signal Schema
   """
   id = fields.Int(dump_only=True)
-  name = fields.String(required=True)
   data = fields.String(required=True)
   owner_id = fields.Int(required=True)
   created_at = fields.DateTime(dump_only=True)

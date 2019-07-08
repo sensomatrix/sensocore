@@ -7,14 +7,10 @@ class Signal(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForgeignKey('users.id'), nullable=False)
-    name = db.Column(db.String())
-    unit = db.Column(db.String())
-    fs = db.Column(db.Integer())
+    data = db.Column(db.Text())
 
-    def __init__(self, name, unit, fs):
-        self.name = name
-        self.unit = unit
-        self.fs = fs
+    def __init__(self, data):
+        self.data = data
         self.owner_id = data.get('owner_id')
 
     def save(self):
@@ -40,10 +36,8 @@ class SignalSchema(Schema):
   Signal Schema
   """
   id = fields.Int(dump_only=True)
-  name = fields.Str(required=True)
-  unit = fields.Str(required=True)
-  owner_id = fields.Int(required=True)
-  fs = fields.Int(dump_only=True)
+  data = fields.String(dump_only=True)
+
 
 
 class UserModel(db.Model):
