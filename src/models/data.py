@@ -3,7 +3,6 @@ from . import db
 import datetime
 from marshmallow import fields, Schema
 
-
 class Data(db.Model):
     """
     Data Model
@@ -21,8 +20,8 @@ class Data(db.Model):
     fs = db.Column(db.Integer)
     unit = db.Column(db.String)
     signal_id = db.Column(db.Integer, db.ForeignKey(
-        'signal.id'), nullable=False)
-    signal = db.relationship('Signal', back_populates="data")
+        'signal.id'))
+    signal = db.relationship('Signal', uselist=False, back_populates="data")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -39,7 +38,7 @@ class Data(db.Model):
         self.fs = data.get('fs')
         self.unit = data.get('unit')
         self.signal_id = data.get('signal_id')
-        self.signal = Signal.query.get(self.signal_id)
+        self.signal = None
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -71,7 +70,7 @@ class DataSchema(Schema):
     start_time = fields.Time(required=True)
     end_time = fields.Time(required=True)
     duration = fields.Int(required=True)
-    signal_id = fields.Int(required=True)
+    signal_id = fields.Int(dump_only=True)
     fs = fields.Int(required=True)
     unit = fields.String(required=True)
     created_at = fields.DateTime(dump_only=True)

@@ -3,7 +3,7 @@ from . import db
 import datetime
 from marshmallow import fields, Schema
 from .epoch import EpochSchema, Epoch
-from .data import DataSchema, Data
+from .data import DataSchema
 
 
 class Signal(db.Model):

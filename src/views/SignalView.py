@@ -1,6 +1,7 @@
 # /src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
 from ..models.signal import Signal, SignalSchema
+from ..models.data import Data, DataSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
 from ..simulations.ecg import generate_ecg 
@@ -8,6 +9,7 @@ import json
 
 signal_api = Blueprint('signal_api', __name__)
 signal_schema = SignalSchema()
+data_schema = DataSchema()
 
 
 @signal_api.route('/', methods=['POST'])
@@ -16,10 +18,20 @@ def create():
     Create Signal Function
     """
     req_data = request.get_json()
-    data, error = signal_schema.load(req_data)
-    if error:
-        return custom_response(error, 400)
-    signal = Signal(data)
+    signal_data, error = signal_schema.load(req_data)
+
+    check_for_error(error)
+
+    actual_data, error = data_schema.load(req_data.get('data'))
+
+    check_for_error(error)
+
+    signal = Signal(signal_data)
+    signal.save()
+    actual_data['signal_id'] = signal.id
+    data = Data(actual_data)
+    data.save()
+    signal.data = data
     signal.save()
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
@@ -131,3 +143,7 @@ def custom_response(res, status_code):
         response=json.dumps(res),
         status=status_code
     )
+
+def check_for_error(error):
+    if error:
+        return custom_response(error, 400)
