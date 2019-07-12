@@ -2,6 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from ..models.signal import Signal, SignalSchema
 from ..models.data import Data, DataSchema
+from ..models.epoch import Epoch, EpochSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
 from ..simulations.ecg import generate_ecg 
@@ -10,6 +11,7 @@ import json
 signal_api = Blueprint('signal_api', __name__)
 signal_schema = SignalSchema()
 data_schema = DataSchema()
+epoch_schema = EpochSchema()
 
 
 @signal_api.route('/', methods=['POST'])
@@ -33,9 +35,22 @@ def create():
     data = Data(actual_data)
     data.save()
 
+    epochs = []
+
+    for epoch in req_data.get('epochs'):
+        actual_epoch, error = epoch_schema.load(epoch)
+
+        check_for_error(error)
+
+        actual_epoch['signal_id'] = signal.id
+        epoch = Epoch(actual_epoch)
+        epoch.save()
+        epochs.append(epoch)
+
     signal.data = data
+    signal.epochs = epochs
     signal.save()
-    
+
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
 
