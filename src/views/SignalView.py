@@ -1,6 +1,5 @@
 # /src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
-from ..shared.authentication import Auth
 from ..models.signal import Signal, SignalSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
@@ -12,7 +11,6 @@ signal_schema = SignalSchema()
 
 
 @signal_api.route('/', methods=['POST'])
-@Auth.auth_required
 def create():
     """
     Create Signal Function
@@ -29,7 +27,6 @@ def create():
 
 
 @signal_api.route('/sim', methods=['POST'])
-@Auth.auth_required
 def create_simulation():
     """
     Creating a simulated signal
@@ -89,7 +86,6 @@ def remove_dc(signal_id):
 
 
 @signal_api.route('/<int:signal_id>', methods=['PUT'])
-@Auth.auth_required
 def update(signal_id):
     """
     Update A Signal
@@ -112,7 +108,6 @@ def update(signal_id):
 
 
 @signal_api.route('/<int:signal_id>', methods=['DELETE'])
-@Auth.auth_required
 def delete(signal_id):
     """
     Delete A Signal

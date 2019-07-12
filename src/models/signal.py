@@ -54,11 +54,11 @@ class Signal(db.Model):
 
     @staticmethod
     def get_all_signals():
-        return SignalModel.query.all()
+        return Signal.query.all()
 
     @staticmethod
     def get_one_signal(id):
-        return SignalModel.query.get(id)
+        return Signal.query.get(id)
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -70,10 +70,10 @@ class SignalSchema(Schema):
     """
     id = fields.Int(dump_only=True)
     name = fields.String(required=True)
-    samples = fields.List(fields.Float)
+    samples = fields.List(fields.Float, required=True)
     sensor = fields.String(required=True)
     sensor_location_on_body = fields.String(required=True)
-    data = fields.Nested(DataSchema, many=False)
+    data = fields.Nested(DataSchema, many=False, required=True)
     epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
