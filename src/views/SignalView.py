@@ -28,11 +28,14 @@ def create():
 
     signal = Signal(signal_data)
     signal.save()
+
     actual_data['signal_id'] = signal.id
     data = Data(actual_data)
     data.save()
+
     signal.data = data
     signal.save()
+    
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
 
