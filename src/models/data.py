@@ -1,4 +1,4 @@
-# src/models/DataModel.py
+# src/models/data.py
 from . import db
 import datetime
 from marshmallow import fields, Schema

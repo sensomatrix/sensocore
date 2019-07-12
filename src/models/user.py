@@ -1,8 +1,8 @@
-# src/models/User.py
+# src/models/user.py
 from marshmallow import fields, Schema
 import datetime
 from . import db, bcrypt
-from .Signal import SignalSchema
+from .signal import SignalSchema
 
 
 class User(db.Model):

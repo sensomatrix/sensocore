@@ -1,23 +1,24 @@
-# src/models/EpochModel.py
+# src/models/device.py
 from . import db
 import datetime
 from marshmallow import fields, Schema
 
 
-class Epoch(db.Model):
+class Device(db.Model):
     """
-    Epoch Model
+    Device Model
     """
 
     # table name
-    __tablename__ = 'epoch'
+    __tablename__ = 'device'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    start_time = db.Column(db.Time)
-    end_time = db.Column(db.Time)
-    duration = db.Column(db.Float)
-    signal_id = db.Column(db.Integer, db.ForeignKey('signal.id'), nullable=False)
+    type = db.Column(db.String)
+    company = db.Column(db.String)
+    sin = db.Column(db.Integer)
+    channel_num = db.Column(db.Integer)
+    time_description = db.Column(db.String)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -27,9 +28,11 @@ class Epoch(db.Model):
         Class constructor
         """
         self.name = data.get('name')
-        self.start_time = data.get('start_time')
-        self.end_time = data.get('end_time')
-        self.duration = data.get('duration')
+        self.type = data.get('type')
+        self.company = data.get('company')
+        self.sin = data.get('sin')
+        self.channel_num = data.get('channel_num')
+        self.time_description = data.get('time_description')
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -51,14 +54,15 @@ class Epoch(db.Model):
         return '<id {}>'.format(self.id)
 
 
-class EpochSchema(Schema):
+class DeviceSchema(Schema):
     """
-    Epoch Schema
+    Device Schema
     """
     id = fields.Int(dump_only=True)
     name = fields.String(required=True)
-    start_time = fields.Time(required=True)
-    end_time = fields.Time(required=True)
-    duration = fields.Int(required=True)
+    type = fields.String(required=True)
+    company = fields.String(required=True)
+    sin = fields.Int(required=True)
+    channel_num = fields.Int(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)

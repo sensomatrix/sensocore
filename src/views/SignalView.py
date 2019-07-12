@@ -1,7 +1,7 @@
 # /src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
-from ..shared.Authentication import Auth
-from ..models.Signal import Signal, SignalSchema
+from ..shared.authentication import Auth
+from ..models.signal import Signal, SignalSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
 from ..simulations.ecg import generate_ecg 

@@ -2,12 +2,12 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from src.models.User import User
-from src.models.Signal import Signal
-from src.models.Data import Data
-from src.models.Device import Device
-from src.models.Epoch import Epoch
-from src.models.Recording import Recording
+from src.models.user import User
+from src.models.signal import Signal
+from src.models.data import Data
+from src.models.device import Device
+from src.models.epoch import Epoch
+from src.models.recording import Recording
 
 from src.app import create_app, db
 

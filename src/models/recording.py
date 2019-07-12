@@ -1,4 +1,4 @@
-# src/models/RecordingModel.py
+# src/models/recording.py
 from . import db
 import datetime
 from marshmallow import fields, Schema

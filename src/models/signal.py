@@ -1,24 +1,27 @@
-# src/models/DeviceModel.py
+# src/models/signal.py
 from . import db
 import datetime
 from marshmallow import fields, Schema
+from .epoch import EpochSchema
+from .data import DataSchema
 
 
-class Device(db.Model):
+class Signal(db.Model):
     """
-    Device Model
+    Signal Model
     """
 
     # table name
-    __tablename__ = 'device'
+    __tablename__ = 'signal'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    type = db.Column(db.String)
-    company = db.Column(db.String)
-    sin = db.Column(db.Integer)
-    channel_num = db.Column(db.Integer)
-    time_description = db.Column(db.String)
+    sensor = db.Column(db.String)
+    sensor_location_on_body = db.Column(db.String)
+    samples = db.Column(db.ARRAY(db.Float))
+    data = db.relationship('Data', uselist=False, back_populates='signal')
+    epochs = db.relationship(
+        'Epoch', backref='signal', order_by="Epoch.id")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -28,11 +31,10 @@ class Device(db.Model):
         Class constructor
         """
         self.name = data.get('name')
-        self.type = data.get('type')
-        self.company = data.get('company')
-        self.sin = data.get('sin')
-        self.channel_num = data.get('channel_num')
-        self.time_description = data.get('time_description')
+        self.sensor = data.get('sensor')
+        self.sensor_location_on_body = data.get('sensor_location_on_body')
+        self.data_id = data.get('data_id')
+        self.owner_id = data.get('owner_id')
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -50,19 +52,28 @@ class Device(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    @staticmethod
+    def get_all_signals():
+        return SignalModel.query.all()
+
+    @staticmethod
+    def get_one_signal(id):
+        return SignalModel.query.get(id)
+
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
 
-class DeviceSchema(Schema):
+class SignalSchema(Schema):
     """
-    Device Schema
+    Signal Schema
     """
     id = fields.Int(dump_only=True)
     name = fields.String(required=True)
-    type = fields.String(required=True)
-    company = fields.String(required=True)
-    sin = fields.Int(required=True)
-    channel_num = fields.Int(required=True)
+    samples = fields.List(fields.Float)
+    sensor = fields.String(required=True)
+    sensor_location_on_body = fields.String(required=True)
+    data = fields.Nested(DataSchema, many=False)
+    epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
