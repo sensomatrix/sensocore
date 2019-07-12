@@ -16,7 +16,6 @@ def create():
     Create Signal Function
     """
     req_data = request.get_json()
-    req_data['owner_id'] = g.user.get('id')
     data, error = signal_schema.load(req_data)
     if error:
         return custom_response(error, 400)

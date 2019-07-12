@@ -38,6 +38,8 @@ class Data(db.Model):
         self.duration = data.get('duration')
         self.fs = data.get('fs')
         self.unit = data.get('unit')
+        self.signal_id = data.get('signal_id')
+        self.signal = Signal.query.get(self.signal_id)
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -69,6 +71,7 @@ class DataSchema(Schema):
     start_time = fields.Time(required=True)
     end_time = fields.Time(required=True)
     duration = fields.Int(required=True)
+    signal_id = fields.Int(required=True)
     fs = fields.Int(required=True)
     unit = fields.String(required=True)
     created_at = fields.DateTime(dump_only=True)

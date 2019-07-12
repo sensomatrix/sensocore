@@ -2,8 +2,8 @@
 from . import db
 import datetime
 from marshmallow import fields, Schema
-from .epoch import EpochSchema
-from .data import DataSchema
+from .epoch import EpochSchema, Epoch
+from .data import DataSchema, Data
 
 
 class Signal(db.Model):
@@ -33,8 +33,7 @@ class Signal(db.Model):
         self.name = data.get('name')
         self.sensor = data.get('sensor')
         self.sensor_location_on_body = data.get('sensor_location_on_body')
-        self.data_id = data.get('data_id')
-        self.owner_id = data.get('owner_id')
+        self.samples = data.get('samples')
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -73,7 +72,7 @@ class SignalSchema(Schema):
     samples = fields.List(fields.Float, required=True)
     sensor = fields.String(required=True)
     sensor_location_on_body = fields.String(required=True)
-    data = fields.Nested(DataSchema, many=False, required=True)
+    data = fields.Nested(DataSchema, many=False, dump_only=True)
     epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
