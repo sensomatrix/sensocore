@@ -1,24 +1,28 @@
-# src/models/DeviceModel.py
+# src/models/DataModel.py
 from . import db
 import datetime
 from marshmallow import fields, Schema
 
 
-class DeviceModel(db.Model):
+class Data(db.Model):
     """
-    Device Model
+    Data Model
     """
 
     # table name
-    __tablename__ = 'device'
+    __tablename__ = 'data'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    type = db.Column(db.String)
-    company = db.Column(db.String)
-    sin = db.Column(db.Integer)
     channel_num = db.Column(db.Integer)
-    time_description = db.Column(db.String)
+    description = db.Column(db.Text)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+    duration = db.Column(db.Float)
+    fs = db.Column(db.Integer)
+    unit = db.Column(db.String)
+    signal_id = db.Column(db.Integer, db.ForeignKey(
+        'signal.id'), nullable=False)
+    signal = db.relationship('Signal', back_populates="data")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -27,12 +31,13 @@ class DeviceModel(db.Model):
         """
         Class constructor
         """
-        self.name = data.get('name')
-        self.type = data.get('type')
-        self.company = data.get('company')
-        self.sin = data.get('sin')
         self.channel_num = data.get('channel_num')
-        self.time_description = data.get('time_description')
+        self.description = data.get('description')
+        self.start_time = data.get('start_time')
+        self.end_time = data.get('end_time')
+        self.duration = data.get('duration')
+        self.fs = data.get('fs')
+        self.unit = data.get('unit')
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -54,15 +59,17 @@ class DeviceModel(db.Model):
         return '<id {}>'.format(self.id)
 
 
-class DeviceSchema(Schema):
+class DataSchema(Schema):
     """
-    Device Schema
+    Data Schema
     """
     id = fields.Int(dump_only=True)
-    name = fields.String(required=True)
-    type = fields.String(required=True)
-    company = fields.String(required=True)
-    sin = fields.Int(required=True)
     channel_num = fields.Int(required=True)
+    description = fields.String(required=True)
+    start_time = fields.Time(required=True)
+    end_time = fields.Time(required=True)
+    duration = fields.Int(required=True)
+    fs = fields.Int(required=True)
+    unit = fields.String(required=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)

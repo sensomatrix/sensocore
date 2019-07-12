@@ -3,7 +3,7 @@ import jwt
 import os
 import datetime
 from flask import json, Response, request, g
-from ..models.UserModel import UserModel
+from ..models.User import User
 from functools import wraps
 
 
@@ -74,7 +74,7 @@ class Auth():
           )
           
       user_id = data['data']['user_id']
-      check_user = UserModel.get_one_user(user_id)
+      check_user = User.get_one_user(user_id)
       if not check_user:
           return Response(
           mimetype="application/json",

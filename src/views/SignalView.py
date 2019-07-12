@@ -1,7 +1,7 @@
 # /src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
 from ..shared.Authentication import Auth
-from ..models.SignalModel import SignalModel, SignalSchema
+from ..models.Signal import Signal, SignalSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
 from ..simulations.ecg import generate_ecg 
@@ -22,7 +22,7 @@ def create():
     data, error = signal_schema.load(req_data)
     if error:
         return custom_response(error, 400)
-    signal = SignalModel(data)
+    signal = Signal(data)
     signal.save()
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
@@ -50,7 +50,7 @@ def get_all():
     """
     Get All Signals
     """
-    signals = SignalModel.get_all_signals()
+    signals = Signal.get_all_signals()
     data = signal_schema.dump(signals, many=True).data
     return custom_response(data, 200)
 
@@ -60,7 +60,7 @@ def get_one(signal_id):
     """
     Get A Signal
     """
-    signal = SignalModel.get_one_signal(signal_id)
+    signal = Signal.get_one_signal(signal_id)
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
     data = signal_schema.dump(signal).data
@@ -74,7 +74,7 @@ def remove_dc(signal_id):
     """
     req_data = request.get_json()
 
-    signal = SignalModel.get_one_signal(signal_id)
+    signal = Signal.get_one_signal(signal_id)
     signal_json = json.loads(signal_schema.dump(signal).data['data'])
     data = signal_json[req_data['mode']][req_data['channel']]['data']
     mean_value = data - mean(data)
@@ -95,7 +95,7 @@ def update(signal_id):
     Update A Signal
     """
     req_data = request.get_json()
-    signal = SignalModel.get_one_signal(signal_id)
+    signal = Signal.get_one_signal(signal_id)
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
     data = signal_schema.dump(signal).data
@@ -117,7 +117,7 @@ def delete(signal_id):
     """
     Delete A Signal
     """
-    signal = SignalModel.get_one_signal(signal_id)
+    signal = Signal.get_one_signal(signal_id)
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
     data = signal_schema.dump(signal).data

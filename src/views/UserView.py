@@ -1,5 +1,5 @@
 from flask import request, json, Response, Blueprint, g
-from ..models.UserModel import UserModel, UserSchema
+from ..models.User import User, UserSchema
 from ..shared.Authentication import Auth
 
 user_api = Blueprint('users', __name__)
@@ -17,12 +17,12 @@ def create():
     return custom_response(error, 400)
   
   # check if user already exist in the db
-  user_in_db = UserModel.get_user_by_email(data.get('email'))
+  user_in_db = User.get_user_by_email(data.get('email'))
   if user_in_db:
     message = {'error': 'User already exist, please supply another email address'}
     return custom_response(message, 400)
   
-  user = UserModel(data)
+  user = User(data)
   user.save()
 
   ser_data = user_schema.dump(user).data
@@ -34,7 +34,7 @@ def create():
 @user_api.route('/', methods=['GET'])
 @Auth.auth_required
 def get_all():
-  users = UserModel.get_all_users()
+  users = User.get_all_users()
   ser_users = user_schema.dump(users, many=True).data
   return custom_response(ser_users, 200)
 
@@ -50,7 +50,7 @@ def login():
   if not data.get('email') or not data.get('password'):
     return custom_response({'error': 'you need email and password to sign in'}, 400)
   
-  user = UserModel.get_user_by_email(data.get('email'))
+  user = User.get_user_by_email(data.get('email'))
 
   if not user:
     return custom_response({'error': 'invalid credentials'}, 400)
@@ -70,7 +70,7 @@ def get_a_user(user_id):
   """
   Get a single user
   """
-  user = UserModel.get_one_user(user_id)
+  user = User.get_one_user(user_id)
   if not user:
     return custom_response({'error': 'user not found'}, 404)
   
@@ -88,7 +88,7 @@ def update():
   if error:
     return custom_response(error, 400)
 
-  user = UserModel.get_one_user(g.user.get('id'))
+  user = User.get_one_user(g.user.get('id'))
   user.update(data)
   ser_user = user_schema.dump(user).data
   return custom_response(ser_user, 200)
@@ -99,7 +99,7 @@ def delete():
   """
   Delete a user
   """
-  user = UserModel.get_one_user(g.user.get('id'))
+  user = User.get_one_user(g.user.get('id'))
   user.delete()
   return custom_response({'message': 'deleted'}, 204)
 
@@ -109,7 +109,7 @@ def get_me():
   """
   Get me
   """
-  user = UserModel.get_one_user(g.user.get('id'))
+  user = User.get_one_user(g.user.get('id'))
   ser_user = user_schema.dump(user).data
   return custom_response(ser_user, 200)
 

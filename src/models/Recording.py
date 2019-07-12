@@ -4,7 +4,7 @@ import datetime
 from marshmallow import fields, Schema
 
 
-class RecordingModel(db.Model):
+class Recording(db.Model):
     """
     Recording Model
     """
