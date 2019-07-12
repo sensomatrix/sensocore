@@ -21,7 +21,7 @@ class Signal(db.Model):
     samples = db.Column(db.ARRAY(db.Float))
     data = db.relationship('Data', uselist=False, back_populates='signal')
     epochs = db.relationship(
-        'Epoch', backref='signal', order_by="Epoch.id")
+        'Epoch', back_populates='signal')
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 

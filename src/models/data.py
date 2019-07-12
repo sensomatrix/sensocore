@@ -20,7 +20,7 @@ class Data(db.Model):
     fs = db.Column(db.Integer)
     unit = db.Column(db.String)
     signal_id = db.Column(db.Integer, db.ForeignKey(
-        'signal.id'))
+        'signal.id'), nullable=False)
     signal = db.relationship('Signal', uselist=False, back_populates="data")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)

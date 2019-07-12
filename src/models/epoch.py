@@ -18,6 +18,7 @@ class Epoch(db.Model):
     end_time = db.Column(db.Time)
     duration = db.Column(db.Float)
     signal_id = db.Column(db.Integer, db.ForeignKey('signal.id'), nullable=False)
+    signal = db.relationship('Signal', uselist=False, back_populates="epochs")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -30,6 +31,7 @@ class Epoch(db.Model):
         self.start_time = data.get('start_time')
         self.end_time = data.get('end_time')
         self.duration = data.get('duration')
+        self.signal_id = data.get('signal_id')
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -57,6 +59,7 @@ class EpochSchema(Schema):
     """
     id = fields.Int(dump_only=True)
     name = fields.String(required=True)
+    signal_id = fields.Int(dump_only=True)
     start_time = fields.Time(required=True)
     end_time = fields.Time(required=True)
     duration = fields.Int(required=True)
