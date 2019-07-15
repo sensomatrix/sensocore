@@ -3,9 +3,8 @@ from flask import request, g, Blueprint, json, Response
 from ..models.signal import Signal, SignalSchema
 from ..models.data import Data, DataSchema
 from ..models.epoch import Epoch, EpochSchema
+from views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
-from ..simulations.eeg import simulate_eeg_jansen
-from ..simulations.ecg import generate_ecg 
 import json
 
 signal_api = Blueprint('signal_api', __name__)
@@ -22,53 +21,14 @@ def create():
     req_data = request.get_json()
     signal_data, error = signal_schema.load(req_data)
 
-    check_for_error(error)
-
-    actual_data, error = data_schema.load(req_data.get('data'))
-
-    check_for_error(error)
-
     signal = Signal(signal_data)
     signal.save()
 
-    actual_data['signal_id'] = signal.id
-    data = Data(actual_data)
-    data.save()
-
-    epochs = []
-
-    for epoch in req_data.get('epochs'):
-        actual_epoch, error = epoch_schema.load(epoch)
-
-        check_for_error(error)
-
-        actual_epoch['signal_id'] = signal.id
-        epoch = Epoch(actual_epoch)
-        epoch.save()
-        epochs.append(epoch)
-
-    signal.data = data
-    signal.epochs = epochs
-    signal.save()
+    create_epochs(signal.id, signal_data['epochs'])
+    create_data(signal.id, signal_data['data'])
 
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
-
-
-@signal_api.route('/sim', methods=['POST'])
-def create_simulation():
-    """
-    Creating a simulated signal
-    """
-    req_data = request.get_json()
-    type = req_data.pop('type', None)
-    if type == 'ECG':
-        # ecg = generate_ecg(**req_data)
-        pass
-    elif type == 'EEG':        
-        eeg = simulate_eeg_jansen(**req_data)
-
-    return custom_response("{}", 200)
 
 
 @signal_api.route('/', methods=['GET'])
