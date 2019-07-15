@@ -19,10 +19,10 @@ class Signal(db.Model):
     sensor = db.Column(db.String)
     sensor_location_on_body = db.Column(db.String)
     samples = db.Column(db.ARRAY(db.Float))
-    data = db.relationship('Data', uselist=False, back_populates='signal')
-    epochs = db.relationship('Epoch', back_populates='signal')
+    data = db.relationship('Data', uselist=False, backref='signal')
+    epochs = db.relationship('Epoch', backref='signal')
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
-    device = db.relationship('Device', uselist=False, back_populates="signal")
+    device = db.relationship('Device', uselist=False, backref="signal")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
