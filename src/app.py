@@ -6,6 +6,7 @@ from .config import app_config
 from .models import db, bcrypt
 
 from .views.SignalView import signal_api as signal_blueprint
+from .views.device_view import device_api as device_blueprint
 
 def create_app(env_name):
   """
@@ -22,6 +23,7 @@ def create_app(env_name):
   db.init_app(app)
 
   app.register_blueprint(signal_blueprint, url_prefix='/api/v1/signals')
+  app.register_blueprint(device_blueprint, url_prefix='/api/v1/devices')
 
   @app.route('/', methods=['GET'])
   def index():

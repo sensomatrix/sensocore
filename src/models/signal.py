@@ -21,8 +21,7 @@ class Signal(db.Model):
     samples = db.Column(db.ARRAY(db.Float))
     data = db.relationship('Data', uselist=False, backref='signal')
     epochs = db.relationship('Epoch', backref='signal')
-    device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
-    device = db.relationship('Device', uselist=False, backref="signal")
+    device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -73,7 +72,7 @@ class SignalSchema(Schema):
     samples = fields.List(fields.Float, required=True)
     sensor = fields.String(required=True)
     sensor_location_on_body = fields.String(required=True)
-    data = fields.Nested(DataSchema, many=False, dump_only=True)
+    data = fields.Nested(DataSchema, many=False)
     epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)

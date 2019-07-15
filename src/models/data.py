@@ -35,8 +35,6 @@ class Data(db.Model):
         self.duration = data.get('duration')
         self.fs = data.get('fs')
         self.unit = data.get('unit')
-        # self.signal_id = data.get('signal_id')
-        # self.signal = None
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
