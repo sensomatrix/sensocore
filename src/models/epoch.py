@@ -17,8 +17,7 @@ class Epoch(db.Model):
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
     duration = db.Column(db.Float)
-    signal_id = db.Column(db.Integer, db.ForeignKey('signal.id'), nullable=False)
-    signal = db.relationship('Signal', uselist=False, back_populates="epochs")
+    signal_id = db.Column(db.Integer, db.ForeignKey('signal.id'))
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 

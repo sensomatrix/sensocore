@@ -1,23 +1,21 @@
-# /src/views/SignalView.py
+# /src/views/device_view.py
 from flask import request, g, Blueprint, json, Response
 from ..models.signal import Signal, SignalSchema
-from ..models.data import Data, DataSchema
-from ..models.epoch import Epoch, EpochSchema
+from ..models.device import Device, DeviceSchema
 from numpy import mean, fromstring
 from ..simulations.eeg import simulate_eeg_jansen
-from ..simulations.ecg import generate_ecg 
+from ..simulations.ecg import generate_ecg
 import json
 
-signal_api = Blueprint('signal_api', __name__)
+device_api = Blueprint('device_api', __name__)
 signal_schema = SignalSchema()
-data_schema = DataSchema()
-epoch_schema = EpochSchema()
+device_schema = DeviceSchema()
 
 
 @signal_api.route('/', methods=['POST'])
 def create():
     """
-    Create Signal Function
+    Create Device Function
     """
     req_data = request.get_json()
     signal_data, error = signal_schema.load(req_data)
@@ -65,7 +63,7 @@ def create_simulation():
     if type == 'ECG':
         # ecg = generate_ecg(**req_data)
         pass
-    elif type == 'EEG':        
+    elif type == 'EEG':
         eeg = simulate_eeg_jansen(**req_data)
 
     return custom_response("{}", 200)
@@ -140,6 +138,7 @@ def custom_response(res, status_code):
         response=json.dumps(res),
         status=status_code
     )
+
 
 def check_for_error(error):
     if error:

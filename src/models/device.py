@@ -2,6 +2,7 @@
 from . import db
 import datetime
 from marshmallow import fields, Schema
+from .signal import Signal, SignalSchema
 
 
 class Device(db.Model):
@@ -18,7 +19,7 @@ class Device(db.Model):
     company = db.Column(db.String)
     sin = db.Column(db.Integer)
     channel_num = db.Column(db.Integer)
-    time_description = db.Column(db.String)
+    signals = db.relationship('Signal', back_populates='device')
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
@@ -64,5 +65,6 @@ class DeviceSchema(Schema):
     company = fields.String(required=True)
     sin = fields.Int(required=True)
     channel_num = fields.Int(required=True)
+    signals = fields.Nested(SignalSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
