@@ -21,7 +21,7 @@ def create():
     device = Device(device_data)
     device.save()
 
-    create_signals(device.id, req_data['signals'])
+    create_signals(req_data['signals'], device.id)
 
     data = device_schema.dump(device).data
     return custom_response(data, 201)

@@ -7,8 +7,7 @@ signal_schema = SignalSchema()
 epoch_schema = EpochSchema()
 data_schema = DataSchema()
 
-
-def create_signals(device_id, signals_data):
+def create_signals(signals_data, device_id=None):
     for signal_json in signals_data:
         signal_data, error = signal_schema.load(signal_json)
         if signal_data:
