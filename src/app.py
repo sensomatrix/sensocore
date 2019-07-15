@@ -2,11 +2,11 @@
 
 from flask import Flask
 
-from .config import app_config
-from .models import db, bcrypt
+from src.config import app_config
+from src.models import db, bcrypt
 
-from .views.SignalView import signal_api as signal_blueprint
-from .views.device_view import device_api as device_blueprint
+from src.views.SignalView import signal_api as signal_blueprint
+from src.views.device_view import device_api as device_blueprint
 
 def create_app(env_name):
   """

@@ -1,8 +1,8 @@
 # src/models/device.py
-from . import db
+from src.models import db
 import datetime
 from marshmallow import fields, Schema
-from .signal import Signal, SignalSchema
+from src.models.signal import Signal, SignalSchema
 
 
 class Device(db.Model):

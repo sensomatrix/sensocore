@@ -1,7 +1,7 @@
 # /src/views/views_helper.py
-from ..models.signal import Signal, SignalSchema
-from ..models.epoch import Epoch, EpochSchema
-from ..models.data import Data, DataSchema
+from src.models.signal import Signal, SignalSchema
+from src.models.epoch import Epoch, EpochSchema
+from src.models.data import Data, DataSchema
 
 signal_schema = SignalSchema()
 epoch_schema = EpochSchema()

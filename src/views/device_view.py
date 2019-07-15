@@ -1,8 +1,8 @@
 # /src/views/device_view.py
 from flask import request, g, Blueprint, json, Response
-from ..models.signal import Signal, SignalSchema
-from ..models.device import Device, DeviceSchema
-from .views_helper import create_signals
+from src.models.signal import Signal, SignalSchema
+from src.models.device import Device, DeviceSchema
+from src.views.views_helper import create_signals
 import json
 
 device_api = Blueprint('device_api', __name__)

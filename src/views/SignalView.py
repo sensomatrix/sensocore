@@ -1,9 +1,9 @@
 # /src/views/SignalView.py
 from flask import request, g, Blueprint, json, Response
-from ..models.signal import Signal, SignalSchema
-from ..models.data import Data, DataSchema
-from ..models.epoch import Epoch, EpochSchema
-from views.views_helper import create_data, create_epochs
+from src.models.signal import Signal, SignalSchema
+from src.models.data import Data, DataSchema
+from src.models.epoch import Epoch, EpochSchema
+from src.views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
 import json
 
