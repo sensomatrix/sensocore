@@ -24,8 +24,8 @@ def create():
     signal = Signal(signal_data)
     signal.save()
 
-    create_epochs(signal.id, signal_data['epochs'])
-    create_data(signal.id, signal_data['data'])
+    create_epochs(signal.id, req_data['epochs'])
+    create_data(signal.id, req_data['data'])
 
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
