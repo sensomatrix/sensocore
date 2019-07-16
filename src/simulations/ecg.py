@@ -28,8 +28,8 @@ def t(M_T, t_T, W_T, t):
     return M_T * math.exp(-1 * ((t - t_T)/(math.sqrt(2) * W_T)) ** 2)
 
 
-def generate_ecg(sampling_frequency, noise_magnitude, end_time, period, delay,
-                 P, Q, R, S, T, callback=None, is_for_graphing=True):
+def generate_ecg(fs, noise_magnitude, duration, period, delay,
+                 P, Q, R, S, T):
 
     Q = [
         [Q[0], Q[3]],
@@ -38,76 +38,45 @@ def generate_ecg(sampling_frequency, noise_magnitude, end_time, period, delay,
     ]
 
     begin_time = 0
-    period = period
-    end_time = end_time
 
-    total_beats = int(end_time / period)
+    total_beats = int(duration / period)
 
     if total_beats == 0:
         total_beats = 1
 
-    if is_for_graphing:
-        begin_time = delay
-        end_time = begin_time + period
-        total_beats = 1
+    begin_time = delay
+    duration = begin_time + period
 
-    time_one_period = np.linspace(0, period, period * sampling_frequency)
+    time_one_period = np.linspace(0, period, period * fs)
 
-    samples = sampling_frequency * total_beats
+    samples = fs * total_beats
 
     diff = samples - len(time_one_period) * total_beats
 
     samples = samples - diff
 
     p_wave = np.tile(generateWave(time_one_period, P, p), total_beats)
-
-    if callback is not None:
-        callback(20)
-
     q_wave = np.tile(generateWave(time_one_period, Q, q), total_beats)
-
-    if callback is not None:
-        callback(40)
-
     r_wave = np.tile(generateWave(time_one_period, R, r), total_beats)
-
-    if callback is not None:
-        callback(60)
-
     s_wave = np.tile(generateWave(time_one_period, S, s), total_beats)
-
-    if callback is not None:
-        callback(80)
-
     t_wave = np.tile(generateWave(time_one_period, T, t), total_beats)
-
-    x = np.linspace(begin_time, end_time, samples)
 
     y = p_wave + q_wave + r_wave + s_wave + t_wave
 
     y -= 0.2
 
     # Need to find out how much to shift the values by
-    if not is_for_graphing:
-        delay_shift = int(delay * sampling_frequency)
+    delay_shift = int(delay * fs)
 
-        y = np.roll(y, delay_shift)
+    y = np.roll(y, delay_shift)
 
-        y[:delay_shift] = 0
+    y[:delay_shift] = 0
 
-    noise = np.random.normal(0, noise_magnitude, x.shape)
+    noise = np.random.normal(0, noise_magnitude, y.shape)
 
     output = y + noise
 
-    if callback is not None:
-        callback(100)
-
-    x = np.reshape(x, (x.shape[0], 1))
-    output = np.reshape(output, (output.shape[0], 1))
-
-    ecg = np.hstack([x, output])
-
-    return ecg
+    return output
 
 
 def generateWave(x, wave_params, wave):
