@@ -6,7 +6,7 @@ from src.app import create_app, db
 
 class DeviceTest(unittest.TestCase):
     """
-    Users Test Case
+    Device Test Case
     """
 
     def setUp(self):
