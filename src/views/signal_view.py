@@ -5,6 +5,7 @@ from src.models.data import Data, DataSchema
 from src.models.epoch import Epoch, EpochSchema
 from src.views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
+from src.simulations.ecg import generate_ecg
 import json
 
 signal_api = Blueprint('signal_api', __name__)
@@ -26,6 +27,38 @@ def create():
 
     create_epochs(signal.id, req_data['epochs'])
     create_data(signal.id, req_data['data'])
+
+    data = signal_schema.dump(signal).data
+    return custom_response(data, 201)
+
+
+@signal_api.route('/simulate/ecg', methods=['POST'])
+def simulate_ecg():
+    """
+    Simulate an ecg signal
+    """
+    req_data = request.get_json()
+    ecg_sim = generate_ecg(**req_data)
+    signal_data, error = signal_schema.load({
+        "name": "ECG Simulated Signal",
+        "raw": ecg_sim,
+    })
+
+    if error:
+        return custom_response(error, 400)
+
+    signal = Signal(signal_data)
+    signal.save()
+
+    create_data(signal.id, {
+        "channel_num": 1,
+        "description": "Simulated ECG Signal",
+        "start_time": "15:00:00",  # TODO: Change this
+        "end_time": "16:00:00",  # TODO: Change this
+        "duration": req_data['duration'],
+        "fs": req_data['fs'],
+        "unit": "mV"
+    })
 
     data = signal_schema.dump(signal).data
     return custom_response(data, 201)
@@ -100,6 +133,7 @@ def custom_response(res, status_code):
         response=json.dumps(res),
         status=status_code
     )
+
 
 def check_for_error(error):
     if error:
