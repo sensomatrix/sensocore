@@ -15,14 +15,7 @@ class SignalTest(unittest.TestCase):
         """
         self.app = create_app("testing")
         self.client = self.app.test_client()
-
-        with self.app.app_context():
-            # create all tables
-            db.create_all()
-
-    def test_create_signal(self):
-        """ Test Create Device """
-        res = self.client.post('/api/v1/signals/', data=json.dumps({
+        self.test_data = {
             "name": "test",
             "samples": [
                     1,
@@ -55,8 +48,29 @@ class SignalTest(unittest.TestCase):
                     "duration": 15
                 }
             ]
-        }), content_type='application/json')
+        }
+
+        with self.app.app_context():
+            # create all tables
+            db.create_all()
+
+    def test_create_signal(self):
+        """ Test Create Device """
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
+
+    def test_get_signals(self):
+        """ Test Create Device """
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.get('/api/v1/signals/',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(len(data), 1)
+        self.assertEqual(res.status_code, 200)
 
     def tearDown(self):
         """
