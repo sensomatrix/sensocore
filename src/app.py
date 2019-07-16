@@ -5,7 +5,7 @@ from flask import Flask
 from src.config import app_config
 from src.models import db, bcrypt
 
-from src.views.SignalView import signal_api as signal_blueprint
+from src.views.signal_view import signal_api as signal_blueprint
 from src.views.device_view import device_api as device_blueprint
 
 def create_app(env_name):
