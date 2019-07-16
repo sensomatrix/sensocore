@@ -72,6 +72,17 @@ class SignalTest(unittest.TestCase):
         self.assertEqual(len(data), 1)
         self.assertEqual(res.status_code, 200)
 
+    def test_get_signal(self):
+        """Test Get One Signal"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+        
+        res = self.client.get('/api/v1/signals/1',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
         duration = 200
