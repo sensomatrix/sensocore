@@ -77,11 +77,18 @@ class SignalTest(unittest.TestCase):
         res = self.client.post(
             '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
-        
+
         res = self.client.get('/api/v1/signals/1',
                               content_type='application/json')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
+
+    def test_get_signal_error(self):
+        """Test Attempt to get one signal that does not exist"""
+        res = self.client.get('/api/v1/signals/1',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
 
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
