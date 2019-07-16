@@ -20,7 +20,7 @@ class SignalTest(unittest.TestCase):
             # create all tables
             db.create_all()
 
-    def test_create_device(self):
+    def test_create_signal(self):
         """ Test Create Device """
         res = self.client.post('/api/v1/signals/', data=json.dumps({
             "name": "test",
