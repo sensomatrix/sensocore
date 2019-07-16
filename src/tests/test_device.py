@@ -1,10 +1,10 @@
 import unittest
 import os
 import json
-from app import create_app, db
+from src.app import create_app, db
 
 
-class Test_DeviceTest(unittest.TestCase):
+class DeviceTest(unittest.TestCase):
     """
     Users Test Case
     """
@@ -64,7 +64,7 @@ class Test_DeviceTest(unittest.TestCase):
                     ]
                 }
             ]
-        }))
+        }), content_type='application/json')
         self.assertEqual(res.status_code, 201)
 
     def tearDown(self):
