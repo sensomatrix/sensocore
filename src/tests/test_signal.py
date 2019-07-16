@@ -72,6 +72,53 @@ class SignalTest(unittest.TestCase):
         self.assertEqual(len(data), 1)
         self.assertEqual(res.status_code, 200)
 
+    def test_simulate_ecg(self):
+        """Test Simulate ECG"""
+        duration = 200
+        period = 1
+        fs = 256
+        res = self.client.post('api/v1/signals/simulate/ecg', data=json.dumps({
+            "fs": fs,
+            "noise_magnitude": 0,
+            "duration": duration,
+            "period": period,
+            "delay": 0,
+            "P": [
+                0.180,
+                0.2922,
+                0.0178
+            ],
+            "Q": [
+                -0.0223,
+                0.3218,
+                0.03064,
+                -0.2725,
+                0.37123,
+                0.00571
+            ],
+            "R": [
+                0.095,
+                0.44471,
+                0.01997
+            ],
+            "S": [
+                0.179,
+                0.46,
+                0.009
+            ],
+            "T": [
+                0.3255,
+                0.654,
+                0.02978
+            ]
+        }), content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(data['sensor'], None)
+        self.assertEqual(data['sensor_location_on_body'], None)
+        self.assertEqual(len(data['raw']), period * fs * duration)
+        self.assertEqual(data['raw'][0:fs - 1], data['raw'][fs: 2*fs - 1])
+        self.assertEqual(res.status_code, 201)
+
     def tearDown(self):
         """
         Tear Down
