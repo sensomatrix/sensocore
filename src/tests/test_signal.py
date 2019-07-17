@@ -96,6 +96,13 @@ class SignalTest(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
 
+    def test_update_signal_error(self):
+        """Test Update an existing signal that does not exist"""
+        res = self.client.put('/api/v1/signals/3', data=json.dumps({}),
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
         duration = 200
