@@ -99,9 +99,6 @@ def update(signal_id):
     signal = Signal.get_one_signal(signal_id)
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
-    data = signal_schema.dump(signal).data
-    if data.get('owner_id') != g.user.get('id'):
-        return custom_response({'error': 'permission denied'}, 400)
 
     data, error = signal_schema.load(req_data, partial=True)
     if error:
