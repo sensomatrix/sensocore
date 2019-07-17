@@ -41,14 +41,17 @@ def simulate_ecg():
     Simulate an ecg signal
     """
     req_data = request.get_json()
-    ecg_sim = generate_ecg(**req_data)
-    signal_data, error = signal_schema.load({
-        "name": "ECG Simulated Signal",
-        "raw": ecg_sim,
-    })
+    try:
+        ecg_sim = generate_ecg(**req_data)
+        signal_data, error = signal_schema.load({
+            "name": "ECG Simulated Signal",
+            "raw": ecg_sim,
+        })
 
-    if error:
-        return custom_response(error, 400)
+        if error:
+            return custom_response(error, 400)
+    except Exception as exc:
+        return custom_response({'error': exc.args}, 400)
 
     signal = Signal(signal_data)
     signal.save()

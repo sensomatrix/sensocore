@@ -143,6 +143,15 @@ class SignalTest(unittest.TestCase):
         self.assertEqual(data['raw'][0:fs - 1], data['raw'][fs: 2*fs - 1])
         self.assertEqual(res.status_code, 201)
 
+    def test_simulate_ecg_error(self):
+        """Test Simulate ECG with error"""
+        res = self.client.post('api/v1/signals/simulate/ecg',
+                               data=json.dumps({}), content_type='application/json')
+        error = json.loads(res.data)
+        self.assertEqual(error, {"error": [
+                         "generate_ecg() missing 10 required positional arguments: 'fs', 'noise_magnitude', 'duration', 'period', 'delay', 'P', 'Q', 'R', ""'S', and 'T'"]})
+        self.assertEqual(res.status_code, 400)
+
     def tearDown(self):
         """
         Tear Down
