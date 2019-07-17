@@ -17,7 +17,7 @@ class SignalTest(unittest.TestCase):
         self.client = self.app.test_client()
         self.test_data = {
             "name": "test",
-            "samples": [
+            "raw": [
                     1,
                     2,
                     3,
@@ -55,10 +55,16 @@ class SignalTest(unittest.TestCase):
             db.create_all()
 
     def test_create_signal(self):
-        """ Test Create Device """
+        """ Test Create Signal """
         res = self.client.post(
             '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
+
+    def test_create_signal_error(self):
+        """ Test Create Signal with invalid data """
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps({}), content_type='application/json')
+        self.assertEqual(res.status_code, 400)
 
     def test_get_signals(self):
         """ Test Create Device """

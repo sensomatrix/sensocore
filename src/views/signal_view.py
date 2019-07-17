@@ -22,6 +22,9 @@ def create():
     req_data = request.get_json()
     signal_data, error = signal_schema.load(req_data)
 
+    if error:
+        return custom_response(error, 400)
+
     signal = Signal(signal_data)
     signal.save()
 
