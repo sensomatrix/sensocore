@@ -48,8 +48,6 @@ def simulate_ecg():
             "raw": ecg_sim,
         })
 
-        if error:
-            return custom_response(error, 400)
     except Exception as exc:
         return custom_response({'error': exc.args}, 400)
 
