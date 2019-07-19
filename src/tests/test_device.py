@@ -31,7 +31,7 @@ class DeviceTest(unittest.TestCase):
             "signals": [
                 {
                     "name": "test",
-                    "samples": [
+                    "raw": [
                         1,
                         2,
                         3,
