@@ -67,6 +67,18 @@ class DeviceTest(unittest.TestCase):
         }), content_type='application/json')
         self.assertEqual(res.status_code, 201)
 
+    def test_create_device_error(self):
+        """ Test Create Device Error"""
+        res = self.client.post(
+            '/api/v1/devices/', data=json.dumps({}), content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(data, {'channel_num': ['Missing data for required field.'],
+                                'company': ['Missing data for required field.'],
+                                'name': ['Missing data for required field.'],
+                                'sin': ['Missing data for required field.'],
+                                'type': ['Missing data for required field.']})
+        self.assertEqual(res.status_code, 400)
+
     def tearDown(self):
         """
         Tear Down
