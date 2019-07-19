@@ -39,8 +39,3 @@ def custom_response(res, status_code):
         response=json.dumps(res),
         status=status_code
     )
-
-
-def check_for_error(error):
-    if error:
-        return custom_response(error, 400)
