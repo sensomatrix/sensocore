@@ -101,17 +101,14 @@ def update(signal_id):
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
 
-    try:
-        data, error = signal_schema.load(req_data, partial=True)
-        if error:
-            return custom_response(error, 400)
-    
-        signal.update(data)
+    data, error = signal_schema.load(req_data, partial=True)
+    if error:
+        return custom_response(error, 400)
 
-        data = signal_schema.dump(signal).data
-        return custom_response(data, 200)
-    except ValidationError as exc:
-        return custom_response(exc.messages, 400)
+    signal.update(data)
+
+    data = signal_schema.dump(signal).data
+    return custom_response(data, 200)
 
 @signal_api.route('/<int:signal_id>', methods=['DELETE'])
 def delete(signal_id):
