@@ -7,6 +7,7 @@ from src.views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
 from src.simulations.ecg import generate_ecg
 import json
+from marshmallow import ValidationError
 
 signal_api = Blueprint('signal_api', __name__)
 signal_schema = SignalSchema()
@@ -100,14 +101,17 @@ def update(signal_id):
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
 
-    data, error = signal_schema.load(req_data, partial=True)
-    if error:
-        return custom_response(error, 400)
-    signal.update(data)
+    try:
+        data, error = signal_schema.load(req_data, partial=True)
+        if error:
+            return custom_response(error, 400)
+    
+        signal.update(data)
 
-    data = signal_schema.dump(signal).data
-    return custom_response(data, 200)
-
+        data = signal_schema.dump(signal).data
+        return custom_response(data, 200)
+    except ValidationError as exc:
+        return custom_response(exc.messages, 400)
 
 @signal_api.route('/<int:signal_id>', methods=['DELETE'])
 def delete(signal_id):
