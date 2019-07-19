@@ -18,6 +18,9 @@ def create():
     req_data = request.get_json()
     device_data, error = device_schema.load(req_data)
 
+    if error:
+        return custom_response(error, 400)
+
     device = Device(device_data)
     device.save()
 
