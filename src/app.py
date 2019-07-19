@@ -25,11 +25,4 @@ def create_app(env_name):
   app.register_blueprint(signal_blueprint, url_prefix='/api/v1/signals')
   app.register_blueprint(device_blueprint, url_prefix='/api/v1/devices')
 
-  @app.route('/', methods=['GET'])
-  def index():
-    """
-    example endpoint
-    """
-    return 'Congratulations! Your first endpoint is workin'
-
   return app
