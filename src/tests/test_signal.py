@@ -129,6 +129,15 @@ class SignalTest(unittest.TestCase):
         self.assertRaises(ValidationError)
         self.assertEqual(res.status_code, 400)
 
+    def test_delete_signal(self):
+        """Test Delete a signal"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.delete('/api/v1/signals/1', content_type='application/json')
+        self.assertEqual(res.status_code, 204)
+
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
         duration = 200
