@@ -125,7 +125,6 @@ class SignalTest(unittest.TestCase):
 
         res = self.client.put('/api/v1/signals/1', data=json.dumps({"inavlid": "invalid"}),
                               content_type='application/json')
-        data = json.loads(res.data)
         self.assertRaises(ValidationError)
         self.assertEqual(res.status_code, 400)
 
@@ -137,6 +136,12 @@ class SignalTest(unittest.TestCase):
 
         res = self.client.delete('/api/v1/signals/1', content_type='application/json')
         self.assertEqual(res.status_code, 204)
+
+    def test_delete_signal_nonexistant(self):
+        """Test Delete a signal non existant"""
+        res = self.client.delete('/api/v1/signals/1', content_type='application/json')
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual({'error': 'signal not found'}, json.loads(res.data))
 
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
