@@ -2,6 +2,7 @@ import unittest
 import os
 import json
 from src.app import create_app, db
+from marshmallow import ValidationError
 
 
 class SignalTest(unittest.TestCase):
@@ -96,7 +97,7 @@ class SignalTest(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
 
-    def test_update_signal_error(self):
+    def test_update_signal_nonexistant(self):
         """Test Update a signal that does not exist"""
         res = self.client.put('/api/v1/signals/3', data=json.dumps({}),
                               content_type='application/json')
@@ -115,6 +116,18 @@ class SignalTest(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(data['name'], new_name)
         self.assertEqual(res.status_code, 200)
+
+    def test_update_signal_load_error(self):
+        """Test Attempt to update an existing signal"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.put('/api/v1/signals/1', data=json.dumps({"inavlid": "invalid"}),
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertRaises(ValidationError)
+        self.assertEqual(res.status_code, 400)
 
     def test_simulate_ecg(self):
         """Test Simulate ECG"""
