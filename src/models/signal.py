@@ -1,9 +1,9 @@
 # src/models/signal.py
 from . import db
 import datetime
-from marshmallow import fields, Schema
 from .epoch import EpochSchema, Epoch
 from .data import DataSchema
+from marshmallow import Schema, fields, validates_schema, ValidationError
 
 
 class Signal(db.Model):
@@ -78,3 +78,10 @@ class SignalSchema(Schema):
     epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
+
+    @validates_schema(pass_original=True)
+    def check_unknown_fields(self, data, original_data):
+        validate_data = original_data if data == {} else data
+        unknown = set(validate_data) - set(self.fields)
+        if unknown:
+            raise ValidationError('Unknown field', unknown)
