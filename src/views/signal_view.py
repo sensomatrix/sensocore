@@ -118,12 +118,9 @@ def delete(signal_id):
     signal = Signal.get_one_signal(signal_id)
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
-    data = signal_schema.dump(signal).data
-    if data.get('owner_id') != g.user.get('id'):
-        return custom_response({'error': 'permission denied'}, 400)
 
     signal.delete()
-    return custom_response({'message': 'deleted'}, 204)
+    return custom_response({}, 204)
 
 
 def custom_response(res, status_code):
