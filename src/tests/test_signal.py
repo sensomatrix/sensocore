@@ -137,7 +137,7 @@ class SignalViewTest(unittest.TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_get_signals(self):
-        """ Test Create Device """
+        """ Test Get Signals """
         res = self.client.post(
             '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
