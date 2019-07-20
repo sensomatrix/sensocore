@@ -22,7 +22,8 @@ class Signal(db.Model):
     filtered = db.Column(db.ARRAY(db.Float), nullable=True)
     data = db.relationship('Data', uselist=False, backref='signal')
     epochs = db.relationship('Epoch', backref='signal')
-    device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=True)
+    device_id = db.Column(
+        db.Integer, db.ForeignKey('device.id'), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
