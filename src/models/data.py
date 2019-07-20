@@ -1,7 +1,8 @@
 # src/models/data.py
 from . import db
 import datetime
-from marshmallow import fields, Schema
+from marshmallow import fields
+from shared.custom_schema import CustomSchema
 
 class Data(db.Model):
     """
@@ -52,7 +53,7 @@ class Data(db.Model):
         return '<id {}>'.format(self.id)
 
 
-class DataSchema(Schema):
+class DataSchema(CustomSchema):
     """
     Data Schema
     """
