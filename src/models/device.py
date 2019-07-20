@@ -1,7 +1,8 @@
 # src/models/device.py
 from src.models import db
 import datetime
-from marshmallow import fields, Schema
+from marshmallow import fields
+from src.shared.custom_schema import CustomSchema
 from src.models.signal import Signal, SignalSchema
 
 
@@ -63,7 +64,7 @@ class Device(db.Model):
         return '<id {}>'.format(self.id)
 
 
-class DeviceSchema(Schema):
+class DeviceSchema(CustomSchema):
     """
     Device Schema
     """

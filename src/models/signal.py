@@ -3,7 +3,8 @@ from . import db
 import datetime
 from .epoch import EpochSchema, Epoch
 from .data import DataSchema
-from marshmallow import Schema, fields, validates_schema, ValidationError
+from marshmallow import fields
+from src.shared.custom_schema import CustomSchema
 
 
 class Signal(db.Model):
@@ -65,7 +66,7 @@ class Signal(db.Model):
         return '<id {}>'.format(self.id)
 
 
-class SignalSchema(Schema):
+class SignalSchema(CustomSchema):
     """
     Signal Schema
     """
@@ -79,10 +80,3 @@ class SignalSchema(Schema):
     epochs = fields.Nested(EpochSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     modified_at = fields.DateTime(dump_only=True)
-
-    @validates_schema(pass_original=True)
-    def check_unknown_fields(self, data, original_data):
-        validate_data = original_data if data == {} else data
-        unknown = set(validate_data) - set(self.fields)
-        if unknown:
-            raise ValidationError('Unknown field', unknown)
