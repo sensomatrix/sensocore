@@ -2,6 +2,7 @@
 from flask import request, g, Blueprint, json, Response
 from src.models.signal import Signal, SignalSchema
 from src.models.data import Data, DataSchema
+from src.models.device import Device
 from src.models.epoch import Epoch, EpochSchema
 from src.views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
@@ -101,14 +102,24 @@ def update(signal_id):
     if not signal:
         return custom_response({'error': 'signal not found'}, 404)
 
-    data, error = signal_schema.load(req_data, partial=True)
-    if error:
-        return custom_response(error, 400)
+    if 'data' in req_data:
+        data, error = data_schema.load(req_data['data'], partial=True)
+        signal_data = signal.data
+        if error:
+            return custom_response(error, 400)
+        signal_data.update(data)
+        return custom_response(data, 200)
+
+    else:
+        data, error = signal_schema.load(req_data, partial=True)
+        if error:
+            return custom_response(error, 400)
 
     signal.update(data)
 
     data = signal_schema.dump(signal).data
     return custom_response(data, 200)
+
 
 @signal_api.route('/<int:signal_id>', methods=['DELETE'])
 def delete(signal_id):
