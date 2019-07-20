@@ -1,7 +1,8 @@
 # src/models/epoch.py
 from . import db
 import datetime
-from marshmallow import fields, Schema
+from marshmallow import fields
+from src.shared.custom_schema import CustomSchema
 
 
 class Epoch(db.Model):
@@ -44,15 +45,11 @@ class Epoch(db.Model):
         self.modified_at = datetime.datetime.utcnow()
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    @staticmethod
+    def get_one_epoch(id):
+        return Epoch.query.get(id)
 
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
-
-
-class EpochSchema(Schema):
+class EpochSchema(CustomSchema):
     """
     Epoch Schema
     """
