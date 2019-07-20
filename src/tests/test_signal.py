@@ -201,6 +201,21 @@ class SignalViewTest(unittest.TestCase):
         self.assertEqual(data, {'description': new_description})
         self.assertEqual(res.status_code, 200)
 
+    def test_update_data_of_signal_error(self):
+        """Test Update data of a signal with error"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        new_description = 'New Description'
+        res = self.client.put('/api/v1/signals/1', data=json.dumps({"data": {
+            'invalid': 'invalid'
+        }}),
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data, {'invalid': ['Unknown field']})
+
     def test_update_signal_load_error(self):
         """Test Attempt to update an existing signal"""
         res = self.client.post(
