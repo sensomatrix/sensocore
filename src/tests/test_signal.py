@@ -186,6 +186,21 @@ class SignalViewTest(unittest.TestCase):
         self.assertEqual(data['name'], new_name)
         self.assertEqual(res.status_code, 200)
 
+    def test_update_data_of_signal(self):
+        """Test Update data of a signal"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        new_description = 'New Description'
+        res = self.client.put('/api/v1/signals/1', data=json.dumps({"data": {
+            "description": new_description
+        }}),
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(data, {'description': new_description})
+        self.assertEqual(res.status_code, 200)
+
     def test_update_signal_load_error(self):
         """Test Attempt to update an existing signal"""
         res = self.client.post(
