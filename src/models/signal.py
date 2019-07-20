@@ -21,8 +21,8 @@ class Signal(db.Model):
     sensor_location_on_body = db.Column(db.String, nullable=True)
     raw = db.Column(db.ARRAY(db.Float))
     filtered = db.Column(db.ARRAY(db.Float), nullable=True)
-    data = db.relationship('Data', uselist=False, backref='signal')
-    epochs = db.relationship('Epoch', backref='signal')
+    data = db.relationship('Data', uselist=False, backref='signal', cascade="all,delete")
+    epochs = db.relationship('Epoch', backref='signal', cascade="all,delete")
     device_id = db.Column(
         db.Integer, db.ForeignKey('device.id'), nullable=True)
     created_at = db.Column(db.DateTime)
