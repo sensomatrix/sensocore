@@ -4,6 +4,7 @@ import datetime
 from marshmallow import fields
 from src.shared.custom_schema import CustomSchema
 
+
 class Data(db.Model):
     """
     Data Model
@@ -48,9 +49,6 @@ class Data(db.Model):
             setattr(self, key, item)
         self.modified_at = datetime.datetime.utcnow()
         db.session.commit()
-
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
 
 
 class DataSchema(CustomSchema):
