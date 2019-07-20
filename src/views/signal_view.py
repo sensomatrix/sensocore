@@ -109,7 +109,13 @@ def update(signal_id):
             return custom_response(error, 400)
         signal_data.update(data)
         return custom_response(data, 200)
-
+    elif 'epoch' in req_data:
+        data, error = epoch_schema.load(req_data['epoch'], partial=True)
+        epoch = Epoch.get_one_epoch(req_data['epoch_id'])
+        if error:
+            return custom_response(error, 400)
+        epoch.update(data)
+        return custom_response(data, 200)
     else:
         data, error = signal_schema.load(req_data, partial=True)
         if error:
