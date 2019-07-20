@@ -13,16 +13,7 @@ class DeviceTest(unittest.TestCase):
         """
         Test Setup
         """
-        self.app = create_app("testing")
-        self.client = self.app.test_client()
-
-        with self.app.app_context():
-            # create all tables
-            db.create_all()
-
-    def test_create_device(self):
-        """ Test Create Device """
-        res = self.client.post('/api/v1/devices/', data=json.dumps({
+        self.test_data = {
             "name": "Niro's Device",
             "type": "ECG",
             "company": "SmartHalo",
@@ -64,7 +55,17 @@ class DeviceTest(unittest.TestCase):
                     ]
                 }
             ]
-        }), content_type='application/json')
+        }
+        self.app = create_app("testing")
+        self.client = self.app.test_client()
+
+        with self.app.app_context():
+            # create all tables
+            db.create_all()
+
+    def test_create_device(self):
+        """ Test Create Device """
+        res = self.client.post('/api/v1/devices/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
 
     def test_create_device_error(self):
@@ -78,6 +79,36 @@ class DeviceTest(unittest.TestCase):
                                 'sin': ['Missing data for required field.'],
                                 'type': ['Missing data for required field.']})
         self.assertEqual(res.status_code, 400)
+
+    def test_get_devices(self):
+        """ Test Get Devices """
+        res = self.client.post(
+            '/api/v1/devices/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.get('/api/v1/devices/',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(len(data), 1)
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_device(self):
+        """Test Get One Device"""
+        res = self.client.post(
+            '/api/v1/devices/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.get('/api/v1/devices/1',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_device_error(self):
+        """Test Attempt to get one device that does not exist"""
+        res = self.client.get('/api/v1/devices/1',
+                              content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
 
     def tearDown(self):
         """
