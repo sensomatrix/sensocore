@@ -2,7 +2,7 @@
 from . import db
 import datetime
 from marshmallow import fields
-from shared.custom_schema import CustomSchema
+from src.shared.custom_schema import CustomSchema
 
 class Data(db.Model):
     """
