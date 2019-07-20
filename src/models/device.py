@@ -51,6 +51,14 @@ class Device(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    @staticmethod
+    def get_all_devices():
+        return Device.query.all()
+
+    @staticmethod
+    def get_one_device(id):
+        return Device.query.get(id)
+
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
