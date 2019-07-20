@@ -30,6 +30,28 @@ def create():
     return custom_response(data, 201)
 
 
+@device_api.route('/', methods=['GET'])
+def get_all():
+    """
+    Get All Devices
+    """
+    devices = Device.get_all_devices()
+    data = device_schema.dump(devices, many=True).data
+    return custom_response(data, 200)
+
+
+@device_api.route('/<int:device_id>', methods=['GET'])
+def get_one(device_id):
+    """
+    Get A Device
+    """
+    device = Device.get_one_device(device_id)
+    if not device:
+        return custom_response({'error': 'device not found'}, 404)
+    data = device_schema.dump(device).data
+    return custom_response(data, 200)
+
+
 def custom_response(res, status_code):
     """
     Custom Response Function
