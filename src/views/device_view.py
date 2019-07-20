@@ -52,6 +52,37 @@ def get_one(device_id):
     return custom_response(data, 200)
 
 
+@device_api.route('/<int:device_id>', methods=['PUT'])
+def update(device_id):
+    """
+    Update A Device
+    """
+    req_data = request.get_json()
+    device = Device.get_one_device(device_id)
+    if not device:
+        return custom_response({'error': 'device not found'}, 404)
+
+    data, error = device_schema.load(req_data, partial=True)
+    if error:
+        return custom_response(error, 400)
+
+    device.update(data)
+
+    data = device_schema.dump(device).data
+    return custom_response(data, 200)
+
+@device_api.route('/<int:device_id>', methods=['DELETE'])
+def delete(device_id):
+    """
+    Delete A device
+    """
+    device = Device.get_one_device(device_id)
+    if not device:
+        return custom_response({'error': 'device not found'}, 404)
+
+    device.delete()
+    return custom_response({}, 204)
+
 def custom_response(res, status_code):
     """
     Custom Response Function
