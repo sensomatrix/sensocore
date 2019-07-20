@@ -48,10 +48,6 @@ class Data(db.Model):
         self.modified_at = datetime.datetime.utcnow()
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
