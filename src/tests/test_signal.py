@@ -3,11 +3,80 @@ import os
 import json
 from src.app import create_app, db
 from marshmallow import ValidationError
+from src.models.signal import Signal, SignalSchema
+from src.views.views_helper import create_data, create_epochs
 
 
-class SignalTest(unittest.TestCase):
+class SignalModelTest(unittest.TestCase):
     """
-    Signal Test Case
+    Signal Model Test Case
+    """
+
+    def setUp(self):
+        """
+        Test Setup
+        """
+        self.app = create_app("testing")
+        self.client = self.app.test_client()
+        self.signal_schema = SignalSchema()
+        self.test_data = {
+            "name": "test",
+            "raw": [
+                    1,
+                    2,
+                    3,
+                    4
+            ],
+            "sensor": "Niro Device",
+            "sensor_location_on_body": "arm",
+            "data": {
+                "channel_num": 1,
+                "description": "test description",
+                "start_time": "15:00:00",
+                "end_time": "18:00:00",
+                "duration": 180,
+                "fs": 256,
+                "unit": "mV"
+            },
+            "epochs": [
+                {
+                    "name": "Watching movie",
+                    "start_time": "15:00:00",
+                    "end_time": "15:30:00",
+                    "duration": 30
+                },
+                {
+                    "name": "Finishing movie",
+                    "start_time": "16:00:00",
+                    "end_time": "16:15:00",
+                    "duration": 15
+                }
+            ]
+        }
+
+        with self.app.app_context():
+            # create all tables
+            db.create_all()
+
+    def test_display_signal_none(self):
+        """ Test Display signal using repr"""
+        signal_data, _ = self.signal_schema.load(self.test_data)
+
+        signal = Signal(signal_data)
+        self.assertEqual(repr(signal), '<id None>')
+
+    def tearDown(self):
+        """
+        Tear Down
+        """
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
+
+
+class SignalViewTest(unittest.TestCase):
+    """
+    Signal View Test Case
     """
 
     def setUp(self):
