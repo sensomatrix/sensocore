@@ -196,7 +196,7 @@ class SignalViewTest(unittest.TestCase):
         res = self.client.put('/api/v1/signals/1', data=json.dumps({"data": {
             "description": new_description
         }}),
-                              content_type='application/json')
+            content_type='application/json')
         data = json.loads(res.data)
         self.assertEqual(data, {'description': new_description})
         self.assertEqual(res.status_code, 200)
@@ -211,10 +211,39 @@ class SignalViewTest(unittest.TestCase):
         res = self.client.put('/api/v1/signals/1', data=json.dumps({"data": {
             'invalid': 'invalid'
         }}),
-                              content_type='application/json')
+            content_type='application/json')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
         self.assertEqual(data, {'invalid': ['Unknown field']})
+
+    def test_update_epoch_of_signal_error(self):
+        """Test Update epoch of a signal with error"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        res = self.client.put('/api/v1/signals/1', data=json.dumps(
+            {'invalid': 'invalid'}), content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data, {'invalid': ['Unknown field']})
+
+    def test_update_epoch_of_signal(self):
+        """Test Update epoch of a signal"""
+        res = self.client.post(
+            '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
+        self.assertEqual(res.status_code, 201)
+
+        new_name = 'New name'
+        res = self.client.put('/api/v1/signals/1', data=json.dumps({
+            "epoch": {
+                "name": new_name,
+            },
+            'epoch_id': 1
+        }), content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(data, {'name': new_name})
+        self.assertEqual(res.status_code, 200)
 
     def test_update_signal_load_error(self):
         """Test Attempt to update an existing signal"""
