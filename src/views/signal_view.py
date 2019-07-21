@@ -7,6 +7,7 @@ from src.models.epoch import Epoch, EpochSchema
 from src.views.views_helper import create_data, create_epochs
 from numpy import mean, fromstring
 from src.simulations.ecg import generate_ecg
+from src.simulations.eeg import simulate_eeg_jansen
 import json
 from marshmallow import ValidationError
 
@@ -59,6 +60,39 @@ def simulate_ecg():
     create_data(signal.id, {
         "channel_num": 1,
         "description": "Simulated ECG Signal",
+        "start_time": "15:00:00",  # TODO: Change this
+        "end_time": "16:00:00",  # TODO: Change this
+        "duration": req_data['duration'],
+        "fs": req_data['fs'],
+        "unit": "mV"
+    })
+
+    data = signal_schema.dump(signal).data
+    return custom_response(data, 201)
+
+
+@signal_api.route('/simulate/eeg', methods=['POST'])
+def simulate_eeg():
+    """
+    Simulate an eeg signal
+    """
+    req_data = request.get_json()
+    try:
+        eeg_sim = simulate_eeg_jansen(**req_data)
+        signal_data, error = signal_schema.load({
+            "name": "EEG Simulated Signal",
+            "raw": eeg_sim,
+        })
+
+    except Exception as exc:
+        return custom_response({'error': exc.args}, 400)
+
+    signal = Signal(signal_data)
+    signal.save()
+
+    create_data(signal.id, {
+        "channel_num": 1,
+        "description": "Simulated EEG Signal",
         "start_time": "15:00:00",  # TODO: Change this
         "end_time": "16:00:00",  # TODO: Change this
         "duration": req_data['duration'],
