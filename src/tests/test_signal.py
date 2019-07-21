@@ -222,8 +222,11 @@ class SignalViewTest(unittest.TestCase):
             '/api/v1/signals/', data=json.dumps(self.test_data), content_type='application/json')
         self.assertEqual(res.status_code, 201)
 
-        res = self.client.put('/api/v1/signals/1', data=json.dumps(
-            {'invalid': 'invalid'}), content_type='application/json')
+        res = self.client.put('/api/v1/signals/1', data=json.dumps({
+            "epoch": {
+                "invalid": 'invalid',
+            },
+            'epoch_id': 1}), content_type='application/json')
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
         self.assertEqual(data, {'invalid': ['Unknown field']})
