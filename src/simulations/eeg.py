@@ -26,12 +26,7 @@ def func(t, y, noise_interp, A, B, a, b, v0, C1, C2, C3, C4, r, e0):
     dy6dt = B * b * (C4 * sigmoid(v0, e0, r, C3 * y1)) - 2 * b * y6 - b * b * y3
     return [dy1dt, dy2dt, dy3dt, dy4dt, dy5dt, dy6dt]
 
-def simulate_eeg_jansen(**kwargs):
-    duration = kwargs.get("duration", 10)
-    fs = kwargs.get("fs", 256)
-    c1 = kwargs.get("c1", 135)
-    noise_magnitude = kwargs.get("noise_magnitude", 0)
-
+def simulate_eeg_jansen(duration, fs, c1, noise_magnitude):
     A = 3.25
     B = 22
     a = 100
@@ -73,9 +68,4 @@ def simulate_eeg_jansen(**kwargs):
 
     output = noise + ode_y
 
-    ode_time = np.reshape(ode_time, (ode_time.shape[0], 1))
-    output = np.reshape(output, (output.shape[0], 1))
-
-    eeg = np.hstack([ode_time, output])
-
-    return eeg  # return a tuple with time and y.
+    return output
