@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 797914527dcd
+Revision ID: e9ea75abfe79
 Revises: 
-Create Date: 2019-07-15 19:58:51.287729
+Create Date: 2019-07-20 22:02:08.476495
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '797914527dcd'
+revision = 'e9ea75abfe79'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,25 +29,13 @@ def upgrade():
     sa.Column('modified_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('recording',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('participant_id', sa.Integer(), nullable=True),
-    sa.Column('institution', sa.String(), nullable=True),
-    sa.Column('date', sa.DateTime(), nullable=True),
-    sa.Column('exp_start_time', sa.Time(), nullable=True),
-    sa.Column('exp_end_time', sa.Time(), nullable=True),
-    sa.Column('time_description', sa.String(), nullable=True),
-    sa.Column('visit_number', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('modified_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('signal',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('sensor', sa.String(), nullable=True),
     sa.Column('sensor_location_on_body', sa.String(), nullable=True),
-    sa.Column('samples', sa.ARRAY(sa.Float()), nullable=True),
+    sa.Column('raw', sa.ARRAY(sa.Float()), nullable=True),
+    sa.Column('filtered', sa.ARRAY(sa.Float()), nullable=True),
     sa.Column('device_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('modified_at', sa.DateTime(), nullable=True),
@@ -72,8 +60,8 @@ def upgrade():
     op.create_table('epoch',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
-    sa.Column('start_time', sa.Time(), nullable=True),
-    sa.Column('end_time', sa.Time(), nullable=True),
+    sa.Column('start_time', sa.Time(), nullable=False),
+    sa.Column('end_time', sa.Time(), nullable=False),
     sa.Column('duration', sa.Float(), nullable=True),
     sa.Column('signal_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -89,6 +77,5 @@ def downgrade():
     op.drop_table('epoch')
     op.drop_table('data')
     op.drop_table('signal')
-    op.drop_table('recording')
     op.drop_table('device')
     # ### end Alembic commands ###
