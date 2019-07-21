@@ -323,6 +323,33 @@ class SignalViewTest(unittest.TestCase):
         self.assertEqual(data['raw'][0:fs - 1], data['raw'][fs: 2*fs - 1])
         self.assertEqual(res.status_code, 201)
 
+    def test_simulate_eeg(self):
+        """Test Simulate EEG"""
+        duration = 10
+        fs = 1000
+        c1 = 1350
+        noise_magnitude = 0
+        res = self.client.post('api/v1/signals/simulate/eeg', data=json.dumps({
+            "fs": fs,
+            "noise_magnitude": noise_magnitude,
+            "duration": duration,
+            'c1': c1
+        }), content_type='application/json')
+        data = json.loads(res.data)
+        self.assertEqual(data['sensor'], None)
+        self.assertEqual(data['sensor_location_on_body'], None)
+        self.assertEqual(len(data['raw']), fs * duration + 1)
+        self.assertEqual(res.status_code, 201)
+
+    def test_simulate_eeg_error(self):
+        """Test Simulate EEG with error"""
+        res = self.client.post('api/v1/signals/simulate/eeg',
+                               data=json.dumps({}), content_type='application/json')
+        error = json.loads(res.data)
+        self.assertEqual(error, {"error": [
+                         "simulate_eeg_jansen() missing 4 required positional arguments: 'duration', 'fs', 'c1', and 'noise_magnitude'"]})
+        self.assertEqual(res.status_code, 400)
+
     def test_simulate_ecg_less_than_one_beat(self):
         """Test Simulate ECG that is less than its period, 
         it should create a signal that is one beat lone"""
