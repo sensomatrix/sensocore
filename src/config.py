@@ -2,37 +2,48 @@
 
 import os
 
-class Development(object):
+
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+class Development(Config):
     """
     Development environment configuration
     """
     DEBUG = True
-    TESTING = False
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DEVELOPMENT = True
 
-class Production(object):
+
+class Production(Config):
     """
-    Production environment configurations
+    Production enviroConfignment configurations
     """
     DEBUG = False
-    TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-class Testing(object):
+
+class Testing(Config):
     """
     Development environment configuration
     """
     TESTING = True
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-    SQLALCHEMY_TRACK_MODIFICATIONS=False
+
+
+class Staging(Config):
+    """
+    Staging environment configuration
+    """
+    DEVELOPMENT = True
+    DEBUG = True
+
 
 app_config = {
     'development': Development,
     'production': Production,
-    "testing": Testing
+    'testing': Testing,
+    'staging': Staging
 }
