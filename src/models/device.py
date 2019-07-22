@@ -20,7 +20,7 @@ class Device(db.Model):
     company = db.Column(db.String)
     sin = db.Column(db.Integer)
     channel_num = db.Column(db.Integer)
-    signals = db.relationship('Signal', backref='device')
+    signals = db.relationship('Signal', backref='device', cascade="all,delete")
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
