@@ -24,6 +24,10 @@ class Patient(db.Model):
     sex = db.Column(db.String)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
+    recording_info = db.relationship(
+        'Recording', backref='patient', cascade="all,delete")
+    devices = db.relationship(
+        'Device', backref='patient', cascade="all,delete")
 
     # class constructor
     def __init__(self, data):
