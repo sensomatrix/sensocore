@@ -6,7 +6,7 @@ from src.models.patient import Patient, PatientSchema
 from src.models.recording import Recording, RecordingSchema
 from src.views.views_helper import create_signals
 import json
-from src.shared.file_read import json_parser
+from src.shared.file_read import json_parser, load_channels
 
 patient_api = Blueprint('patient_api', __name__)
 signal_schema = SignalSchema()
@@ -27,11 +27,15 @@ def upload():
     
     if (error):
         return custom_response(error, 400)
+
     recording_data, error = recording_schema.load(recording_info)
 
     if (error):
         return custom_response(error, 400)
 
+    channels, channel_info_dict = load_channels(file)
+
+    return custom_response({}, 200)
 
 def custom_response(res, status_code):
     """
