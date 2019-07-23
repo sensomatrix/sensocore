@@ -6,6 +6,45 @@ import json
 import re
 from src.models.patient import Patient
 
+def load_channels(data):
+    head = list(data.keys())[0]  # the first key in json
+    channel_keys = [x for x in list(data[head]['header']['device_information'].keys())
+                            if re.search("^channel\d+", x)]  # ex: channel1, channel2
+
+    channels = {}  # dictionary of channels ex: "channel1" = Channel object
+    channel_info_dict = {}
+    for c in channel_keys:
+        # device info
+        name = data[head]['header']['device_information'][c]['name']
+        fs = data[head]['header']['device_information'][c]['data']['fs']
+        samples_array = data[head]['Raw_Signal'][c]['data']
+        channel_dimens = data[head]['header']['device_information'][c]['data']['dimension']
+        sensor = data[head]['header']['device_information'][c]['sensor']
+        description = data[head]['header']['device_information'][c]['data']['description']
+        unit = data[head]['header']['device_information'][c]['data']['unit']
+        start_time = data[head]['header']['device_information'][c]['data']['start_time']
+        end_time = data[head]['header']['device_information'][c]['data']['end_time']
+
+        if name != "IBI":
+            channel_info_dict.update({c: ['Name: '+name, {'fs': convert_to_string(fs)},
+                                        'Channel dimensions: '+convert_to_string(channel_dimens),
+                                        {'Sensor': sensor}, {'Description': description}]})
+
+        # epoch info
+        epoch_keys = [x for x in list(data[head]['header']['epoch_information'][c].keys())
+                        if re.search("^epoch\d+", x)]  # ex: epoch1, epoch2
+
+        epochs = {}  # dictionary of epochs ex: "epoch1" = Epoch object
+        for e in epoch_keys:
+            epoch_name = data[head]['header']['epoch_information'][c][e]['name']
+            epoch_start_time = data[head]['header']['epoch_information'][c][e]['start_time']
+            epoch_end_time = data[head]['header']['epoch_information'][c][e]['end_time']
+            epochs[e] = {'epoch_name': epoch_name,
+            'epoch_start_time': epoch_start_time,
+            'epoch_end_time': epoch_end_time}
+
+    return channel_info_dict, epochs
+
 def json_parser(data):
     """
     Function that parses the json file and returns the data
@@ -28,40 +67,7 @@ def json_parser(data):
     patient_info.update({'Recording Information': ['Institution: '+instituition, 'Date: '+date,
                                                    'Visit Number: '+str(visit_num)]})
 
-    channel_keys = [x for x in list(data[head]['header']['device_information'].keys())
-                         if re.search("^channel\d+", x)]  # ex: channel1, channel2
-
-    channels = {}  # dictionary of channels ex: "channel1" = Channel object
-    channel_info_dict = {}
-    for c in channel_keys:
-        # device info
-        name = data[head]['header']['device_information'][c]['name']
-        fs = data[head]['header']['device_information'][c]['data']['fs']
-        samples_array = data[head]['Raw_Signal'][c]['data']
-        channel_dimens = data[head]['header']['device_information'][c]['data']['dimension']
-        sensor = data[head]['header']['device_information'][c]['sensor']
-        description = data[head]['header']['device_information'][c]['data']['description']
-        unit = data[head]['header']['device_information'][c]['data']['unit']
-        start_time = data[head]['header']['device_information'][c]['data']['start_time']
-        end_time = data[head]['header']['device_information'][c]['data']['end_time']
-
-        if name != "IBI":
-            channel_info_dict.update({c: ['Name: '+name, {'fs': convert_to_string(fs)},
-                                           'Channel dimensions: '+convert_to_string(channel_dimens),
-                                           {'Sensor': sensor}, {'Description': description}]})
-
-        # epoch info
-        epoch_keys = [x for x in list(data[head]['header']['epoch_information'][c].keys())
-                        if re.search("^epoch\d+", x)]  # ex: epoch1, epoch2
-
-        epochs = {}  # dictionary of epochs ex: "epoch1" = Epoch object
-        for e in epoch_keys:
-            epoch_name = data[head]['header']['epoch_information'][c][e]['name']
-            epoch_start_time = data[head]['header']['epoch_information'][c][e]['start_time']
-            epoch_end_time = data[head]['header']['epoch_information'][c][e]['end_time']
-            epochs[e] = Epoch(epoch_name, epoch_start_time, epoch_end_time)
-        channels[c] = Channel(name, fs, samples_array, channel_dimens, sensor, description, unit, start_time,
-                              end_time, epochs)
+    channels, channel_info_dict = load_channels(data)
 
     patient_info.update({'Device Information': ['Name: '+device_name, {'Channels': channel_info_dict}]})
     patient_info = {'File path: '+filepath: patient_info}
