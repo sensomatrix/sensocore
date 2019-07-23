@@ -1,0 +1,13 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/migrations": true
+    },
+    "python.pythonPath": "/Users/niroigensuntharam/.local/share/virtualenvs/sensocore-vO-RU7mu/bin/python"
+}
