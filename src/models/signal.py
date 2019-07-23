@@ -25,6 +25,8 @@ class Signal(db.Model):
     epochs = db.relationship('Epoch', backref='signal', cascade="all,delete")
     device_id = db.Column(
         db.Integer, db.ForeignKey('device.id'), nullable=True)
+    patient_id = db.Column(
+        db.Integer, db.ForeignKey('patient.id'), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 

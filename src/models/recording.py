@@ -19,6 +19,8 @@ class Recording(db.Model):
     date = db.Column(db.Date)
     time_description = db.Column(db.String)
     visit_num = db.Column(db.String)
+    patient_id = db.Column(
+        db.Integer, db.ForeignKey('patient.id'), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 

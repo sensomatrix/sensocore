@@ -21,6 +21,8 @@ class Device(db.Model):
     sin = db.Column(db.Integer)
     channel_num = db.Column(db.Integer)
     signals = db.relationship('Signal', backref='device', cascade="all,delete")
+    patient_id = db.Column(
+        db.Integer, db.ForeignKey('patient.id'), nullable=True)
     created_at = db.Column(db.DateTime)
     modified_at = db.Column(db.DateTime)
 
