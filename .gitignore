@@ -7,3 +7,7 @@ venv/
 *.png
 *.DS_Store
 site/
+cov.xml
+.coverage
+.vscode
+migrations
